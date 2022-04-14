@@ -1,0 +1,6 @@
+Options -Indexes
+RewriteEngine On
+
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^([^/]*)(.*)$ service-handler.php?first=$1&second=$2

@@ -1,0 +1,34 @@
+<tr>
+    <td align="center" valign="top">
+        <!-- CENTERING TABLE // -->
+        <table border="0" cellpadding="0" cellspacing="0" width="96%" margin-left="2%">
+            <tr>
+                <td align="center" valign="top">
+                    <!-- FLEXIBLE CONTAINER // -->
+                    <table border="0" cellpadding="00" cellspacing="0" width="100%" class="flexibleContainer">
+                        <thead></thead>
+                        <tbody>
+                            <tr>
+                                <td style="padding:8px;">
+                                    <h3 style="color:#5F5F5F;line-height:187%;font-family:Helvetica,Arial,sans-serif;font-size:16px;font-weight:normal;margin-top:0;margin-bottom:3px;text-align:left;letter-spacing: 1px;">
+                                        Dear {{user_name}}, <br>Your order worth Rs. {{revised_amount}} has been confirmed and your invoice has been generated.
+                                    </h3>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="center" bgcolor="#27c0f1" width="150" style="-moz-border-radius: 4px;-webkit-border-radius: 4px;border-radius: 4px;background-color: #F44336;border-radius:4px;color:#ffffff;display:inline-block;font-family:sans-serif;font-size:13px;font-weight:bold;line-height:20px;text-align:center;text-decoration:none;width:200px;-webkit-text-size-adjust:none;height:40px;padding:8px">
+                                    <a href="{{invoice_url}}" style="width:200px;display: block;text-decoration: none;border:0;text-align: center;font-weight: bold;font-size: 15px;font-family: sans-serif;color: #ffffff;background: #F44336;border: 1px solid #F44336;-moz-border-radius: 4px;-webkit-border-radius: 4px;border-radius: 4px;line-height:37px;letter-spacing: 1px;"
+                                        class="button_link">Download Invoice</a>
+                                </td>
+                            </tr>
+                            <!--                                                 <h3 style="color:#5F5F5F;line-height:187%;font-family:Helvetica,Arial,sans-serif;font-size:16px;font-weight:normal;margin-top:0;margin-bottom:3px;text-align:left;padding-left: 20px;letter-spacing: 1px;">Delivery Address<br>{{line_1}},<br>{{line_2}},<br>{{line_3}}<br>{{landmark}} - {{pin}}
+                        </h3> -->
+                            <tr height="10" width="100%"></tr>
+                        </tbody>
+                    </table>
+                    <!-- // FLEXIBLE CONTAINER -->
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr>

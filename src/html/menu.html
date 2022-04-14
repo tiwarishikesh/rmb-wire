@@ -1,0 +1,102 @@
+<div class="container w-full p-0" style="max-width: 1500px;">
+    <div class="single-column col-sm-3">
+        <p>About</p>
+        <div class="single-column-body">
+            <a href="" onclick="return false" class="link-type-1">Legend</a>
+            <a href="" onclick="return false" class="link-type-1">Purpose</a>
+            <a href="" onclick="return false" class="link-type-1">Board</a>
+            <a href="" onclick="route('blog');return false" class="link-type-1">Blog</a>
+            <a href="" onclick="route('gallery');return false" class="link-type-1">Gallery</a>
+        </div>
+    </div>
+    <div class="single-column col-sm-3">
+        <p>Resources</p>
+        <div class="single-column-body">
+            <a href="" onclick="return false" class="link-type-1">Become a Member</a>
+            <a href="" onclick="return false" class="link-type-1">Start a Chapter</a>
+            <a href="" onclick="return false" class="link-type-1">Chapter Guidelines</a>
+            <a href="" onclick="return false" class="link-type-1">Shop</a>
+            <div class="second-column-second-section">
+                <a href="" onclick="return false" class="link-type-2">Annual Meetings</a>
+                <a href="" onclick="return false" class="link-type-2">Board Meetings Meetings</a>
+                <a href="" onclick="return false" class="link-type-2">ByLaws</a>
+                <a href="" onclick="return false" class="link-type-2">Logo</a>
+            </div>
+        </div>
+    </div>
+    <div class="single-column col-sm-3">
+        <p>Contact</p>
+        <div class="single-column-body">
+            <div class="third-column-first-section">
+                <div class="container w-full p-0">
+                    <div class="col-sm-12 p-0">
+                        <input type="text" placeholder="Full Name" name="" id="">
+                    </div>
+                    <div class="col-sm-6" style="padding-left: 0;">
+                        <input type="text" placeholder="number" name="" id="">
+                    </div>
+                    <div class="col-sm-6 p-0">
+                        <input type="text" placeholder="email" name="" id="">
+                    </div>
+                    <div class="col-sm-12 p-0">
+                        <textarea name="" placeholder="Message" id="" style="height: unset;" rows="5"></textarea>
+                    </div>
+                </div>
+                <div class="container w-full p-0">
+                    <div class="button bordered-button faded-blue" style="max-width: 200px;">
+                        <p>KNOW MORE</p>
+                    </div>
+                </div>
+            </div>
+            <div class="third-column-second-section">
+                <a href="" onclick="return false" class="link-type-3">Terms and Conditions</a>
+                <a href="" onclick="return false" class="link-type-3">Disclaimers</a>
+                <a href="" onclick="return false" class="link-type-3">Privacy Policy</a>
+                <a href="" onclick="return false" class="link-type-3">GDPR Policy</a>
+            </div>
+            <div class="third-column-social-section">
+                <i class="fa-brands fa-facebook-f"></i>
+                <i class="fa-brands fa-twitter"></i>
+            </div>
+        </div>
+    </div>
+    <div class="single-column col-sm-3">
+        <div class="unauthed">
+            <p>Member Login</p>
+            <div class="single-column-body">
+                <div class="third-column-first-section">
+                    <div class="container w-full p-0">
+                        <div class="col-sm-12 p-0">
+                            <input type="text" placeholder="Email / Number" id="loginEmail" id="">
+                        </div>
+                        <div class="col-sm-12 p-0">
+                            <input type="password" placeholder="Password" id="loginPassword" id="">
+                        </div>
+                    </div>
+                    <div class="container w-full p-0">
+                        <p class="login_status" style="color:red;font-size:14px;"></p>
+                        <div class="button" style="max-width: 200px;" onclick="auth.login()">
+                            LOG IN
+                        </div>
+                        <br>
+                        <a href="Javascript:void(0)" onclick="auth.magiclink()">Forgot Password ? Get login link on email</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="authed">
+            <p>My Account</p>
+            <div class="single-column-body">
+                <a href="" onclick="return false" class="link-type-1"><tag class="fname"></tag> <tag class="lname"></tag></a>
+                <div class="second-column-second-section">
+                    <a href="" onclick="route('account/personal');return false" class="link-type-2"><i style="width:30px;" class="fa-solid fa-user"></i> Personal</a>
+                    <a href="" onclick="route('account/security');return false" class="link-type-2"><i style="width:30px;" class="fa-solid fa-user-shield"></i> Security</a>
+                    <a href="" onclick="route('account/membership');return false" class="link-type-2"><i style="width:30px;" class="fa-solid fa-receipt"></i> Membership</a>
+                    <a href="" onclick="route('account/network');return false" class="link-type-2"><i style="width:30px;" class="fa-solid fa-users"></i> Network</a>
+                    <br>
+                    <a href="" onclick="auth.logout();return false" class="link-type-2"><i style="width:30px;" class="fa-solid fa-power-off"></i> Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

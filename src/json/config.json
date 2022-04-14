@@ -1,0 +1,24 @@
+{
+    "ispwa": false,
+    "serviceurl": "/service/",
+    "html_path": "/src/html/",
+    "blog_url": "https://blogs.barazki.in/wp-json/wp/v2/barazki/",
+    "order_status": ["Placed", "Confirmed", "Dispatched", "Delivered", "Cancelled", "Returned", "Packed"],
+    "cdn_url": "http://localhost/cdn.kanr.is/barazki/",
+    "payment_status": ["Pending", "Completed", "Refunded"],
+    "components": {
+        "header": ["body", "Loading headers"],
+        "home": ["appbody", "Loading home"],
+        "menu": ["body", "Loading menu items"],
+        "footer": ["body", "Loading menu items"],
+        "blog": ["appbody", "Loading menu items"],
+        "gallery": ["appbody", "Loading gallery and images"],
+        "account":["appbody","Loading account sections"]
+    },
+    "keys": {
+        "Razorpay": {
+            "key_id": "rzp_test_leGW5HZJFyiTf4"
+        }
+    },
+    "env": "dev"
+}

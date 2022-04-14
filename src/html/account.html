@@ -1,0 +1,402 @@
+<div class="account-left-section">
+    <div class="left-menu-single-item" linked-to="personal" onclick="route('account/personal')">
+        <h4><i class="fa-solid fa-user"></i> Personal Details</h4>
+    </div>
+    <div class="left-menu-single-item" linked-to="security" onclick="route('account/security')">
+        <h4><i class="fa-solid fa-user-shield"></i> Security</h4>
+    </div>
+    <div class="left-menu-single-item" linked-to="membership" onclick="route('account/membership')">
+        <h4><i class="fa-solid fa-receipt"></i> Membership Details</h4>
+    </div>
+    <div class="left-menu-single-item" linked-to="gallery" onclick="route('account/gallery')">
+        <h4><i class="fa-solid fa-images"></i> Gallery</h4>
+    </div>
+    <div class="left-menu-single-item" linked-to="blogs" onclick="route('account/blogs')">
+        <h4><i class="fa-solid fa-blog"></i> My Blogs</h4>
+    </div>
+    <div class="left-menu-single-item" linked-to="network" onclick="route('account/network')">
+        <h4><i class="fa-solid fa-users"></i> Network</h4>
+    </div>
+    <div class="left-menu-single-item" style="position: absolute;bottom: 0;border-top: 1px solid #e3e3e3;border-radius: 0;max-width: 250px;right: 0;background: transparent;" onclick="auth.logout()">
+        <h4><i class="fa-solid fa-users"></i> Logout</h4>
+    </div>
+</div>
+<div class="account-right-section">
+    <div class="right-menu-single-item" linked-to="personal">
+        <h4>Personal Information</h4>
+        <br>
+        <br>
+        <div class="container" style="max-width: 1400px;float:left;">
+            <div class="col-sm-6">
+                <div class="col-sm-6 p-l-0">
+                    <div class="dropzone_profile dropzone dropzone_square smalltools" data-width="1080" data-height="1080" data-url="php/build/upload_user_photo.php" data-image="" style="width: 100%;aspect-ratio:1">
+                        <input type="file" accept=".png, .jpg, .jpeg" name="thumb" />
+                    </div>
+                </div>
+                <div class="col-sm-6 p-r-0">
+                    <div class="col-sm-12 p-0">
+                        <input type="text" placeholder="First Name" name="" id="fname_edit">
+                    </div>
+                    <div class="col-sm-12 p-0">
+                        <input type="text" placeholder="Last Name" name="" id="lname_edit">
+                    </div>
+                    <div class="col-sm-12 p-0">
+                        <input type="text" placeholder="Gender" name="" id="gender_edit">
+                    </div>
+                    <div class="col-sm-12 p-0">
+                        <input type="text" placeholder="Club Name" name="" id="clubname_edit">
+                    </div>
+                    <div class="col-sm-12 p-0">
+                        <input type="number" placeholder="Number of years in Rotary" name="" id="yearsinrotary">
+                    </div>
+                </div>
+                <br>
+                </br>
+                <h4>Contact Information</h4>
+                <div class="col-sm-6 p-l-0">
+                    <input type="text" placeholder="Phone 1" name="" id="phone1">
+                </div>
+                <div class="col-sm-6 p-r-0">
+                    <input type="text" placeholder="Phone 2" name="" id="phone2">
+                </div>
+                <div class="col-sm-6 p-l-0">
+                    <input type="text" placeholder="Email 1" name="" id="email1">
+                </div>
+                <div class="col-sm-6 p-r-0">
+                    <input type="text" placeholder="Email 2" name="" id="email2">
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="about-edit-section" style="min-height: 350px;">
+
+                </div>
+            </div>
+        </div>
+        <div class="container" style="max-width: 1400px;float:left;border-top:1px solid #efefef;margin-top:50px;">
+            <h4>Business Information</h4>
+        </div>
+        <div class="container" style="max-width: 1400px;float:left;">
+            <div class="col-sm-6">
+                <div class="col-sm-6 p-l-0">
+                    <div class="dropzone_logo dropzone dropzone_square smalltools" data-width="1080" data-height="1080" data-url="php/build/upload_user_photo.php" data-image="" style="width: 100%;aspect-ratio:1">
+                        <input type="file" accept=".png, .jpg, .jpeg" name="thumb" />
+                    </div>
+                </div>
+                <div class="col-sm-6 p-r-0">
+                    <div class="col-sm-12 p-0">
+                        <input type="text" placeholder="Organisation Name" name="" id="organisation_name">
+                    </div>
+                    <div class="col-sm-12 p-0">
+                        <input type="text" placeholder="Position Occupied" name="" id="position">
+                    </div>
+                    <div class="col-sm-12 p-0">
+                        <textarea name="" id="" placeholder="Address" id="business_adress" rows="5" style="height:unset"></textarea>
+                    </div>
+                </div>
+                <br>
+                </br>
+                
+            </div>
+            <div class="col-sm-6">
+                <div class="business-details-edit-section" style="min-height: 350px;">
+
+                </div>
+            </div>
+        </div>
+        <div class="container" style="float: left;margin-bottom:50px;">
+            <div class="button" style="width: 250px;float:left" onclick="auth.login()">
+                SAVE CHANGES
+            </div>
+        </div>
+        <br>
+        </br>
+        <div class="container" style="height:50px;float: left"></div>
+    </div>
+    <div class="right-menu-single-item" linked-to="security">
+        <h4>Reset Password</h4>
+        <br>
+        <br>
+        <div class="container" style="max-width: 1400px;float:left;">
+            <div class="container w-full-p-0">
+                <div class="col-sm-4">
+                    <div class="col-sm-12 p-0">
+                        <input type="text" placeholder="Password" name="" id="passwordNew">
+                    </div>
+                    <div class="col-sm-12 p-0">
+                        <input type="text" placeholder="Confirm Password" name="" id="passwordConfirm">
+                    </div>
+                </div>
+            </div>
+            <p class="newpasswordstatus" style="color:red;font-size:14px;"></p>
+            <div class="button" style="width: 250px;float:left" onclick="auth.newPassword()">
+                RESET PASSWORD
+            </div>
+        </div>
+    </div>
+    <div class="right-menu-single-item" linked-to="membership">
+        <h4>Membership Plan</h4>
+        <br>
+        <br>
+        <div class="container w-full p-0">
+            <div class="container current-plan" style="margin-left:0">
+                <h3>Current Plan</h3>
+                <p>Annual Membership at 15.00 USD <span>Expring on 24th April 2022</span></p>
+                <br>
+                <div class="button bordered-button" style="width: 250px;float:left;transform:scale(0.7)" onclick="auth.login()">
+                    <p>RENEW NOW</p>
+                </div>
+            </div>
+        </div>
+        <div class="container w-full p-0">
+            <div class="container all-plans" style="margin-left:0">
+                <div class="container membership-plan current">
+                    <h3>Annual</h3>
+                    <p>Fees: USD 15</p>
+                    <div class="button" style="width: 250px;float:left;transform:scale(0.7)" onclick="auth.login()">
+                        <p>SELECT PLAN</p>
+                    </div>
+                </div>
+                <div class="container membership-plan">
+                    <h3>Lifetime</h3>
+                    <p>Fees: USD 75</p>
+                    <div class="button" style="width: 250px;float:left;transform:scale(0.7)" onclick="auth.login()">
+                        <p>SELECT PLAN</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="right-menu-single-item" linked-to="gallery">
+        <h4>My Images</h4>
+        <div class="container single-photo-upload-container">
+            <div class="col-sm-6" style="max-width:450px;">
+                <div class="dropzone_1 dropzone dropzone_square smalltools" data-image="http://property.mq.edu.au/__data/assets/image/0005/365036/75T_G800sm.jpg" data-width="1080" data-height="720" data-url="php/build/upload_user_photo.php" data-image="" style="width: 100%;aspect-ratio:1.5">
+                    <input type="file" accept=".png, .jpg, .jpeg" name="thumb" />
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="col-sm-12 p-0">
+                    <input type="text" placeholder="Image title" value="This is image title" name="" id="">
+                </div>
+                <div class="col-sm-12 p-0">
+                    <textarea name="" placeholder="Description" id="" value="This is image description" style="height: unset;" rows="5"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="container single-photo-upload-container">
+            <div class="col-sm-6" style="max-width:450px;">
+                <div class="dropzone_2 dropzone dropzone_square smalltools" data-width="1080" data-height="720" data-url="php/build/upload_user_photo.php" data-image="" style="width: 100%;aspect-ratio:1.5">
+                    <input type="file" accept=".png, .jpg, .jpeg" name="thumb" />
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="col-sm-12 p-0">
+                    <input type="text" placeholder="Image title" name="" id="">
+                </div>
+                <div class="col-sm-12 p-0">
+                    <textarea name="" placeholder="Description" id="" style="height: unset;" rows="5"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="right-menu-single-item" linked-to="blogs">
+        <div class="container w-full">
+            <h4 style="display: inline-block;float:left">My Blogs</h4>
+            <div class="button" style="width: 150px;float:left;transform:scale(0.8);transform-origin:top right" onclick="route('account/blogs/add')">
+                <p>ADD NEW</p>
+            </div>
+        </div>
+        <br>
+        <div class="container w-full" id="my-blog-archive">
+            <div class="container my-blog-single-card">
+                <img src="https://5.imimg.com/data5/GG/BR/MY-24252948/social-media-marketing-services-500x500.jpg" alt="">
+                <h4>A Complete guide to modern social media Engineering</h4>
+                <p>The more you know about your competitors’ SEO strategy, the better your own site can perform.</p>
+                <div class="button" style="width: 150px;float:left;transform:scale(0.8);transform-origin:top right" onclick="route('account/blogs/edit')">
+                    <p>EDIT</p>
+                </div>        
+            </div>
+            <div class="container my-blog-single-card">
+                <img src="https://5.imimg.com/data5/GG/BR/MY-24252948/social-media-marketing-services-500x500.jpg" alt="">
+                <h4>A Complete guide to modern social media Engineering</h4>
+                <p>The more you know about your competitors’ SEO strategy, the better your own site can perform.</p>
+                <div class="button" style="width: 150px;float:left;transform:scale(0.8);transform-origin:top right" onclick="route('account/blogs/edit')">
+                    <p>EDIT</p>
+                </div>        
+            </div>
+            <div class="container my-blog-single-card">
+                <img src="https://5.imimg.com/data5/GG/BR/MY-24252948/social-media-marketing-services-500x500.jpg" alt="">
+                <h4>A Complete guide to modern social media Engineering</h4>
+                <p>The more you know about your competitors’ SEO strategy, the better your own site can perform.</p>
+                <div class="button" style="width: 150px;float:left;transform:scale(0.8);transform-origin:top right" onclick="route('account/blogs/edit')">
+                    <p>EDIT</p>
+                </div>        
+            </div>
+        </div>
+        <div class="container w-full" id="my-blog-add" style="border-top:1px solid #dedede;">
+            <div class="container w-full">
+                <h4 style="display: inline-block;float:left">Add New Blog</h4>
+                <div class="button" style="width: 250px;float:left;transform:scale(0.8);transform-origin:top right" onclick="route('account/blogs/add')">
+                    <p>UPLOAD BLOG</p>
+                </div>
+            </div>
+            <br>
+            <div class="container w-full">
+                <div class="col-sm-4" style="border-left: 1px solid #dedede;float:right">
+                    <div class="col-sm-12 p-0">
+                        <div class="col-md-7 p-l-0">
+                            <h5>Primary Image</h5>
+                            <div class="new_blog_banner dropzone dropzone_square smalltools" data-width="1080" data-height="720" data-url="php/build/upload_user_photo.php" data-image="" style="width: 100%;aspect-ratio:1.5">
+                                <input type="file" accept=".png, .jpg, .jpeg" name="thumb" />
+                            </div>
+                        </div>
+                        <div class="col-md-5 p-r-0">
+                            <h5>Thumbnail</h5>
+                            <div class="new_blog_thumb dropzone dropzone_square smalltools" data-width="1080" data-height="720" data-url="php/build/upload_user_photo.php" data-image="" style="width: 100%;aspect-ratio:1">
+                                <input type="file" accept=".png, .jpg, .jpeg" name="thumb" />
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="col-sm-12 p-0">
+                        <input type="text" placeholder="Blog Title" name="" id="">
+                    </div>
+                    <div class="col-sm-12 p-0">
+                        <input type="number" placeholder="Read time in minutes" name="" id="">
+                    </div>
+                    <div class="col-sm-12 p-0">
+                        <textarea name="" placeholder="Excerpt" id="" style="height: unset;" rows="5"></textarea>
+                    </div>
+                </div>
+                <div class="col-sm-8">
+                    <div class="new-blog-body-editor" style="min-height: calc(100vh - 400px)"></div>
+                </div>
+            </div>
+        </div>
+        <div class="container w-full" id="my-blog-edit"style="border-top:1px solid #dedede; ">
+            <div class="container w-full">
+                <h4 style="display: inline-block;float:left">Update Blog</h4>
+                <div class="button" style="width: 250px;float:left;transform:scale(0.8);transform-origin:top right" onclick="route('account/blogs/add')">
+                    <p>SAVE CHANGES</p>
+                </div>
+            </div>
+            <br>
+            <div class="container w-full">
+                <div class="col-sm-4" style="border-left: 1px solid #dedede;float:right">
+                    <div class="col-sm-12 p-0">
+                        <div class="col-md-7 p-l-0">
+                            <h5>Primary Image</h5>
+                            <div class="update_blog_banner dropzone dropzone_square smalltools" data-width="1080" data-height="720" data-url="php/build/upload_user_photo.php" data-image="https://shanebarker.com/wp-content/uploads/2020/05/The-Future-of-Social-Media-Marketing-11-Trends-You-Need-to-Know.jpg" style="width: 100%;aspect-ratio:1.5">
+                                <input type="file" accept=".png, .jpg, .jpeg" name="thumb" />
+                            </div>
+                        </div>
+                        <div class="col-md-5 p-r-0">
+                            <h5>Thumbnail</h5>
+                            <div class="update_blog_thumb dropzone dropzone_square smalltools" data-width="1080" data-height="720" data-url="php/build/upload_user_photo.php" data-image="https://5.imimg.com/data5/GG/BR/MY-24252948/social-media-marketing-services-500x500.jpg" style="width: 100%;aspect-ratio:1">
+                                <input type="file" accept=".png, .jpg, .jpeg" name="thumb" />
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="col-sm-12 p-0">
+                        <input type="text" placeholder="Blog Title" value="A Complete guide to modern social media Engineering" name="" id="">
+                    </div>
+                    <div class="col-sm-12 p-0">
+                        <input type="number" placeholder="Read time in minutes" value="24" name="" id="">
+                    </div>
+                    <div class="col-sm-12 p-0">
+                        <textarea name="" placeholder="Excerpt" id="" value="The more you know about your competitors’ SEO strategy, the better your own site can perform." style="height: unset;" rows="5"></textarea>
+                    </div>
+                </div>
+                <div class="col-sm-8">
+                    <div class="edit-blog-body-editor" style="min-height: calc(100vh - 400px)"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="right-menu-single-item" linked-to="network" style="overflow-y: hidden;">
+        <div class="container w-full network-header">
+            <div class="col-sm-3">
+                <img src="https://www.rotarymeansbusiness.in/images/userphotos/1582107447657.1ddcca.jpg" class="network_photo" alt="">
+            </div>
+            <div class="col-sm-3">
+                <p>120<span>Friends</span></p>
+                <p>10<span>Posts</span></p>
+            </div>
+            <div class="col-sm-6">
+                <a href="Javascript:void(0)" onclick="route('account/network/friends');return false">Profile</a>
+                <a href="Javascript:void(0)" onclick="route('account/network/friends');return false">Friends</a>
+                <a href="Javascript:void(0)" onclick="route('account/network/gallery');return false">Gallery</a>
+                <a href="Javascript:void(0)" onclick="route('account/network/albums');return false">Albums</a>
+            </div>
+        </div>
+        <div class="container w-full network-body">
+            <div class="container p-0 w-full">
+                <div class="col-sm-4">
+                    <div class="container feed-home-about">
+                        <h3>About</h3>
+                        <p>I’m a friendly kitchen assistant who suffers from a severe phobia of buttons.<br>Brother of Elijah Jay Watkins, who has phobia of buttons and trust issues.</p>
+                        <p>Mumbai, India</p>
+                        <p>CEO, KANRIS Inftech PVt Ltd</p>
+                        <p>March, 11</p>
+                    </div>
+                    <div class="container feed-home-friends">
+                        <h3>Friends</h3>
+                        <div class="container w-full p-0">
+                            <img src="https://www.rotarymeansbusiness.in/images/userphotos/1582107447657.1ddcca.jpg" alt="">
+                            <img src="https://www.rotarymeansbusiness.in/images/userphotos/1582107447657.1ddcca.jpg" alt="">
+                            <img src="https://www.rotarymeansbusiness.in/images/userphotos/1582107447657.1ddcca.jpg" alt="">
+                            <img src="https://www.rotarymeansbusiness.in/images/userphotos/1582107447657.1ddcca.jpg" alt="">
+                            <img src="https://www.rotarymeansbusiness.in/images/userphotos/1582107447657.1ddcca.jpg" alt="">
+                            <img src="https://www.rotarymeansbusiness.in/images/userphotos/1582107447657.1ddcca.jpg" alt="">
+                            <img src="https://www.rotarymeansbusiness.in/images/userphotos/1582107447657.1ddcca.jpg" alt="">
+                            <img src="https://www.rotarymeansbusiness.in/images/userphotos/1582107447657.1ddcca.jpg" alt="">
+                        </div>
+                        <div class="button" style="width: 250px;float:left;transform:scale(0.8);transform-origin:top right" onclick="route('account/network/friends')">
+                            <p>VIEW ALL</p>
+                        </div>
+                    </div>
+                    <div class="container feed-home-friends">
+                        <h3>Gallery</h3>
+                        <div class="container w-full p-0">
+                            <img src="https://www.rotarymeansbusiness.in/images/userphotos/1582107447657.1ddcca.jpg" alt="">
+                            <img src="https://www.rotarymeansbusiness.in/images/userphotos/1582107447657.1ddcca.jpg" alt="">
+                            <img src="https://www.rotarymeansbusiness.in/images/userphotos/1582107447657.1ddcca.jpg" alt="">
+                            <img src="https://www.rotarymeansbusiness.in/images/userphotos/1582107447657.1ddcca.jpg" alt="">
+                            <img src="https://www.rotarymeansbusiness.in/images/userphotos/1582107447657.1ddcca.jpg" alt="">
+                            <img src="https://www.rotarymeansbusiness.in/images/userphotos/1582107447657.1ddcca.jpg" alt="">
+                            <img src="https://www.rotarymeansbusiness.in/images/userphotos/1582107447657.1ddcca.jpg" alt="">
+                            <img src="https://www.rotarymeansbusiness.in/images/userphotos/1582107447657.1ddcca.jpg" alt="">
+                        </div>
+                        <div class="button" style="width: 250px;float:left;transform:scale(0.8);transform-origin:top right" onclick="route('account/network/gallery')">
+                            <p>VIEW ALL</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-8">
+                    <div class="container new-post-block">
+                        <h3>Create Post</h3>
+                        <div class="button bordered-button" style="width: 200px;float:left;transform: scale(0.7);transform-origin: top right;position: absolute;top: 13px;right: 15px;" onclick="route('account/blogs/add')">
+                            <p>Add Photo</p>
+                        </div>
+                        <textarea style="height:unset" name="" id="" rows="10"></textarea>
+                        <div class="button" style="width: 250px;float:left;transform:scale(0.8);transform-origin:top right" onclick="route('account/blogs/add')">
+                            <p>SUBMIT</p>
+                        </div>
+                    </div>
+                    <div class="container old-post-block">
+                        <div class="post-member">
+                            <img src="https://www.rotarymeansbusiness.in/images/userphotos/1582107447657.1ddcca.jpg" alt="">
+                            <h4>Rishikesh Tiwari</h4>
+                            <h5>29 minutes ago</h5>
+                        </div>
+                        <div class="post-body">
+                            <p>Look at that sky! I so want to be there.. Can we arrange a trip? Is that a possibility? Please!!!</p>
+                            <img src="http://angular-material.fusetheme.com/assets/images/cards/14-640x480.jpg" alt="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

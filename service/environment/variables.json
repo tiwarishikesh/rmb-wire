@@ -1,0 +1,12 @@
+{
+    "keys": {
+        "razorpay_key_id": "rzp_test_leGW5HZJFyiTf4",
+        "razorpay_key_secret": "tS0zR86rT94CMEDBPq1dkU0L"
+    },
+    "dbConnection": {
+        "server": "localhost",
+        "user": "",
+        "password": "",
+        "dbName": ""
+    }
+}

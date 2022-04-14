@@ -1,0 +1,57 @@
+<tr style="border-top:1px solid #bcbcbc;" margin-top="10">
+    <td align="center" valign="top">
+        <!-- CENTERING TABLE // -->
+        <table border="0" cellpadding="0" cellspacing="0" width="750" class="flexibleContainer" style="width:100% !important;padding:8px;" id="order_table">
+            <thead>
+                <td width="50%" style="width: 50%;">PRODUCT</td>
+                <td width="25%" style="width: 25%;">QTY</td>
+                <td width="25%" style="width: 25%;text-align:right">AMOUNT</td>
+            </thead>
+            <tbody>
+                {{items}}
+                <tr>
+                    <td width="50%" style="width: 50%;">Bottle Guord</td>
+                    <td width="25%" style="width: 25%;">500 gm</td>
+                    <td width="25%" style="width: 25%;text-align:right">50.00</td>
+                </tr>
+            </tbody>
+        </table>
+        <!-- // FLEXIBLE CONTAINER -->
+        <table border="0" cellpadding="0" cellspacing="0" width="750" class="flexibleContainer" style="width:100% !important;padding:8px;" id="money_table">
+            <thead height="0">
+                <td style="width: 75%;"></td>
+                <td style="width: 25%;text-align:right"></td>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="width: 75%;text-align: right;">Subtotal</td>
+                    <td style="width: 25%;text-align:right">{{subtotal}}</td>
+                </tr>
+                <tr>
+                    <td style="width: 75%;text-align: right;">Shipping</td>
+                    <td style="width: 25%;text-align:right">{{shipping}}</td>
+                </tr>
+                <tr>
+                    <td style="width: 75%;text-align: right;">Savings</td>
+                    <td style="width: 25%;text-align:right">{{savings}}</td>
+                </tr>
+                <tr>
+                    <td style="width: 75%;text-align: right;color:orange;font-weight:bold">BCASH Used</td>
+                    <td style="width: 25%;text-align:right">{{paid_by_bcash}}</td>
+                </tr>
+                <tr>
+                    <td style="width: 75%;text-align: right;color:green">Save the Planet</td>
+                    <td style="width: 25%;text-align:right">{{use_env_pack}}</td>
+                </tr>
+                <tr>
+                    <td style="width: 75%;text-align: right;color:green;font-weight:bold">Amount Adjusted</td>
+                    <td style="width: 25%;text-align:right">{{adjusted_amount}}</td>
+                </tr>
+                <tr>
+                    <td style="width: 75%;text-align: right;font-weight:bold">TOTAL</td>
+                    <td style="width: 25%;text-align:right">{{revised_amount}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </td>
+</tr>
