@@ -1,5 +1,5 @@
 let version = 1;
-let old_path={};
+let old_path = {};
 let path = {};
 let base_path = "";
 let quillEditors = {};
@@ -43,183 +43,183 @@ function loadelements() {
     });
 }
 
-async function startRMB(){
+async function startRMB() {
     await auth.checklogin();
     setInterval(() => {
         checkUrl();
     }, 50);
     setTimeout(() => {
-        if(path.params.magiclink){
+        if (path.params.magiclink) {
             auth.LogInWithMagicLink();
         }
     }, 100);
     setTimeout(() => {
-        if(path.pathname == ''){
+        if (path.pathname == '') {
             route('home');
         }
     }, 500);
     $("#animated-thumbnails-gallery")
-  .justifiedGallery({
-    captions: false,
-    lastRow: "hide",
-    rowHeight: 180,
-    margins: 5
-  })
-  .on("jg.complete", function () {
-    lightGallery(document.getElementById("animated-thumbnails-gallery"), {
-      autoplayFirstVideo: false,
-      pager: false,
-      galleryId: "nature",
-      flipHorizontal: false,
-      flipVertical: false,
-      rotateLeft: false,
-      plugins: [
-        lgZoom,
-        lgThumbnail,
-        lgShare,
-        lgRotate,
-        lgFullscreen,
-        lgAutoplay
-      ],
-      mobileSettings: {
-        controls: false,
-        showCloseIcon: false,
-        download: false,
-        rotate: false
-      }
-    });
-  });
-  $("#animated-thumbnails-gallery1")
-  .justifiedGallery({
-    captions: false,
-    lastRow: "hide",
-    rowHeight: 180,
-    margins: 5
-  })
-  .on("jg.complete", function () {
-    lightGallery(document.getElementById("animated-thumbnails-gallery1"), {
-      autoplayFirstVideo: false,
-      pager: false,
-      galleryId: "nature",
-      flipHorizontal: false,
-      flipVertical: false,
-      rotateLeft: false,
-      plugins: [
-        lgZoom,
-        lgThumbnail,
-        lgShare,
-        lgRotate,
-        lgFullscreen,
-        lgAutoplay
-      ],
-      mobileSettings: {
-        controls: false,
-        showCloseIcon: false,
-        download: false,
-        rotate: false
-      }
-    });
-  });
+        .justifiedGallery({
+            captions: false,
+            lastRow: "hide",
+            rowHeight: 180,
+            margins: 5
+        })
+        .on("jg.complete", function() {
+            lightGallery(document.getElementById("animated-thumbnails-gallery"), {
+                autoplayFirstVideo: false,
+                pager: false,
+                galleryId: "nature",
+                flipHorizontal: false,
+                flipVertical: false,
+                rotateLeft: false,
+                plugins: [
+                    lgZoom,
+                    lgThumbnail,
+                    lgShare,
+                    lgRotate,
+                    lgFullscreen,
+                    lgAutoplay
+                ],
+                mobileSettings: {
+                    controls: false,
+                    showCloseIcon: false,
+                    download: false,
+                    rotate: false
+                }
+            });
+        });
+    $("#animated-thumbnails-gallery1")
+        .justifiedGallery({
+            captions: false,
+            lastRow: "hide",
+            rowHeight: 180,
+            margins: 5
+        })
+        .on("jg.complete", function() {
+            lightGallery(document.getElementById("animated-thumbnails-gallery1"), {
+                autoplayFirstVideo: false,
+                pager: false,
+                galleryId: "nature",
+                flipHorizontal: false,
+                flipVertical: false,
+                rotateLeft: false,
+                plugins: [
+                    lgZoom,
+                    lgThumbnail,
+                    lgShare,
+                    lgRotate,
+                    lgFullscreen,
+                    lgAutoplay
+                ],
+                mobileSettings: {
+                    controls: false,
+                    showCloseIcon: false,
+                    download: false,
+                    rotate: false
+                }
+            });
+        });
 }
 
 let auth = {
-    login: function () {
+    login: function() {
         let payload = {
-            email : $("#loginEmail").val(),
+            email: $("#loginEmail").val(),
             password: $("#loginPassword").val()
         }
-        
-        if(/\S+@\S+\.\S+/.test(payload.email) && payload.password.length > 5){
+
+        if (/\S+@\S+\.\S+/.test(payload.email) && payload.password.length > 5) {
             $(".login_status").text("");
-            xhttp.post('auth', payload, {}).then((response)=>{
-                if(response.status == "success"){
-                    $('body').attr('auth','true');
-                    localStorage.setItem('auth','true');
+            xhttp.post('auth', payload, {}).then((response) => {
+                if (response.status == "success") {
+                    $('body').attr('auth', 'true');
+                    localStorage.setItem('auth', 'true');
                     auth.getMember(response.user);
-                }else{
-                    if(response.details == "Wrong passsword"){
+                } else {
+                    if (response.details == "Wrong passsword") {
                         $(".login_status").text("Wrong Password");
-                    }else{
+                    } else {
                         $(".login_status").text("No Records Found. Please check your email ID");
                     }
                 }
             })
-        }else{
+        } else {
             $(".login_status").text("Please Enter Valid Credentials. Password id minimum 6 characters");
         }
     },
-    logout: function(){
-        $('body').attr('auth','false');
-        localStorage.setItem('auth','false');
-        xhttp.delete('auth',{},{}).then(()=>{
+    logout: function() {
+        $('body').attr('auth', 'false');
+        localStorage.setItem('auth', 'false');
+        xhttp.delete('auth', {}, {}).then(() => {
             window.location.reload();
         })
     },
-    checklogin: function(){
-        return new Promise((resolve, reject)=>{
-            xhttp.get('auth', {}, {}).then((response)=>{
-                if(response.status == "success"){
-                    $('body').attr('auth','true');
-                    localStorage.setItem('auth','true');
+    checklogin: function() {
+        return new Promise((resolve, reject) => {
+            xhttp.get('auth', {}, {}).then((response) => {
+                if (response.status == "success") {
+                    $('body').attr('auth', 'true');
+                    localStorage.setItem('auth', 'true');
                     auth.getMember(response.user);
                     resolve();
-                }else{
+                } else {
                     resolve();
                 }
-            }).catch(()=>{
+            }).catch(() => {
                 resolve();
             })
         })
     },
-    newPassword: function () {
+    newPassword: function() {
         $(".newpasswordstatus").text('');
 
         let payload = {
             password: $("#passwordNew").val(),
             confirmPassword: $("#passwordConfirm").val()
         }
-        if(payload.password.length>5 && payload.password == payload.confirmPassword){
-            xhttp.put('auth',payload,{}).then((response)=>{
-                if(response.status == "success"){
+        if (payload.password.length > 5 && payload.password == payload.confirmPassword) {
+            xhttp.put('auth', payload, {}).then((response) => {
+                if (response.status == "success") {
                     $(".newpasswordstatus").text('Password updated successfully');
-                    $(".newpasswordstatus").css('color','#999');
+                    $(".newpasswordstatus").css('color', '#999');
                     setTimeout(() => {
                         $(".newpasswordstatus").text('');
                     }, 1500);
-                }else{
+                } else {
                     $(".newpasswordstatus").text('Something went wrong please try again');
-                    $(".newpasswordstatus").css('color','red');
+                    $(".newpasswordstatus").css('color', 'red');
                 }
             })
-        }else{
+        } else {
             $(".newpasswordstatus").text('Please check if passwords match. Minimum length is 6');
-            $(".newpasswordstatus").css('color','red');
+            $(".newpasswordstatus").css('color', 'red');
         }
     },
-    magiclink:function () {
+    magiclink: function() {
         $(".login_status").text("");
-        if(/\S+@\S+\.\S+/.test($("#loginEmail").val())){
-            xhttp.options('auth',{email: $("#loginEmail").val()},{}).then((response)=>{
-                if(response.status == "success"){
+        if (/\S+@\S+\.\S+/.test($("#loginEmail").val())) {
+            xhttp.options('auth', { email: $("#loginEmail").val() }, {}).then((response) => {
+                if (response.status == "success") {
                     showsnackbar('Email with Reset Link has been sent successfully');
-                }else{
+                } else {
                     $(".login_status").text("No Records Found. Please check your email ID");
                     setTimeout(() => {
                         $(".login_status").text("");
                     }, 1500);
                 }
             })
-        }else{
+        } else {
             $(".login_status").text("Please Enter Valid Email ID");
         }
     },
-    LogInWithMagicLink: function () {
-        xhttp.patch('auth',{magicLink: path.params.magiclink},{}).then((response)=>{
-            if(response.status == "success"){
-                $('body').attr('auth','true');
-                localStorage.setItem('auth','true');
+    LogInWithMagicLink: function() {
+        xhttp.patch('auth', { magicLink: path.params.magiclink }, {}).then((response) => {
+            if (response.status == "success") {
+                $('body').attr('auth', 'true');
+                localStorage.setItem('auth', 'true');
                 auth.getMember(response.user);
-            }else{
+            } else {
                 Snackbar.show({
                     pos: 'top-center',
                     showAction: false,
@@ -229,10 +229,10 @@ let auth = {
             }
         })
     },
-    getMember: function (user) {
+    getMember: async function(user) {
         $('.fname').text(user.fname);
         $('.lname').text(user.lname);
-        xhttp.get('member',{},{}).then((response)=>{
+        xhttp.get('member', {}, {}).then((response) => {
             $("#fname_edit").val(response.data.personal.fname);
             $("#lname_edit").val(response.data.personal.lname);
             $("#gender_edit").val(response.data.personal.gender);
@@ -243,40 +243,49 @@ let auth = {
             $("#position").val(response.data.professional.position);
             $("#business_adress").html(response.data.professional.organisation_address);
 
-            if(response.data.contact.filter(x => x.type=="email")[0]){
-                $("#email1").val(response.data.contact.filter(x => x.type=="email")[0].details);
+            if (response.data.contact.filter(x => x.contact_type == "email")[0]) {
+                $("#email1").val(response.data.contact.filter(x => x.contact_type == "email")[0].details);
             }
-            if(response.data.contact.filter(x => x.type=="email")[1]){
-                $("#email2").val(response.data.contact.filter(x => x.type=="email")[1].details);
+            if (response.data.contact.filter(x => x.contact_type == "email")[1]) {
+                $("#email2").val(response.data.contact.filter(x => x.contact_type == "email")[1].details);
             }
-            if(response.data.contact.filter(x => x.type=="email")[0]){
-                $("#phone1").val(response.data.contact.filter(x => x.type=="phone")[0].details);
+            if (response.data.contact.filter(x => x.contact_type == "phone")[0]) {
+                $("#phone1").val(response.data.contact.filter(x => x.contact_type == "phone")[0].details);
             }
-            if(response.data.contact.filter(x => x.type=="email")[1]){
-                $("#phone2").val(response.data.contact.filter(x => x.type=="phone")[0].details);
+            if (response.data.contact.filter(x => x.contact_type == "phone")[1]) {
+                $("#phone2").val(response.data.contact.filter(x => x.contact_type == "phone")[0].details);
             }
+
+            quillEditors.aboutEditSection.container.firstChild.innerHTML = response.data.personal.about;
+            quillEditors.aboutEditSection.container.firstChild.innerHTML = response.data.personal.about;
+        })
+    },
+    getMemberdata: function() {
+        return new Promise((resolve, reject) => {
+            let data = localStorage.getItem('memberData');
+
         })
     }
 }
 
 var QuilltoolbarOptions = [
-  ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
-  ['blockquote', 'code-block'],
+    ['bold', 'italic', 'underline', 'strike'], // toggled buttons
+    ['blockquote', 'code-block'],
 
-  [{ 'header': 1 }, { 'header': 2 }],               // custom button values
-  [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-  [{ 'script': 'sub'}, { 'script': 'super' }],      // superscript/subscript
-  [{ 'indent': '-1'}, { 'indent': '+1' }],          // outdent/indent
-  [{ 'direction': 'rtl' }],                         // text direction
+    [{ 'header': 1 }, { 'header': 2 }], // custom button values
+    [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+    [{ 'script': 'sub' }, { 'script': 'super' }], // superscript/subscript
+    [{ 'indent': '-1' }, { 'indent': '+1' }], // outdent/indent
+    [{ 'direction': 'rtl' }], // text direction
 
-  [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
-  [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+    [{ 'size': ['small', false, 'large', 'huge'] }], // custom dropdown
+    [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
 
-  [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
-  [{ 'font': [] }],
-  [{ 'align': [] }],
+    [{ 'color': [] }, { 'background': [] }], // dropdown with defaults from theme
+    [{ 'font': [] }],
+    [{ 'align': [] }],
 
-  ['clean']                                         // remove formatting button
+    ['clean'] // remove formatting button
 ];
 
 /* ///////////////////////////////////////////////////////////////////////////
@@ -285,18 +294,18 @@ var QuilltoolbarOptions = [
 //////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////// */
 
-function checkUrl(){
+function checkUrl() {
     if (window.location.href.toLowerCase() == path.href) {
         return false;
     }
-    parseURL().then(()=>{
+    parseURL().then(() => {
         $('menu').removeClass('active')
-        if(path.parts[0] == "account" && path.parts[1]){
+        if (path.parts[0] == "account" && path.parts[1]) {
             $('.left-menu-single-item').removeClass('active');
             $(`.left-menu-single-item[linked-to="${path.parts[1]}"]`).addClass('active');
             $(`.right-menu-single-item:not([linked-to="${path.parts[1]}"])`).slideUp();
             $(`.right-menu-single-item[linked-to="${path.parts[1]}"]`).slideDown();
-            if(path.parts[1] == "gallery"){
+            if (path.parts[1] == "gallery") {
                 setTimeout(() => {
                     $('.dropzone_1').html5imageupload({
                         onAfterProcessImage: function() {
@@ -329,13 +338,13 @@ function checkUrl(){
                         }
                     });
                 }, 1000);
-            }else if(path.parts[1] == "personal"){
-                if(!quillEditors.aboutEditSection){
+            } else if (path.parts[1] == "personal") {
+                if (!quillEditors.aboutEditSection) {
                     quillEditors.aboutEditSection = new Quill('.about-edit-section', {
                         theme: 'snow'
                     });
                 }
-                if(!quillEditors.aboutBusinessEditSection){
+                if (!quillEditors.aboutBusinessEditSection) {
                     quillEditors.aboutBusinessEditSection = new Quill('.business-details-edit-section', {
                         theme: 'snow'
                     });
@@ -357,23 +366,24 @@ function checkUrl(){
                         }
                     });
                 }, 500);
-            }else if(path.parts[1] == "blogs"){
-                if(!path.parts[2]){
+            } else if (path.parts[1] == "blogs") {
+                if (!path.parts[2]) {
 
-                }else if(path.parts[2] == "add"){
-                    if(!quillEditors.newBlogBody){
+                } else if (path.parts[2] == "add") {
+                    if (!quillEditors.newBlogBody) {
                         quillEditors.newBlogBody = new Quill('.new-blog-body-editor', {
-                                    theme: 'snow',modules: {
-                                    'toolbar': [
+                            theme: 'snow',
+                            modules: {
+                                'toolbar': [
                                     [{ 'size': [] }],
-                                    [ 'bold', 'italic', 'underline', 'strike' ],
+                                    ['bold', 'italic', 'underline', 'strike'],
                                     [{ 'color': [] }, { 'background': [] }],
                                     [{ 'script': 'super' }, { 'script': 'sub' }],
-                                    ['blockquote', 'code-block' ],
-                                    [{ 'list': 'ordered' }, { 'list': 'bullet'}, { 'indent': '-1' }, { 'indent': '+1' }],
-                                    [ 'direction', { 'align': [] }],
-                                    [ 'link', 'image'],
-                                    [ 'clean' ]
+                                    ['blockquote', 'code-block'],
+                                    [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
+                                    ['direction', { 'align': [] }],
+                                    ['link', 'image'],
+                                    ['clean']
                                 ]
                             }
                         })
@@ -408,20 +418,21 @@ function checkUrl(){
                             $('#filename').val('');
                         }
                     });
-                }else{
-                    if(!quillEditors.updateBlogBody){
+                } else {
+                    if (!quillEditors.updateBlogBody) {
                         quillEditors.updateBlogBody = new Quill('.edit-blog-body-editor', {
-                                    theme: 'snow',modules: {
-                                    'toolbar': [
+                            theme: 'snow',
+                            modules: {
+                                'toolbar': [
                                     [{ 'size': [] }],
-                                    [ 'bold', 'italic', 'underline', 'strike' ],
+                                    ['bold', 'italic', 'underline', 'strike'],
                                     [{ 'color': [] }, { 'background': [] }],
                                     [{ 'script': 'super' }, { 'script': 'sub' }],
-                                    ['blockquote', 'code-block' ],
-                                    [{ 'list': 'ordered' }, { 'list': 'bullet'}, { 'indent': '-1' }, { 'indent': '+1' }],
-                                    [ 'direction', { 'align': [] }],
-                                    [ 'link', 'image'],
-                                    [ 'clean' ]
+                                    ['blockquote', 'code-block'],
+                                    [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
+                                    ['direction', { 'align': [] }],
+                                    ['link', 'image'],
+                                    ['clean']
                                 ]
                             }
                         })
