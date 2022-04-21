@@ -13,7 +13,7 @@ function login($conn,$payload){
             unset($user->password);
             include('./jwt-func.php');
             header("Set-Cookie:" . "Authorization=".setToken(json_decode(json_encode($user), true))."; HttpOnly; Max-Age=31536000;");
-            return array("status"=>"success", "details"=>$user);
+            return array("status"=>"success", "user"=>$user);
         }else{
             return array("status"=>"failed","details"=>"Wrong passsword");
         }
