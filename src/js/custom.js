@@ -3,7 +3,8 @@ let old_path = {};
 let path = {};
 let base_path = "";
 let quillEditors = {};
-
+let tempIntervals = [];
+let currentimage = '';
 
 $(document).ready(function() {
     $.getJSON(`/src/json/config.json?v=${version}`, function(response) {
@@ -230,34 +231,73 @@ let auth = {
         })
     },
     getMember: async function(user) {
-        $('.fname').text(user.fname);
-        $('.lname').text(user.lname);
-        xhttp.get('member', {}, {}).then((response) => {
-            $("#fname_edit").val(response.data.personal.fname);
-            $("#lname_edit").val(response.data.personal.lname);
-            $("#gender_edit").val(response.data.personal.gender);
-            $("#clubname_edit").val(response.data.personal.club);
-            $("#yearsinrotary").val(response.data.personal.yearsinrotary);
+        return new Promise((resolve, reject)=>{
+            $('.fname').text(user?.fname);
+            $('.lname').text(user?.lname);
+            xhttp.get('member', {}, {}).then((response) => {
+                auth.memberData = response.data;
+                $("#fname_edit").val(response.data.personal.fname);
+                $("#lname_edit").val(response.data.personal.lname);
+                $('.fname').val(response.data.personal.fname);
+                $('.lname').val(response.data.personal.lname);
+                $("#gender_edit").val(response.data.personal.gender);
+                $("#clubname_edit").val(response.data.personal.club);
+                $("#yearsinrotary").val(response.data.personal.yearsinrotary);
 
-            $("#organisation_name").val(response.data.professional.organisation_name);
-            $("#position").val(response.data.professional.position);
-            $("#business_adress").html(response.data.professional.organisation_address);
+                $("#organisation_name").val(response.data.professional.organisation_name);
+                $("#position").val(response.data.professional.position);
+                $("#business_adress").html(response.data.professional.organisation_address);
 
-            if (response.data.contact.filter(x => x.contact_type == "email")[0]) {
-                $("#email1").val(response.data.contact.filter(x => x.contact_type == "email")[0].details);
-            }
-            if (response.data.contact.filter(x => x.contact_type == "email")[1]) {
-                $("#email2").val(response.data.contact.filter(x => x.contact_type == "email")[1].details);
-            }
-            if (response.data.contact.filter(x => x.contact_type == "phone")[0]) {
-                $("#phone1").val(response.data.contact.filter(x => x.contact_type == "phone")[0].details);
-            }
-            if (response.data.contact.filter(x => x.contact_type == "phone")[1]) {
-                $("#phone2").val(response.data.contact.filter(x => x.contact_type == "phone")[0].details);
-            }
+                if (response.data.contact.filter(x => x.contact_type == "email")[0]) {
+                    $("#email1").val(response.data.contact.filter(x => x.contact_type == "email")[0].details);
+                }
+                if (response.data.contact.filter(x => x.contact_type == "email")[1]) {
+                    $("#email2").val(response.data.contact.filter(x => x.contact_type == "email")[1].details);
+                }
+                if (response.data.contact.filter(x => x.contact_type == "phone")[0]) {
+                    $("#phone1").val(response.data.contact.filter(x => x.contact_type == "phone")[0].details);
+                }
+                if (response.data.contact.filter(x => x.contact_type == "phone")[1]) {
+                    $("#phone2").val(response.data.contact.filter(x => x.contact_type == "phone")[0].details);
+                }
 
-            quillEditors.aboutEditSection.container.firstChild.innerHTML = response.data.personal.about;
-            quillEditors.aboutEditSection.container.firstChild.innerHTML = response.data.personal.about;
+                let tempInt = setInterval(() => {
+                    if(quillEditors.aboutEditSection?.container && quillEditors.aboutEditSection?.container){
+                        quillEditors.aboutEditSection.container.firstChild.innerHTML = response.data.personal.about || '';
+                        quillEditors.aboutBusinessEditSection.container.firstChild.innerHTML = response.data.professional.about || '';
+                        clearInterval(tempInt);
+                        resolve();
+                    }
+                }, 500);
+
+                $("#edit_personal_photo").parent().html(`<div class="dropzone_profile dropzone dropzone_square smalltools" id="edit_personal_photo" data-width="1080" data-height="1080" data-url="/service/profile_photo" data-image="" style="max-width:100%;width: 100%;aspect-ratio:1">
+                    <input type="file" accept=".png, .jpg, .jpeg" name="thumb" />
+                </div>`);
+                $("#edit_personal_photo").attr('data-image', '/service/build/'+response.data.personal.photo || '');
+                $(".network_photo").attr('src','/service/build/'+response.data.personal.photo);
+                setTimeout(() => {
+                    $('#edit_personal_photo').html5imageupload({
+                        onAfterProcessImage: function() {
+                            auth.getMember();
+                            $('.file_name_' + currentimage).val($(this.element).data('name'));
+                            if ($(this)[0].element.classList[2] == 'dropzone_myphoto') {
+                                Snackbar.show({
+                                    pos: 'bottom-center',
+                                    showAction: false,
+                                    text: 'Successfully updated your photo'
+                                });
+                            }
+                        },
+                        onAfterCancel: function() {
+                            $('#filename').val('');
+                        }
+                    });
+                }, 500);
+                $(".feed-home-about p:eq(0)").html(auth.memberData.personal.about.replace(/<\/?[a-z][a-z0-9]*[^<>]*>/ig, ""))
+                $(".feed-home-about p:eq(1)").html(auth.memberData.personal.club.replace(/<\/?[a-z][a-z0-9]*[^<>]*>/ig, ""));
+                $(".feed-home-about p:eq(2)").html(auth.memberData.professional.position+', '+ auth.memberData.professional.organisation_name);
+                $(".feed-home-about p:eq(3)").html('');
+            })
         })
     },
     getMemberdata: function() {
@@ -266,6 +306,89 @@ let auth = {
 
         })
     }
+}
+
+function checkPersonalDataUpdate() {
+    if(!auth.memberData){
+        setTimeout(() => {
+            checkPersonalDataUpdate();
+        }, 500);
+    }
+    tempIntervals.push(setInterval(() => {
+        console.log('Running');
+        let tempData = $.extend( true,{}, auth.memberData );
+        tempData.personal.fname = $("#fname_edit").val();
+        tempData.personal.lname = $("#lname_edit").val();
+        tempData.personal.gender = $("#gender_edit").val();
+        tempData.personal.club = $("#clubname_edit").val();
+        tempData.personal.yearsinrotary = $("#yearsinrotary").val();
+        if(tempData){
+            tempData.personal.about = quillEditors.aboutEditSection.container.firstChild.innerHTML;
+        }
+
+        if(tempData.contact.filter(x =>  x.contact_type == "email")[0]){
+            tempData.contact.filter(x =>  x.contact_type == "email")[0].details = $("#email1").val() || "";
+        }
+        if(tempData.contact.filter(x =>  x.contact_type == "email")[1]){
+            tempData.contact.filter(x =>  x.contact_type == "email")[1].details = $("#email2").val() || "";
+        }
+        if(tempData.contact.filter(x =>  x.contact_type == "phone")[0]){
+            tempData.contact.filter(x =>  x.contact_type == "phone")[0].details = $("#phone1").val() || "";
+        }
+        if(tempData.contact.filter(x =>  x.contact_type == "phone")[1]){
+            tempData.contact.filter(x =>  x.contact_type == "phone")[1].details = $("#phone2").val() || "";
+        }
+
+        tempData.professional.organisation_name = $("#organisation_name").val();
+        tempData.professional.organisation_address = $("#business_adress").val();
+        tempData.professional.position = $("#position").val();  
+        tempData.professional.description = quillEditors.aboutBusinessEditSection.container.firstChild.innerHTML;
+
+        if(JSON.stringify(tempData) !== JSON.stringify(auth.memberData)){
+            setTimeout(() => {
+                let tempData1 = $.extend( true,{}, auth.memberData );
+                tempData1.personal.fname = $("#fname_edit").val();
+                tempData1.personal.lname = $("#lname_edit").val();
+                tempData1.personal.gender = $("#gender_edit").val();
+                tempData1.personal.club = $("#clubname_edit").val();
+                tempData1.personal.yearsinrotary = $("#yearsinrotary").val();
+                if(tempData1){
+                    tempData1.personal.about = quillEditors.aboutEditSection.container.firstChild.innerHTML;
+                }
+
+                if(tempData1.contact.filter(x =>  x.contact_type == "email")[0]){
+                    tempData1.contact.filter(x =>  x.contact_type == "email")[0].details = $("#email1").val() || "";
+                }
+                if(tempData1.contact.filter(x =>  x.contact_type == "email")[1]){
+                    tempData1.contact.filter(x =>  x.contact_type == "email")[1].details = $("#email2").val() || "";
+                }
+                if(tempData1.contact.filter(x =>  x.contact_type == "phone")[0]){
+                    tempData1.contact.filter(x =>  x.contact_type == "phone")[0].details = $("#phone1").val() || "";
+                }
+                if(tempData1.contact.filter(x =>  x.contact_type == "phone")[1]){
+                    tempData1.contact.filter(x =>  x.contact_type == "phone")[1].details = $("#phone2").val() || "";
+                }
+
+                tempData1.professional.organisation_name = $("#organisation_name").val();
+                tempData1.professional.organisation_address = $("#business_adress").val();
+                tempData1.professional.position = $("#position").val();  
+                if(tempData1){
+                    tempData1.professional.description = quillEditors.aboutBusinessEditSection.container.firstChild.innerHTML;
+                }
+
+                console.log(tempData, tempData1);
+                if(JSON.stringify(tempData) == JSON.stringify(tempData1)){
+                    showsnackbar('Update the data');
+                    tempIntervals.forEach((x)=>{
+                        clearInterval(x);
+                    })
+                    xhttp.post('member', tempData, {}).then(()=>{
+                        auth.getMember().then(checkPersonalDataUpdate);
+                    })
+                }
+            }, 1000);
+        }
+    }, 2000))
 }
 
 var QuilltoolbarOptions = [
@@ -299,6 +422,9 @@ function checkUrl() {
         return false;
     }
     parseURL().then(() => {
+        tempIntervals.forEach((x)=>{
+            clearInterval(x);
+        })
         $('menu').removeClass('active')
         if (path.parts[0] == "account" && path.parts[1]) {
             $('.left-menu-single-item').removeClass('active');
@@ -349,23 +475,10 @@ function checkUrl() {
                         theme: 'snow'
                     });
                 }
+                auth.getMember();
                 setTimeout(() => {
-                    $('.dropzone_profile').html5imageupload({
-                        onAfterProcessImage: function() {
-                            $('.file_name_' + currentimage).val($(this.element).data('name'));
-                            if ($(this)[0].element.classList[2] == 'dropzone_myphoto') {
-                                Snackbar.show({
-                                    pos: 'bottom-center',
-                                    showAction: false,
-                                    text: 'Successfully updated your photo'
-                                });
-                            }
-                        },
-                        onAfterCancel: function() {
-                            $('#filename').val('');
-                        }
-                    });
-                }, 500);
+                    checkPersonalDataUpdate();
+                }, 1000);
             } else if (path.parts[1] == "blogs") {
                 if (!path.parts[2]) {
 

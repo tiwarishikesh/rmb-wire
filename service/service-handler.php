@@ -24,6 +24,8 @@ $routes = array(
     ["OPTIONS","auth","build/authentication.php","magicLink","",[]],
     ["PATCH","auth","build/authentication.php","logInMagicLink","",[]],
     ["GET","member","build/member.php","getmember","auth",[]],
+    ["POST","member","build/member.php","updatemember","auth",[]],
+    ["POST","profile_photo","build/member.php","upload_profilephoto","auth",[]]
 );
 
 foreach ($routes as $route) {

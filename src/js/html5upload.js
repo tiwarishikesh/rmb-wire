@@ -256,9 +256,14 @@
             if (options.removeurl != null && !empty($(element).data('name'))) {
                 $.ajax({
                     type: 'POST',
+                    datatype: "application/json",
+                    headers: {
+                        type: "application/json"
+                    },
                     url: options.removeurl,
-                    data: { image: $(element).data('name') },
+                    data: JSON.stringify({ image: $(element).data('name') }),
                     success: function(response) {
+                        console.log('line 266');
                         if (_self.options.onAfterRemoveImage) _self.options.onAfterRemoveImage.call(_self, response, _self);
                     }
                 })
@@ -648,10 +653,15 @@
             $.ajax({
                 type: 'POST',
                 url: options.url,
-                data: $.extend(obj, options.data),
+                datatype: "application/json",
+                headers: {
+                    type: "application/json"
+                },
+                data: JSON.stringify($.extend(obj, options.data)),
                 success: function(response) {
-
+                    console.log('line 662');
                     if (response.status == "success") {
+                        response = response.payload;
                         var file = response.url.split('?');
                         $(element).find('.tools .saving').remove();
                         $(element).find('.tools').children().toggle();
@@ -762,8 +772,13 @@
                 $.ajax({
                     type: 'POST',
                     url: options.removeurl,
-                    data: { image: $(element).data('name') },
+                    datatype: "application/json",
+                    headers: {
+                        type: "application/json"
+                    },
+                    data: JSON.stringify({ image: $(element).data('name') }),
                     success: function(response) {
+                        console.log('line 779');
                         if (_self.options.onAfterRemoveImage) _self.options.onAfterRemoveImage.call(_self, response, _self);
                     }
                 })

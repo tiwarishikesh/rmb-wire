@@ -3,7 +3,7 @@
     require_once 'lib/php-jwt/ExpiredException.php';
     require_once 'lib/php-jwt/SignatureInvalidException.php';
     require_once 'lib/php-jwt/JWT.php';
-    require_once 'lib/php-jwt/KEY.php';
+    require_once 'lib/php-jwt/Key.php';
 
 
     use \Firebase\JWT\JWT;

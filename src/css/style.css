@@ -7,11 +7,11 @@ body, h1, h2 , h3, h4, h5, h6, a, p{
 }
 
 body[auth="true"] .unauthed{
-    display: none;
+    display: none !important;
 }
 
 body[auth="false"] .authed{
-    display: none;
+    display: none !important;
 }
 
 img{
