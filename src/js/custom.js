@@ -4,6 +4,7 @@ let path = {};
 let base_path = "";
 let quillEditors = {};
 let tempIntervals = [];
+let tempDatepickers = [];
 let currentimage = '';
 
 $(document).ready(function() {
@@ -19,7 +20,11 @@ $(document).ready(function() {
         } else {
             $('body').attr('pwa', 'false');
         }
-        loadelements().then(startRMB);
+        Promise.allSettled(
+            [
+                loadelements(),
+                IP.get()
+            ]).then(startRMB);
     })
 })
 
@@ -46,6 +51,12 @@ function loadelements() {
 
 async function startRMB() {
     await auth.checklogin();
+    Array.from($('[name="phone"]')).forEach((input)=>{
+            window[$(input).attr('data-variable')] = window.intlTelInput($(`#${$(input).attr('id')}`)[0], {
+            separateDialCode: true,
+            initialCountry: IP.IPData.countryCode || 'auto'
+        });
+    })
     setInterval(() => {
         checkUrl();
     }, 50);
@@ -231,7 +242,7 @@ let auth = {
         })
     },
     getMember: async function(user) {
-        return new Promise((resolve, reject)=>{
+        return new Promise((resolve, reject) => {
             $('.fname').text(user?.fname);
             $('.lname').text(user?.lname);
             xhttp.get('member', {}, {}).then((response) => {
@@ -240,9 +251,18 @@ let auth = {
                 $("#lname_edit").val(response.data.personal.lname);
                 $('.fname').val(response.data.personal.fname);
                 $('.lname').val(response.data.personal.lname);
-                $("#gender_edit").val(response.data.personal.gender);
+                if (["male", "female"].includes(response.data.personal.gender)) {
+                    $(`#${response.data.personal.gender}`).prop('checked', true);
+                    $("#gender").val("");
+                    $("#other").addClass('disabled');
+                } else {
+                    $("#other").prop("checked", true);
+                    $("#gender").val(response.data.personal.gender);
+                    $("#other").removeClass('disabled');
+                }
                 $("#clubname_edit").val(response.data.personal.club);
-                $("#yearsinrotary").val(response.data.personal.yearsinrotary);
+                $("#dateofjoining").val(response.data.personal.dateofjoining);
+                $("#dob").val(response.data.personal.dateofbirth);
 
                 $("#organisation_name").val(response.data.professional.organisation_name);
                 $("#position").val(response.data.professional.position);
@@ -255,14 +275,14 @@ let auth = {
                     $("#email2").val(response.data.contact.filter(x => x.contact_type == "email")[1].details);
                 }
                 if (response.data.contact.filter(x => x.contact_type == "phone")[0]) {
-                    $("#phone1").val(response.data.contact.filter(x => x.contact_type == "phone")[0].details);
+                    window.phone1Edit.setNumber(response.data.contact.filter(x => x.contact_type == "phone")[0].details);
                 }
                 if (response.data.contact.filter(x => x.contact_type == "phone")[1]) {
-                    $("#phone2").val(response.data.contact.filter(x => x.contact_type == "phone")[0].details);
+                    window.phone2Edit.setNumber(response.data.contact.filter(x => x.contact_type == "phone")[1].details);
                 }
 
                 let tempInt = setInterval(() => {
-                    if(quillEditors.aboutEditSection?.container && quillEditors.aboutEditSection?.container){
+                    if (quillEditors.aboutEditSection?.container && quillEditors.aboutEditSection?.container) {
                         quillEditors.aboutEditSection.container.firstChild.innerHTML = response.data.personal.about || '';
                         quillEditors.aboutBusinessEditSection.container.firstChild.innerHTML = response.data.professional.about || '';
                         clearInterval(tempInt);
@@ -273,8 +293,8 @@ let auth = {
                 $("#edit_personal_photo").parent().html(`<div class="dropzone_profile dropzone dropzone_square smalltools" id="edit_personal_photo" data-width="1080" data-height="1080" data-url="/service/profile_photo" data-image="" style="max-width:100%;width: 100%;aspect-ratio:1">
                     <input type="file" accept=".png, .jpg, .jpeg" name="thumb" />
                 </div>`);
-                $("#edit_personal_photo").attr('data-image', '/service/build/'+response.data.personal.photo || '');
-                $(".network_photo").attr('src','/service/build/'+response.data.personal.photo);
+                $("#edit_personal_photo").attr('data-image', '/service/build/' + response.data.personal.photo || '');
+                $(".network_photo").attr('src', '/service/build/' + response.data.personal.photo);
                 setTimeout(() => {
                     $('#edit_personal_photo').html5imageupload({
                         onAfterProcessImage: function() {
@@ -295,7 +315,7 @@ let auth = {
                 }, 500);
                 $(".feed-home-about p:eq(0)").html(auth.memberData.personal.about.replace(/<\/?[a-z][a-z0-9]*[^<>]*>/ig, ""))
                 $(".feed-home-about p:eq(1)").html(auth.memberData.personal.club.replace(/<\/?[a-z][a-z0-9]*[^<>]*>/ig, ""));
-                $(".feed-home-about p:eq(2)").html(auth.memberData.professional.position+', '+ auth.memberData.professional.organisation_name);
+                $(".feed-home-about p:eq(2)").html(auth.memberData.professional.position + ', ' + auth.memberData.professional.organisation_name);
                 $(".feed-home-about p:eq(3)").html('');
             })
         })
@@ -309,86 +329,114 @@ let auth = {
 }
 
 function checkPersonalDataUpdate() {
-    if(!auth.memberData){
+    if (!auth.memberData) {
         setTimeout(() => {
             checkPersonalDataUpdate();
         }, 500);
     }
     tempIntervals.push(setInterval(() => {
         console.log('Running');
-        let tempData = $.extend( true,{}, auth.memberData );
+        let tempData = $.extend(true, {}, auth.memberData);
         tempData.personal.fname = $("#fname_edit").val();
         tempData.personal.lname = $("#lname_edit").val();
-        tempData.personal.gender = $("#gender_edit").val();
+        tempData.personal.gender = $('[name="gender"]:checked').val() == "other" ? ($("#gender").val() || 'non binary') : $('[name="gender"]:checked').val();
+        if ($("#other").prop("checked") == true) {
+            $("#gender").removeClass('disabled');
+        } else {
+            $("#gender").addClass('disabled');
+        }
         tempData.personal.club = $("#clubname_edit").val();
-        tempData.personal.yearsinrotary = $("#yearsinrotary").val();
-        if(tempData){
+        tempData.personal.dateofbirth = $("#dob").val();
+        tempData.personal.dateofjoining = $("#dateofjoining").val();
+        tempData.personal.timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+
+        if (tempData) {
             tempData.personal.about = quillEditors.aboutEditSection.container.firstChild.innerHTML;
         }
 
-        if(tempData.contact.filter(x =>  x.contact_type == "email")[0]){
-            tempData.contact.filter(x =>  x.contact_type == "email")[0].details = $("#email1").val() || "";
+        if (tempData.contact.filter(x => x.contact_type == "email")[0]) {
+            tempData.contact.filter(x => x.contact_type == "email")[0].details = $("#email1").val() || "";
         }
-        if(tempData.contact.filter(x =>  x.contact_type == "email")[1]){
-            tempData.contact.filter(x =>  x.contact_type == "email")[1].details = $("#email2").val() || "";
+        if (tempData.contact.filter(x => x.contact_type == "email")[1]) {
+            tempData.contact.filter(x => x.contact_type == "email")[1].details = $("#email2").val() || "";
         }
-        if(tempData.contact.filter(x =>  x.contact_type == "phone")[0]){
-            tempData.contact.filter(x =>  x.contact_type == "phone")[0].details = $("#phone1").val() || "";
+        if (tempData.contact.filter(x => x.contact_type == "phone")[0]) {
+            tempData.contact.filter(x => x.contact_type == "phone")[0].details = $("#phone1").val() ? ('+' + window.phone1Edit.getSelectedCountryData().dialCode + $("#phone1").val()) : "";
         }
-        if(tempData.contact.filter(x =>  x.contact_type == "phone")[1]){
-            tempData.contact.filter(x =>  x.contact_type == "phone")[1].details = $("#phone2").val() || "";
+        if($("#phone2").val()){
+            if (tempData.contact.filter(x => x.contact_type == "phone")[1]) {
+                tempData.contact.filter(x => x.contact_type == "phone")[1].details = ('+' + window.phone2Edit.getSelectedCountryData().dialCode + $("#phone2").val());
+            }else{
+                tempData.contact.push({
+                    contact_type: "phone",
+                    details: '+' + window.phone2Edit.getSelectedCountryData().dialCode + $("#phone2").val(),
+                    member_id: auth.memberData.personal.id
+                })
+            }
         }
 
         tempData.professional.organisation_name = $("#organisation_name").val();
         tempData.professional.organisation_address = $("#business_adress").val();
-        tempData.professional.position = $("#position").val();  
+        tempData.professional.position = $("#position").val();
         tempData.professional.description = quillEditors.aboutBusinessEditSection.container.firstChild.innerHTML;
 
-        if(JSON.stringify(tempData) !== JSON.stringify(auth.memberData)){
+        if (JSON.stringify(tempData) !== JSON.stringify(auth.memberData)) {
             setTimeout(() => {
-                let tempData1 = $.extend( true,{}, auth.memberData );
+                let tempData1 = $.extend(true, {}, auth.memberData);
                 tempData1.personal.fname = $("#fname_edit").val();
                 tempData1.personal.lname = $("#lname_edit").val();
-                tempData1.personal.gender = $("#gender_edit").val();
+                tempData1.personal.gender = $('[name="gender"]:checked').val() == "other" ? ($("#gender").val() || 'non binary') : $('[name="gender"]:checked').val();
                 tempData1.personal.club = $("#clubname_edit").val();
-                tempData1.personal.yearsinrotary = $("#yearsinrotary").val();
-                if(tempData1){
+                tempData1.personal.dateofbirth = $("#dob").val();
+                tempData1.personal.dateofjoining = $("#dateofjoining").val();
+                tempData1.personal.timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+                if (tempData1) {
                     tempData1.personal.about = quillEditors.aboutEditSection.container.firstChild.innerHTML;
                 }
 
-                if(tempData1.contact.filter(x =>  x.contact_type == "email")[0]){
-                    tempData1.contact.filter(x =>  x.contact_type == "email")[0].details = $("#email1").val() || "";
+                if (tempData1.contact.filter(x => x.contact_type == "email")[0]) {
+                    tempData1.contact.filter(x => x.contact_type == "email")[0].details = $("#email1").val() || "";
                 }
-                if(tempData1.contact.filter(x =>  x.contact_type == "email")[1]){
-                    tempData1.contact.filter(x =>  x.contact_type == "email")[1].details = $("#email2").val() || "";
+                if (tempData1.contact.filter(x => x.contact_type == "email")[1]) {
+                    tempData1.contact.filter(x => x.contact_type == "email")[1].details = $("#email2").val() || "";
                 }
-                if(tempData1.contact.filter(x =>  x.contact_type == "phone")[0]){
-                    tempData1.contact.filter(x =>  x.contact_type == "phone")[0].details = $("#phone1").val() || "";
+                if (tempData1.contact.filter(x => x.contact_type == "phone")[0]) {
+                    tempData1.contact.filter(x => x.contact_type == "phone")[0].details = $("#phone1").val() ? ('+' + window.phone1Edit.getSelectedCountryData().dialCode + $("#phone1").val()) : "";
                 }
-                if(tempData1.contact.filter(x =>  x.contact_type == "phone")[1]){
-                    tempData1.contact.filter(x =>  x.contact_type == "phone")[1].details = $("#phone2").val() || "";
+                if($("#phone2").val()){
+                    if (tempData1.contact.filter(x => x.contact_type == "phone")[1]) {
+                        tempData1.contact.filter(x => x.contact_type == "phone")[1].details = ('+' + window.phone2Edit.getSelectedCountryData().dialCode + $("#phone2").val());
+                    }else{
+                        tempData1.contact.push({
+                            contact_type: "phone",
+                            details: '+' + window.phone2Edit.getSelectedCountryData().dialCode + $("#phone2").val(),
+                            member_id: auth.memberData.personal.id
+                        })
+                    }
                 }
 
                 tempData1.professional.organisation_name = $("#organisation_name").val();
                 tempData1.professional.organisation_address = $("#business_adress").val();
-                tempData1.professional.position = $("#position").val();  
-                if(tempData1){
+                tempData1.professional.position = $("#position").val();
+                if (tempData1) {
                     tempData1.professional.description = quillEditors.aboutBusinessEditSection.container.firstChild.innerHTML;
                 }
 
                 console.log(tempData, tempData1);
-                if(JSON.stringify(tempData) == JSON.stringify(tempData1)){
-                    showsnackbar('Update the data');
-                    tempIntervals.forEach((x)=>{
+                if (JSON.stringify(tempData) == JSON.stringify(tempData1)) {
+                    showsnackbar('Your profile has been updated');
+                    tempIntervals.forEach((x) => {
                         clearInterval(x);
                     })
-                    xhttp.post('member', tempData, {}).then(()=>{
+                    xhttp.post('member', tempData, {}).then(() => {
                         auth.getMember().then(checkPersonalDataUpdate);
                     })
                 }
-            }, 1000);
+            }, 5000);
         }
-    }, 2000))
+    }, 1000))
 }
 
 var QuilltoolbarOptions = [
@@ -422,9 +470,12 @@ function checkUrl() {
         return false;
     }
     parseURL().then(() => {
-        tempIntervals.forEach((x)=>{
-            clearInterval(x);
-        })
+        tempIntervals.forEach((x) => {
+                clearInterval(x);
+            })
+            /* tempDatepickers.forEach((x)=>{
+                x.destroy();
+            }) */
         $('menu').removeClass('active')
         if (path.parts[0] == "account" && path.parts[1]) {
             $('.left-menu-single-item').removeClass('active');
@@ -479,6 +530,14 @@ function checkUrl() {
                 setTimeout(() => {
                     checkPersonalDataUpdate();
                 }, 1000);
+                tempDatepickers.push($("#dateofjoining").bootstrapMaterialDatePicker({
+                    format: 'DD MMMM YYYY',
+                    time: false,
+                }));
+                tempDatepickers.push($("#dob").bootstrapMaterialDatePicker({
+                    format: 'DD MMMM YYYY',
+                    time: false
+                }));
             } else if (path.parts[1] == "blogs") {
                 if (!path.parts[2]) {
 
@@ -712,7 +771,7 @@ xhttp =  {
     default: function(type,data,endpoint,options){
         return new Promise((resolve,reject)=>{
             $.ajax({
-                url: config.serviceurl + endpoint,
+                url: endpoint.startsWith('http')? endpoint:  config.serviceurl + endpoint,
                 data: type.toString().toLowerCase() == 'get' ? data : JSON.stringify(data),
                 type: type,
                 datatype: "application/json",
@@ -894,4 +953,35 @@ mandatory = () => {
         throw new Error('Missing parameter!');
         resolve();
     })
+}
+
+var IP = {
+    get: function () {
+        return new Promise((resolve, reject)=>{
+            if(this.IPData){
+                resolve(this.IPData);
+            }else{
+                this.fetch().then(()=>{
+                    resolve(this.IPData)
+                });
+            }
+        })
+    },
+    fetch: function () {
+        return new Promise((resolve, reject)=>{
+            $.ajax({
+                url: "http://ip-api.com/json",
+                type: 'GET',
+                success: function(json)
+                {
+                    IP.IPData = json;
+                    resolve();
+                },
+                error: function(err)
+                {
+                  console.log("Request failed, error= " + err);
+                }
+              });
+        })   
+    }
 }

@@ -1,5 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&family=Pinyon+Script&display=swap');
 
+body{ 
+    padding: 0;
+    font-family: 'Roboto', sans-serif;
+    background: rgba(200, 200, 200, 0.1);
+    background-image: -webkit-linear-gradient(0deg, rgba(12, 20, 86, 0.05) 5%, rgb(5 29 231 / 23%) 50%, rgba(12, 20, 86, 0.1) 95%);
+    /* height: 100vh; */
+    /* overflow-y: scroll; */
+    /* backdrop-filter: blur(201px); */
+}
 
 body, h1, h2 , h3, h4, h5, h6, a, p{
     font-family: 'Open Sans';
@@ -100,9 +109,9 @@ header{
     top:0;
     left:0;
     backdrop-filter: blur(5px);
-    border-bottom: 1px solid #777;
+    border-bottom: 1px solid #707de3;
     z-index: 999;
-}
+box-shadow: 0px 0px 1px 2px #707de322;}
 
 header i {
     float: right;
@@ -972,7 +981,7 @@ account{
 }
 
 .left-menu-single-item:hover h4{
-    color: #003399;
+    color: #9F9FFF;
 }
 
 .left-menu-single-item.active{
@@ -980,7 +989,7 @@ account{
 }
 
 .left-menu-single-item.active h4 i{
-    color: #003399;
+    color: #9F9FFF;
 }
 
 .account-right-section{
@@ -999,7 +1008,7 @@ account{
     overflow-y:scroll;
     padding-top:75px;
     padding-bottom:50px;
-}
+background: linear-gradient(90deg, #fff0, #fffb,#fff0);}
 
 .right-menu-single-item h1{
     font-size:36px;
@@ -1139,7 +1148,7 @@ account{
     width:175px;
     border-radius:63% 37% 30% 70%/50% 45% 55% 50%;
     border-width:2px;
-    background: linear-gradient(to bottom, #003399, #a3b8e2);
+    background: linear-gradient(to bottom, #007BC6, #a3b8e2);
     padding:5px;
     box-shadow:0px 0px 3px 9px #c0cfee14;
     display: inline-block;
@@ -1322,6 +1331,33 @@ input, textarea{
     outline: none;
 }
 
+input.disabled, textarea.disabled{
+    opacity: 0.4;
+    pointer-events:none;
+}
+
+input.big-no-border{
+    background: transparent;
+    border: none;
+    font-size: 50px;
+    font-weight: 100;
+    color: #555;
+    border-bottom: 1px solid #cecece;
+    border-radius: 0;
+    padding-left: 0;
+}
+
+input.medium-no-border{
+    background: transparent;
+    border: none;
+    font-size: 35px;
+    font-weight: 100;
+    color: #555;
+    border-bottom: 1px solid #cecece;
+    border-radius: 0;
+    padding-left: 0;
+}
+
 textarea{
     padding-top: 12px;
 }
@@ -1345,12 +1381,12 @@ textarea{
 .button.bordered-button{
     position: relative;
     color:#3153BC;
-}
+background: transparent;border: 2px solid #3153BC;}
 
 .button.bordered-button::before{
     content: '';
     position: absolute;
-    background: #fff;
+    /* background: #fff; */
     width: calc(100% - 4px);
     height: calc(100% - 4px);
     top:2px;
@@ -1366,14 +1402,89 @@ textarea{
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     z-index: 2;
-    padding-top: 2px;
+    padding-top: 4px;
     text-align: center;
     letter-spacing: 1px;
-    font-weight: 300;
+    font-weight: 400;
+    font-size: 20px;
 }
 
 .button.bordered-button.faded-blue::before{
     background: linear-gradient(0deg,#fbfbfb, #e5e9f7);
+}
+
+.checkbox,
+.radio{
+    margin-top: 10px !important;
+}
+
+.checkbox label,
+.radio label {
+    position: relative;
+    padding-left: 30px;
+    font-size: 14px;
+    cursor: pointer;
+    pointer-events: auto;
+width: 100%;}
+
+.checkbox label:before,
+.radio label:before {
+    margin-top: -7px;
+    color: #444;
+}
+
+.checkbox label:after,
+.radio label:after {
+    margin-top: -7px;
+    color: #0544c2;
+}
+
+.checkbox label:before,
+.checkbox label:after,
+.radio label:before,
+.radio label:after {
+    font-family: 'Font Awesome\ 5 Pro';
+    font-size: 21px;
+    /*absolutely positioned*/
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.checkbox label:before,
+.radio label:before {
+    content: '\f0c8';
+    /*unchecked*/
+}
+
+.checkbox label:after,
+.radio label:after {
+    content: '\f14a';
+    /*checked*/
+    /*checked icon will be hidden by default by using 0 max-width and overflow hidden*/
+    max-width: 0;
+    overflow: hidden;
+    opacity: 0.5;
+    /*CSS3 transitions for animated effect*/
+    transition: all 0.35s;
+}
+
+
+/*hiding the original checkboxes*/
+input[type="checkbox"],
+input[type="radio"] {
+    display: none;
+}
+
+
+/*when the user checks the checkbox the checked icon will animate in*/
+
+.checkbox input[type="checkbox"]:checked~label:after,
+.radio input[type="radio"]:checked~label:after {
+    max-width: 25px;
+    /*an arbitratry number more than the icon's width*/
+    opacity: 1;
+    /*for fade in effect*/
 }
 
 

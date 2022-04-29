@@ -16,7 +16,7 @@ function updatemember($conn, $payload){
     if($user->id !== $personal->id){
         my_error(403);
     }
-    $result1 = mysqli_query($conn, "UPDATE `member` SET `fname`='$personal->fname',`lname`='$personal->lname',`club`='$personal->club',`about`='$personal->about',`gender`='$personal->gender',`yearsinrotary`='$personal->yearsinrotary' WHERE `id` = '$user->id'");
+    $result1 = mysqli_query($conn, "UPDATE `member` SET `fname`='$personal->fname',`lname`='$personal->lname',`club`='$personal->club',`about`='$personal->about',`gender`='$personal->gender',`dateofjoining`='$personal->dateofjoining', `dateofbirth` = '$personal->dateofbirth', `timezone`='$personal->timezone' WHERE `id` = '$user->id'");
     $result2 = '';
     if(mysqli_num_rows(mysqli_query($conn, "SELECT * FROM `member` WHERE `id`='$user->id'"))>0){
         $result2 = mysqli_query($conn, "UPDATE `member_profession` SET `organisation_name`='$professional->organisation_name',`position`='$professional->position',`description`='$professional->description',`organisation_address`='$professional->organisation_address' WHERE `member_id`= '$user->id'");

@@ -27,37 +27,57 @@
         <br>
         <br>
         <div class="container" style="max-width: 1400px;float:left;">
-            <div class="col-sm-6">
-                <div class="col-sm-6 p-l-0">
+            <div class="col-sm-12">
+                <div class="col-sm-4 p-l-0">
                     <div class="dropzone_profile dropzone dropzone_square smalltools" id="edit_personal_photo" data-width="1080" data-height="1080" data-url="/service/profile_photo" data-image="" style="max-width:100%;width: 100%;aspect-ratio:1">
                         <input type="file" accept=".png, .jpg, .jpeg" name="thumb" />
                     </div>
                 </div>
-                <div class="col-sm-6 p-r-0">
-                    <div class="col-sm-12 p-0">
-                        <input type="text" placeholder="First Name" name="" id="fname_edit">
+                <div class="col-sm-8 p-r-0">
+                    <div class="col-sm-6 p-0">
+                        <input type="text" class="big-no-border" placeholder="First Name" name="" id="fname_edit">
+                    </div>
+                    <div class="col-sm-6 p-0">
+                        <input type="text" class="big-no-border" placeholder="Last Name" name="" id="lname_edit">
                     </div>
                     <div class="col-sm-12 p-0">
-                        <input type="text" placeholder="Last Name" name="" id="lname_edit">
+                        <div class="radio col-xs-3">
+                            <input type="radio" id="male" name="gender" value="male">
+                            <label for="male">Male</label><br>
+                        </div>
+                        <div class="radio col-xs-3">
+                            <input type="radio" id="female" name="gender" value="female">
+                            <label for="female">Female</label><br>
+                        </div>
+                        <div class="radio col-xs-3">
+                            <input type="radio" id="other" name="gender" value="other">
+                            <label for="other">Other</label>
+                        </div>
+                        <div class="col-sm-3 p-0">
+                            <input type="text" placeholder="Please Specify" style="text-transform: capitalize;" name="" id="gender">
+                        </div>
                     </div>
-                    <div class="col-sm-12 p-0">
-                        <input type="text" placeholder="Gender" name="" id="gender_edit">
+                    <div class="col-sm-12 p-0" style="margin-top:20px;margin-bottom:25px;">
+                        <input type="text" placeholder="Club Name" class="medium-no-border" name="" id="clubname_edit">
                     </div>
-                    <div class="col-sm-12 p-0">
-                        <input type="text" placeholder="Club Name" name="" id="clubname_edit">
+                    <br>
+                    <div class="col-sm-6 p-l-0">
+                        <p>Date Of Birth</p>
+                        <input type="text" placeholder="Date of Birth" name="" id="dob">
                     </div>
-                    <div class="col-sm-12 p-0">
-                        <input type="number" placeholder="Number of years in Rotary" name="" id="yearsinrotary">
+                    <div class="col-sm-6 p-0">
+                        <p>In Rotary Since</p>
+                        <input type="text" placeholder="Date of Joining Rotary" name="" id="dateofjoining">
                     </div>
                 </div>
                 <br>
                 </br>
                 <h4>Contact Information</h4>
                 <div class="col-sm-6 p-l-0">
-                    <input type="text" placeholder="Phone 1" name="" id="phone1">
+                    <input type="text" placeholder="Phone 1" data-variable="phone1Edit" name="phone" id="phone1">
                 </div>
                 <div class="col-sm-6 p-r-0">
-                    <input type="text" placeholder="Phone 2" name="" id="phone2">
+                    <input type="text" placeholder="Phone 2" data-variable="phone2Edit" name="phone" id="phone2">
                 </div>
                 <div class="col-sm-6 p-l-0">
                     <input type="text" placeholder="Email 1" name="" id="email1">
