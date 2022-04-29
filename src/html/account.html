@@ -123,11 +123,6 @@
                 </div>
             </div>
         </div>
-        <div class="container" style="float: left;margin-bottom:50px;">
-            <div class="button" style="width: 250px;float:left" onclick="auth.login()">
-                SAVE CHANGES
-            </div>
-        </div>
         <br>
         </br>
         <div class="container" style="height:50px;float: left"></div>
@@ -137,19 +132,23 @@
         <br>
         <br>
         <div class="container" style="max-width: 1400px;float:left;">
-            <div class="container w-full-p-0">
-                <div class="col-sm-4">
+            <div class="container w-full p-0">
+                <div class="col-sm-4 p-0">
                     <div class="col-sm-12 p-0">
-                        <input type="text" placeholder="Password" name="" id="passwordNew">
+                        <input data-type="password" type="password" placeholder="Password" name="password" id="passwordNew">
+                        <div onclick="togglePasswordField()" class="passwordshowhide"></div>
+                        <p>&nbsp;</p>
                     </div>
                     <div class="col-sm-12 p-0">
-                        <input type="text" placeholder="Confirm Password" name="" id="passwordConfirm">
+                        <input data-type="password" type="password" placeholder="Confirm Password" name="password" id="passwordConfirm">
+                        <div onclick="togglePasswordField()" class="passwordshowhide"></div>
+                        <p>&nbsp;</p>
                     </div>
                 </div>
             </div>
             <p class="newpasswordstatus" style="color:red;font-size:14px;"></p>
-            <div class="button" style="width: 250px;float:left" onclick="auth.newPassword()">
-                RESET PASSWORD
+            <div class="button glassed" style="width: 250px;float:left" onclick="auth.newPassword()">
+                <p>RESET PASSWORD</p>
             </div>
         </div>
     </div>

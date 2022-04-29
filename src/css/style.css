@@ -262,9 +262,9 @@ home{
     aspect-ratio: 1;
     border-color: #e6e7ee;
     background-color:#e6e7ee;
-    max-width: 725px;
+    max-height: 70vh;
     overflow: hidden;
-    margin-top: 7vh;
+    /* margin-top: 7vh; */
 }
 
 .landing-banner .col-sm-5{
@@ -272,10 +272,10 @@ home{
 }
 
 .landing-banner h1{
-    font-size: 40px;
+    font-size: 55px;
     padding-left: 50px;
-    font-weight: 300;
-}
+    font-weight: 400;
+text-transform: uppercase;line-height: 1.7;text-align: center;}
 
 .landing-banner h2{
     font-size: 28px;
@@ -284,8 +284,8 @@ home{
     padding-left: 50px;
     line-height: 2;
     font-weight: 300;
-    max-width: 80%;
-}
+    /* max-width: 80%; */
+text-align: center;}
 
 .landing-banner .slider-pagination{
     width:100%;
@@ -1026,6 +1026,10 @@ background: linear-gradient(90deg, #fff0, #fffb,#fff0);}
     padding-right: 75px;
 }
 
+[linked-to="security"] p{
+    color:red;
+margin-top: -5px;font-style: italic;}
+
 .single-photo-upload-container{
     float:left;
     display: block;
@@ -1037,7 +1041,7 @@ background: linear-gradient(90deg, #fff0, #fffb,#fff0);}
 }
 
 .current-plan{
-    border: 1px solid #dedede;
+    border: 1px solid #8d89c9;
     padding: 10px;
     max-width:450px;
     border-radius: 10px;
@@ -1073,7 +1077,7 @@ background: linear-gradient(90deg, #fff0, #fffb,#fff0);}
 }
 
 .membership-plan{
-    border: 1px solid #dedede;
+    border: 1px solid #b2b5d7;
     width: fit-content;
     padding: 15px;
     float:left;
@@ -1362,6 +1366,52 @@ textarea{
     padding-top: 12px;
 }
 
+.passwordshowhide{
+    position: absolute;
+    width: 70px;
+    height: 41px;
+    background: #fff2;
+    top: 2px;
+    right: 0;
+    opacity: 1;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    backdrop-filter: blur(6px);
+    border-left: 1px solid #6495ed2e;
+    font-family: 'Font Awesome 6 Free';
+    cursor:pointer;
+}
+
+.passwordshowhide::before{
+    content: '\f06e';
+    font-size: 20px;
+    right: 25px;
+    position: absolute;
+    top: 7px;
+    color:#747474;
+    overflow:hidden;
+}
+
+.passwordshowhide::after{
+    content: '\f070';
+    font-size: 20px;
+    right: 25px;
+    position: absolute;
+    top: 7px;
+    width:0;
+    overflow:hidden;
+    transition:0.5s;
+    color:#747474;
+}
+
+.passwordvisible .passwordshowhide::after{
+    width:unset;
+}
+
+.passwordvisible .passwordshowhide::before{
+    width:0;
+}
+
 .button{
     display: block;
     margin: auto;
@@ -1371,17 +1421,51 @@ textarea{
     font-size: 20px;
     color: #eee;
     text-align: center;
-    padding-top: 11px;
+    padding-top: 15px;
     letter-spacing: 1px;
     font-weight: 300;
     cursor: pointer;
-    margin-top:10px;
+    margin-top: 10px;
+}
+
+.button p{
+    position: relative;
+    text-align: center;
+    /* background: linear-gradient(182deg,#6581E3, #3153BC); */
+    /* -webkit-background-clip: text; */
+    /* -webkit-text-fill-color: transparent; */
+    /* z-index: 2; */
+    padding-top: 0px;
+    /* text-align: center; */
+    /* letter-spacing: 1px; */
+    /* font-weight: 400; */
+    font-size: 18px;
+    margin-top: unset;
+    line-height: 1;
+color: #efefef;font-style: normal;}
+
+.button.glassed{
+    background: linear-gradient(182deg,#4b6fbb, #022d83bb);
+    backdrop-filter:blur(5px);
+    background: rgba(34 78 147 1);
+    box-shadow: 0 2px 8px 0 rgba( 31, 38, 135, 0.37 );
+    backdrop-filter: blur( 6px );
+    -webkit-backdrop-filter: blur( 6px );
+    
+    border: 1px solid rgba( 255, 255, 255, 0.18 );
 }
 
 .button.bordered-button{
     position: relative;
     color:#3153BC;
-background: transparent;border: 2px solid #3153BC;}
+    background: transparent;
+    border: 2px solid #3153BC;
+box-shadow: 0 2px 8px 0 rgb(147 153 231 / 37%);}
+
+.button.bordered-button.glassed{
+    background: #fff5;
+    backdrop-filter:blur(5px);
+}
 
 .button.bordered-button::before{
     content: '';
@@ -1402,15 +1486,26 @@ background: transparent;border: 2px solid #3153BC;}
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     z-index: 2;
-    padding-top: 4px;
+    padding-top: 0px;
     text-align: center;
     letter-spacing: 1px;
     font-weight: 400;
-    font-size: 20px;
+    font-size: 18px;
+    margin-top: unset;
+    line-height: 1;
 }
 
 .button.bordered-button.faded-blue::before{
     background: linear-gradient(0deg,#fbfbfb, #e5e9f7);
+}
+
+.button.small{
+    height: 40px;
+    font-size: 16px;
+padding-top: 12px;border: 1px solid #3153BC;}
+
+.button.small p{
+    font-size:16px
 }
 
 .checkbox,
@@ -1805,14 +1900,8 @@ body[path_part_0="account"][path_part_1="blogs"][path_part_2="edit"] #my-blog-ed
     }
 }
 
-/* 
-
-
-
-
-                                                                                                                                                                                                                        
-                                                                                                                                                                                                                        
-                                                                                                                                                                                                                        
+/*                                                                                                                                                                                                                                                                                                                                                                                                                                            
+                                                                                                                                                                                                                    
  ______  ______  ______  ______  ______  ______  ______  ______  ______  ______  ______  ______  ______  ______  ______  ______  ______  ______  ______  ______  ______  ______  ______  ______  ______  ______  ______ 
 |      \|      \|      \|      \|      \|      \|      \|      \|      \|      \|      \|      \|      \|      \|      \|      \|      \|      \|      \|      \|      \|      \|      \|      \|      \|      \|      \
  \$$$$$$ \$$$$$$ \$$$$$$ \$$$$$$ \$$$$$$ \$$$$$$ \$$$$$$ \$$$$$$ \$$$$$$ \$$$$$$ \$$$$$$ \$$$$$$ \$$$$$$ \$$$$$$ \$$$$$$ \$$$$$$ \$$$$$$ \$$$$$$ \$$$$$$ \$$$$$$ \$$$$$$ \$$$$$$ \$$$$$$ \$$$$$$ \$$$$$$ \$$$$$$ \$$$$$$                                                                                                                                                                                                                        

@@ -191,10 +191,12 @@ let auth = {
             confirmPassword: $("#passwordConfirm").val()
         }
         if (payload.password.length > 5 && payload.password == payload.confirmPassword) {
+            $("#passwordNew").val('');
+            $("#passwordConfirm").val('');
+
             xhttp.put('auth', payload, {}).then((response) => {
                 if (response.status == "success") {
-                    $(".newpasswordstatus").text('Password updated successfully');
-                    $(".newpasswordstatus").css('color', '#999');
+                    showsnackbar('Password Updated Succesfully');
                     setTimeout(() => {
                         $(".newpasswordstatus").text('');
                     }, 1500);
@@ -284,7 +286,7 @@ let auth = {
                 let tempInt = setInterval(() => {
                     if (quillEditors.aboutEditSection?.container && quillEditors.aboutEditSection?.container) {
                         quillEditors.aboutEditSection.container.firstChild.innerHTML = response.data.personal.about || '';
-                        quillEditors.aboutBusinessEditSection.container.firstChild.innerHTML = response.data.professional.about || '';
+                        quillEditors.aboutBusinessEditSection.container.firstChild.innerHTML = response.data.professional.description || '';
                         clearInterval(tempInt);
                         resolve();
                     }
@@ -325,6 +327,33 @@ let auth = {
             let data = localStorage.getItem('memberData');
 
         })
+    },
+    checkPasswords: function () {
+        if(path.parts[1] == "security"){
+            if($("#passwordNew").val().length > 3){
+                if(RegexCheck.regexes.password.test($("#passwordNew").val())){
+                    $(`[linked-to="security"] p:eq(0)`).css('color','green');
+                    $(`[linked-to="security"] p:eq(0)`).text('Password Valid and Acceptable');
+                    $(`[linked-to="security"] p:eq(1)`).css('color','red');
+                    $(`[linked-to="security"] p:eq(1)`).text('Please Re Enter Password');
+                    if($("#passwordConfirm").val().length > 3){
+                        if($("#passwordConfirm").val() == $("#passwordNew").val()){
+                            $(`[linked-to="security"] p:eq(1)`).css('color','green');
+                            $(`[linked-to="security"] p:eq(1)`).text('Passwords Match');
+                        }else{
+                            $(`[linked-to="security"] p:eq(1)`).css('color','red');
+                            $(`[linked-to="security"] p:eq(1)`).text('Passwords Do Not Match');
+                        }
+                    }
+                }else{
+                    $(`[linked-to="security"] p:eq(0)`).css('color','red');
+                    $(`[linked-to="security"] p:eq(0)`).text('Password must be between 6 and 30 characters. Must have atleast one number and 1 special character');
+                }
+            }
+            setTimeout(()=>{
+                auth.checkPasswords();
+            },500)
+        }
     }
 }
 
@@ -335,7 +364,7 @@ function checkPersonalDataUpdate() {
         }, 500);
     }
     tempIntervals.push(setInterval(() => {
-        console.log('Running');
+        let error = false;
         let tempData = $.extend(true, {}, auth.memberData);
         tempData.personal.fname = $("#fname_edit").val();
         tempData.personal.lname = $("#lname_edit").val();
@@ -358,13 +387,26 @@ function checkPersonalDataUpdate() {
         if (tempData.contact.filter(x => x.contact_type == "email")[0]) {
             tempData.contact.filter(x => x.contact_type == "email")[0].details = $("#email1").val() || "";
         }
-        if (tempData.contact.filter(x => x.contact_type == "email")[1]) {
-            tempData.contact.filter(x => x.contact_type == "email")[1].details = $("#email2").val() || "";
+        if($("#email2").val()){
+            if(RegexCheck.regexes.email.test($("#email2").val())){
+                if (tempData.contact.filter(x => x.contact_type == "email")[1]) {
+                    tempData.contact.filter(x => x.contact_type == "email")[1].details = $("#email2").val() || "";
+                }else{
+                    tempData.contact.push({
+                        contact_type: "email",
+                        details: $("#email2").val(),
+                        member_id: auth.memberData.personal.id
+                    });
+                }
+            }else{
+                showsnackbar("Please Enter Valid Second Email ID");
+            }
         }
-        if (tempData.contact.filter(x => x.contact_type == "phone")[0]) {
+        
+        if (tempData.contact.filter(x => x.contact_type == "phone")[0] && $("phone1").val()?.length > 5) {
             tempData.contact.filter(x => x.contact_type == "phone")[0].details = $("#phone1").val() ? ('+' + window.phone1Edit.getSelectedCountryData().dialCode + $("#phone1").val()) : "";
         }
-        if($("#phone2").val()){
+        if($("#phone2").val().length > 5){
             if (tempData.contact.filter(x => x.contact_type == "phone")[1]) {
                 tempData.contact.filter(x => x.contact_type == "phone")[1].details = ('+' + window.phone2Edit.getSelectedCountryData().dialCode + $("#phone2").val());
             }else{
@@ -399,8 +441,18 @@ function checkPersonalDataUpdate() {
                 if (tempData1.contact.filter(x => x.contact_type == "email")[0]) {
                     tempData1.contact.filter(x => x.contact_type == "email")[0].details = $("#email1").val() || "";
                 }
-                if (tempData1.contact.filter(x => x.contact_type == "email")[1]) {
-                    tempData1.contact.filter(x => x.contact_type == "email")[1].details = $("#email2").val() || "";
+                if($("#email2").val()){
+                    if(RegexCheck.regexes.email.test($("#email2").val())){
+                        if (tempData1.contact.filter(x => x.contact_type == "email")[1]) {
+                            tempData1.contact.filter(x => x.contact_type == "email")[1].details = $("#email2").val() || "";
+                        }else{
+                            tempData1.contact.push({
+                                    contact_type: "email",
+                                    details: $("#email2").val(),
+                                    member_id: auth.memberData.personal.id
+                                });
+                        }
+                    }
                 }
                 if (tempData1.contact.filter(x => x.contact_type == "phone")[0]) {
                     tempData1.contact.filter(x => x.contact_type == "phone")[0].details = $("#phone1").val() ? ('+' + window.phone1Edit.getSelectedCountryData().dialCode + $("#phone1").val()) : "";
@@ -423,8 +475,6 @@ function checkPersonalDataUpdate() {
                 if (tempData1) {
                     tempData1.professional.description = quillEditors.aboutBusinessEditSection.container.firstChild.innerHTML;
                 }
-
-                console.log(tempData, tempData1);
                 if (JSON.stringify(tempData) == JSON.stringify(tempData1)) {
                     showsnackbar('Your profile has been updated');
                     tempIntervals.forEach((x) => {
@@ -458,6 +508,20 @@ var QuilltoolbarOptions = [
 
     ['clean'] // remove formatting button
 ];
+
+function togglePasswordField() {
+    if($('[data-type="password"]').attr('type') == "password"){
+        Array.from($('[data-type="password"]')).forEach((x)=>{
+            $(x).parent().addClass('passwordvisible');
+            $(x).attr('type','text');
+        })
+    }else{
+        Array.from($('[data-type="password"]')).forEach((x)=>{
+            $(x).parent().removeClass('passwordvisible');
+            $(x).attr('type','password');
+        })
+    }
+}
 
 /* ///////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
@@ -538,6 +602,8 @@ function checkUrl() {
                     format: 'DD MMMM YYYY',
                     time: false
                 }));
+            }else if (path.parts[1] == "security") {
+                auth.checkPasswords();
             } else if (path.parts[1] == "blogs") {
                 if (!path.parts[2]) {
 
@@ -984,4 +1050,20 @@ var IP = {
               });
         })   
     }
+}
+
+RegexCheck = {
+    default : function (type, value, options) {
+        return this.regexes[type].test(value);
+    },
+    ...Object.assign(
+        ...['email','phone','password'].map(k => ({ [k]: 
+        async function(value, options){
+            return this.default(k, value, options);
+        }
+     }))),
+     regexes:{
+         email: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,5})+$/,
+         password: /^(?=.*[0-9])(?=.*[!@#$%^&*-])[a-zA-Z0-9!@#$%^&*-]{6,30}$/
+     }
 }
