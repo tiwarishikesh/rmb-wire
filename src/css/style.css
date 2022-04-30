@@ -924,6 +924,55 @@ gallery h4{
     margin-bottom:30px;
 }
 
+.myGalleryEditLeft{
+    height:100vh;
+    overflow-y:scroll;
+    float:left;
+    width:100%;
+    max-width: calc(100% - 500px);
+    position: absolute;
+    left: 0;
+    top: 75px;
+}
+
+.editGalleryExistingImages{
+    width: 100%;
+    height: calc(100vh - 130px);
+    overflow-y: scroll;
+    position: relative;
+}
+
+
+.myGalleryEditRight{
+    height:calc(100vh - 65px);
+    width:500px;
+    background:#ddf1;
+    position:absolute;
+    top:65px;
+    right:0;
+    border-left:1px solid #cecece;
+}
+
+.AddEditImage{
+    height: calc(100% - 75px);
+    margin-bottom:20px;
+    border-bottom: 1px solid #dddd;
+    overflow-y:scroll;
+}
+
+
+.myGalleryEditLeft h5{
+    font-size:36px;
+    font-weight:300;
+    color:#555;
+}
+
+.myGalleryEditLeft h6{
+    font-size:22px;
+    font-weight:400;
+    color:#747474;
+}
+
 .single-event-images{
     padding-bottom:75px;
     margin-bottom:50px;
@@ -1008,7 +1057,7 @@ account{
     overflow-y:scroll;
     padding-top:75px;
     padding-bottom:50px;
-background: linear-gradient(90deg, #fff0, #fffb,#fff0);}
+background: linear-gradient(90deg, #fff0, #fff5,#fff0);backdrop-filter: blur(25px);}
 
 .right-menu-single-item h1{
     font-size:36px;
@@ -1033,7 +1082,17 @@ margin-top: -5px;font-style: italic;}
 .single-photo-upload-container{
     float:left;
     display: block;
-    margin-bottom: 50px;
+    margin-bottom: 25px;
+    padding-bottom: 25px;
+    border-right: 1px solid #6495ed4a;
+    padding-top: 15px;
+}
+
+.single-photo-upload-container:nth-of-type(3n){
+    border:none;
+}
+.single-photo-upload-container img{
+    border-radius: 12px;
 }
 
 .single-photo-upload-container .dropzone:after{
@@ -1134,8 +1193,8 @@ margin-top: -5px;font-style: italic;}
     height:75px;
     border-bottom:1px solid #efefef;
     top:65px;
-    background:#fff9;
-    backdrop-filter: blur(5px);
+    background: #fff7;
+    backdrop-filter: blur(20px);
     top: -9px;
     z-index: 9;
     /* top: 0; */
@@ -1195,12 +1254,12 @@ margin-top: -5px;font-style: italic;}
 }
 
 .network-body{
-    background: #0033990d;
-    height: calc(100vh - 141px);
-    top: -9px;
+    background: #00339955;
+    height: calc(100vh - 65px);
+    top: -85px;
     position: relative;
     overflow-y: scroll;
-}
+/* background: #00339901; */background: #fff2;padding-top: 70px;}
 
 .network-body h3{
     margin-bottom:15px;
@@ -1448,12 +1507,26 @@ color: #efefef;font-style: normal;}
     background: linear-gradient(182deg,#4b6fbb, #022d83bb);
     backdrop-filter:blur(5px);
     background: rgba(34 78 147 1);
-    box-shadow: 0 2px 8px 0 rgba( 31, 38, 135, 0.37 );
+    box-shadow: 0 4px 16px 0 rgb(31 38 135 / 37%);
     backdrop-filter: blur( 6px );
     -webkit-backdrop-filter: blur( 6px );
     
     border: 1px solid rgba( 255, 255, 255, 0.18 );
 }
+
+.button.glassed.red{
+    background: rgb(251 38 41 / 5%);
+    box-shadow: 0 4px 16px 0 rgb(135 31 31 / 37%);
+    backdrop-filter: blur( 6.5px );
+    -webkit-backdrop-filter: blur( 6.5px );
+    border: 1px solid rgba( 255, 255, 255, 0.18 );
+    color:red;
+}
+
+.button.glassed.red p{
+    color: red;
+-webkit-background-clip: unset;
+    -webkit-text-fill-color: unset;background: transparent;}
 
 .button.bordered-button{
     position: relative;
@@ -1465,7 +1538,12 @@ box-shadow: 0 2px 8px 0 rgb(147 153 231 / 37%);}
 .button.bordered-button.glassed{
     background: #fff5;
     backdrop-filter:blur(5px);
-}
+background: rgba( 175, 165, 248, 0.2 );
+box-shadow: 0 4px 16px 0 rgb(31 38 135 / 37%);
+backdrop-filter: blur( 6.5px );
+-webkit-backdrop-filter: blur( 6.5px );
+
+border: 1px solid rgba( 255, 255, 255, 0.18 );}
 
 .button.bordered-button::before{
     content: '';

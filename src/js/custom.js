@@ -193,6 +193,8 @@ let auth = {
         if (payload.password.length > 5 && payload.password == payload.confirmPassword) {
             $("#passwordNew").val('');
             $("#passwordConfirm").val('');
+            $(`[linked-to="security"] p:eq(0)`).html(`&nbsp;`);
+            $(`[linked-to="security"] p:eq(1)`).html(`&nbsp;`);
 
             xhttp.put('auth', payload, {}).then((response) => {
                 if (response.status == "success") {
@@ -547,7 +549,7 @@ function checkUrl() {
             $(`.right-menu-single-item:not([linked-to="${path.parts[1]}"])`).slideUp();
             $(`.right-menu-single-item[linked-to="${path.parts[1]}"]`).slideDown();
             if (path.parts[1] == "gallery") {
-                setTimeout(() => {
+                /* setTimeout(() => {
                     $('.dropzone_1').html5imageupload({
                         onAfterProcessImage: function() {
                             $('.file_name_' + currentimage).val($(this.element).data('name'));
@@ -578,7 +580,7 @@ function checkUrl() {
                             $('#filename').val('');
                         }
                     });
-                }, 1000);
+                }, 1000); */
             } else if (path.parts[1] == "personal") {
                 if (!quillEditors.aboutEditSection) {
                     quillEditors.aboutEditSection = new Quill('.about-edit-section', {
