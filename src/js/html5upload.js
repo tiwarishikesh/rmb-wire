@@ -7,6 +7,8 @@
  * 
  */
 
+let ImageUploadedResponse = '';
+
 (function(window, $, undefined) {
     "use strict";
 
@@ -662,6 +664,7 @@
                     console.log('line 662');
                     if (response.status == "success") {
                         response = response.payload;
+                        ImageUploadedResponse = response;
                         var file = response.url.split('?');
                         $(element).find('.tools .saving').remove();
                         $(element).find('.tools').children().toggle();

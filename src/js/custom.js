@@ -491,6 +491,334 @@ function checkPersonalDataUpdate() {
     }, 1000))
 }
 
+var member = {
+    image: {
+        addNew: function () {
+            $(".AddEditImage h4").html('&nbsp; Add New Image');
+            member.image.currentOrientation = '';  
+            $("#addEditImageTitle").val('');
+            $("#addEditImageDescription").val('');
+            $(".orientationselect label").css('pointer-events','');
+            this.currentEditDetails = {};
+            this.editOn = false;
+        },
+        checkCurrent: function () {
+            if(this.currentOrientation != $(`[name="newImageAspectRatio"]:checked`).val()){
+                this.currentOrientation != $(`[name="newImageAspectRatio"]:checked`).val();
+                this.currentOrientation = $(`[name="newImageAspectRatio"]:checked`).val();
+                $("#addEditPhotoInput").attr('data-orientation',this.currentOrientation);
+                $("#addEditPhotoInput").html(`
+                <div class="dropzone_addEditPhotoInput dropzone dropzone_square smalltools" id="addEditPhotoInputDropZone" data-width="${this.aspectRatios[this.currentOrientation].width}" data-height="${this.aspectRatios[this.currentOrientation].height}" data-url="/service/gallery_photo" data-image="" style="max-width:${this.aspectRatios[this.currentOrientation].constrain}%;width: 100%;aspect-ratio:${this.aspectRatios[this.currentOrientation].ratio}">
+                        <input type="file" accept=".png, .jpg, .jpeg" name="thumb" />
+                    </div>`);
+                $('#addEditPhotoInputDropZone').html5imageupload({
+                    onAfterProcessImage: function(x) {
+                        $("#addEditPhotoInput").attr('data-img',ImageUploadedResponse.filename);
+                        member.image.newImageUploaded();
+                    },
+                    onAfterCancel: function() {
+                        $('#filename').val('');
+                    }
+                });
+            }
+            setTimeout(() => {
+                if(path.parts[1] == "gallery"){
+                    this.checkCurrent();
+                }
+            }, 500);
+        },
+        edit: function (x) {
+            this.editOn = true;
+            $(".orientationselect label").css('pointer-events','none');
+            this.currentPhotoEdit = member.image.myPhotos.filter(photo => photo.id == x)[0];
+            let fraction = $(`[data-img-id="${x}"] img`).width() / $(`[data-img-id="${x}"] img`).height();
+            this.currentOrientation = fraction < 1 ? 'potrait' : fraction > 1 ? 'landscape' : 'square';
+            $(`#${member.image.currentOrientation}`).prop('checked',true);
+            $("#addEditPhotoInput").html(`
+                <div class="dropzone_addEditPhotoInput dropzone dropzone_square smalltools" id="addEditPhotoInputDropZone"
+                data-width="${this.aspectRatios[this.currentOrientation].width}"
+                data-height="${this.aspectRatios[this.currentOrientation].height}"
+                data-url="/service/gallery_photo"
+                data-image="/assets/membergallery/${this.currentPhotoEdit.photo_name}" style="max-width:${this.aspectRatios[this.currentOrientation].constrain}%;width: 100%;aspect-ratio:${this.aspectRatios[this.currentOrientation].ratio}">
+                        <input type="file" accept=".png, .jpg, .jpeg" name="thumb" />
+                    </div>`);
+            $('#addEditPhotoInputDropZone').html5imageupload({
+                onAfterProcessImage: function(x) {
+                    $("#addEditPhotoInput").attr('data-img',ImageUploadedResponse.filename);
+                    member.image.newImageUploaded();
+                },
+                onAfterCancel: function() {
+                    $('#filename').val('');
+                }
+            });
+            $(".AddEditImage h4").html('&nbsp; Edit Image');
+            $("#addEditImageTitle").val(this.currentPhotoEdit.photo_title);
+            $("#addEditImageDescription").val(this.currentPhotoEdit.photo_description);
+            this.currentEditDetails = {
+                id: this.currentPhotoEdit.id,
+                photo_title: this.currentPhotoEdit.photo_title,
+                photo_description: this.currentPhotoEdit.photo_description,
+            }
+            this.checkCurrentEdit();
+        },
+        checkCurrentEdit: function(){
+            if(this.currentEditDetails.id){
+                let x = {
+                    id: this.currentPhotoEdit.id,
+                    photo_title: $("#addEditImageTitle").val(),
+                    photo_description: $("#addEditImageDescription").val()
+                }
+                setTimeout(() => {
+                    if(JSON.stringify(this.currentEditDetails) != JSON.stringify(x)){
+                        setTimeout(() => {
+                            let y = {
+                                id: this.currentPhotoEdit.id,
+                                photo_title: $("#addEditImageTitle").val(),
+                                photo_description: $("#addEditImageDescription").val()
+                            }
+                            if(JSON.stringify(y) == JSON.stringify(x) && JSON.stringify(this.currentEditDetails) != JSON.stringify(x)){
+                                this.currentEditDetails = x;
+                                xhttp.put('gallery_photo',x,{}).then(()=>{
+                                    showsnackbar('Photo data updated');
+                                    $(`.single-photo-upload-container[data-img-id="${x.id}"] h5`).text(x.photo_title);
+                                    $(`.single-photo-upload-container[data-img-id="${x.id}"] h6`).text(x.photo_description);
+                                    member.image.checkCurrentEdit();
+                                })
+                            }
+                        }, 1000);
+                    }
+                    if(path.parts[1]=="gallery"){
+                        this.checkCurrentEdit();
+                    }
+                }, 1000);
+            }else{
+                setTimeout(() => {
+                    if(path.parts[1]=="gallery"){
+                        this.checkCurrentEdit();
+                    }
+                }, 1000);
+            }
+        },
+        editOn : false,
+        newImageUploaded: function () {
+            if(member.image.editOn){
+                xhttp.put('gallery_photo/change',{
+                    old: this.currentPhotoEdit.id,
+                    new: ImageUploadedResponse?.image_id
+                }).then(()=>{
+                    $(`.single-photo-upload-container[data-img-id="${this.currentPhotoEdit.id}"] img`).src(`/assets/membergallery/${ImageUploadedResponse.filename}`);
+                })
+            }else{
+                let temp = {
+                    photo_title: $("#addEditImageTitle").val(),
+                    photo_description: $("#addEditImageDescription").val()
+                }
+                member.image.getMyPhotos().then(()=>{
+                    member.image.populateMyPhotos().then(()=>{
+                        setTimeout(() => {
+                            member.image.edit(ImageUploadedResponse?.image_id);
+                            setTimeout(() => {
+                                $("#addEditImageTitle").val(temp.photo_title);
+                                $("#addEditImageDescription").val(temp.photo_description);
+                            }, 100);
+                        }, 500);
+                    })
+                })
+            }
+        },
+        getMyPhotos: function () {
+            return new Promise((resolve, reject)=>{
+                xhttp.get('gallery_photo',{},{}).then((response)=>{
+                    member.image.myPhotos = response.photos
+                    resolve();
+                })
+            })  
+        },
+        populateMyPhotos: async function () {
+            return new Promise((resolve, reject)=>{
+                if(!member.image.myPhotos){
+                    member.image.getMyPhotos().then(member.image.populateMyPhotos);
+                    return false;
+                }
+                $(`[linked-to="gallery"] .single-photo-upload-container`).remove();
+                template_engine('.single-photo-upload-container', member.image.myPhotos, ".editGalleryExistingImages").then(()=>{
+                    resolve();
+                });
+            })
+        },
+        delete: function (id) {
+            let _this = this;
+            xhttp.delete('gallery_photo',{id: id}).then((response)=>{
+                _this.getMyPhotos().then(()=>{
+                    _this.populateMyPhotos().then(()=>{
+                        _this.addNew();
+                    })
+                })
+            })
+        },
+        aspectRatios:{
+            landscape:{
+                ratio: 1.77,
+                width:1920,
+                height:1080,
+                constrain: 80
+            },
+            potrait:{
+                ratio: 0.562,
+                width:1080,
+                height: 1920,
+                constrain: 45
+            },
+            square:{
+                ratio: 1,
+                width: 1080,
+                height:1080,
+                constrain: 80
+            }
+        },
+        currentOrientation: 0
+    },
+    blogs : {
+        get: function () {
+            return new Promise((resolve, reject)=>{
+                xhttp.get('myBlog',{}).then((response)=>{
+                    this.myBlogs = response.blogs;
+                    resolve();
+                })
+            })  
+        },
+        populate: async function () {
+            return new Promise(async(resolve, reject)=>{
+                $("account .my-blog-single-card").remove();
+                if(!member.blogs.myBlogs){
+                    await member.blogs.get().then(()=>{
+                        template_engine('.my-blog-single-card',member.blogs.myBlogs, "#my-blog-archive");
+                        resolve();
+                    })
+                }else{
+                    template_engine('.my-blog-single-card',member.blogs.myBlogs, "#my-blog-archive");
+                    resolve();
+                }
+            })  
+        },
+        add: function () {
+            let error = false;
+            let payload = {
+                title: $("#newBlogTitle").val().length > 10 ? $("#newBlogExcerpt").val() : (error = true, showsnackbar('Please add a title of more than 10 characters')),
+                excerpt: $("#newBlogExcerpt").val().length > 10 ? $("#newBlogExcerpt").val() : (error = true, showsnackbar('Please add a excerpt of more than 10 characters')),
+                readTime: $("#newBlogReadTime").val() ? $("#newBlogReadTime").val() : (error = true, showsnackbar('Please include approximate read time')),
+                body: quillEditors.newBlogBody.root.innerHTML.slice(3).slice(0,-4) || (error = true,showsnackbar('Please enter valid body for the blog')),
+                banner: member.blogs.currentBanner || (showsnackbar('Please include a banner imager'), error = true),
+                thumbnail: member.blogs.currentThumbnail || (showsnackbar('Please include a thumbnail imager'), error = true)
+            }
+            if(!error){
+                xhttp.post('myBlog', payload).then((response)=>{
+                    $('.new_blog_banner .btn-del')[0].click();
+                    $('.new_blog_thumb .btn-del')[0].click();
+                    $("#newBlogReadTime").val('');
+                    $("#newBlogExcerpt").val('');
+                    $("#newBlogExcerpt").val('');
+                    route('account/blogs');
+                    member.blogs.get().then(()=>{
+                        member.blogs.populate();
+                    })
+                })
+            }
+        },
+        update: function () {
+            let error = false;
+            let payload = {
+                id: path.parts[3],
+                title: $("#updateBlogTitle").val().length > 10 ? $("#updateBlogTitle").val() : (error = true, showsnackbar('Please add a title of more than 10 characters')),
+                excerpt: $("#updateBlogExcerpt").val().length > 10 ? $("#updateBlogExcerpt").val() : (error = true, showsnackbar('Please add a excerpt of more than 10 characters')),
+                readTime: $("#updateBlogReadTime").val() ? $("#updateBlogReadTime").val() : (error = true, showsnackbar('Please include approximate read time')),
+                body: quillEditors.updateBlogBody.root.innerHTML.slice(3).slice(0,-4) || (error = true,showsnackbar('Please enter valid body for the blog')),
+                banner: member.blogs.currentBanner || (showsnackbar('Please include a banner imager'), error = true),
+                thumbnail: member.blogs.currentThumbnail || (showsnackbar('Please include a thumbnail imager'), error = true)
+            }
+            if(!error){
+                xhttp.put('myBlog', payload).then((response)=>{
+                    $("#updateBlogTitle").val('');
+                    $("#updateBlogExcerpt").val('');
+                    $("#updateBlogReadTime").val('');
+                    route('account/blogs');
+                    member.blogs.get().then(()=>{
+                        member.blogs.populate();
+                    })
+                })
+            }
+        },
+        startEdit: async function () {
+            if(!member.blogs.myBlogs){
+                member.blogs.get().then(()=>{
+                    member.blogs.startEdit();
+                })
+                return false;
+            }
+            let currentBlog = member.blogs.myBlogs.filter(x => x.id == path.parts[3])[0];
+            if(!currentBlog){
+                route('account/blogs');
+                return false;
+            }
+            if (!quillEditors.updateBlogBody) {
+                quillEditors.updateBlogBody = new Quill('.edit-blog-body-editor', {
+                    theme: 'snow',
+                    modules: {
+                        'toolbar': [
+                            [{ 'size': [] }],
+                            ['bold', 'italic', 'underline', 'strike'],
+                            [{ 'color': [] }, { 'background': [] }],
+                            [{ 'script': 'super' }, { 'script': 'sub' }],
+                            ['blockquote', 'code-block'],
+                            [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
+                            ['direction', { 'align': [] }],
+                            ['link', 'image'],
+                            ['clean']
+                        ]
+                    }
+                })
+            }else{
+                /* quillEditors.updateBlogBody.container.firstChild.innerHTML = ; */
+            }
+            
+            
+            $("#update_blog_banner_container").html(`<h5>Primary Image</h5><div class="update_blog_banner dropzone dropzone_square smalltools" data-width="1080" data-height="720" data-url="/service/blogimage"
+            data-image="/assets/blogImages/${currentBlog.banner}" style="width: 100%;aspect-ratio:1.77">
+                <input type="file" accept=".png, .jpg, .jpeg" name="thumb" />
+            </div>`);
+            $("#update_blog_thumb_container").html(`<h5>Thumbnail</h5><div class="update_blog_thumb dropzone dropzone_square smalltools" data-width="1080" data-height="1080" data-url="/service/blogimage"
+            data-image="/assets/blogImages/${currentBlog.thumbnail}" style="width: 100%;aspect-ratio:1">
+                <input type="file" accept=".png, .jpg, .jpeg" name="thumb" />
+            </div>`);
+            $('.update_blog_banner').html5imageupload({
+                onAfterProcessImage: function() {
+                        member.blogs.currentBanner = ImageUploadedResponse?.filename;
+                    
+                },
+                onAfterCancel: function() {
+                    $('#filename').val('');
+                }
+            });
+            $('.update_blog_thumb').html5imageupload({
+                onAfterProcessImage: function() {
+                    
+                        member.blogs.currentThumbnail = ImageUploadedResponse?.filename;
+                    
+                },
+                onAfterCancel: function() {
+                    $('#filename').val('');
+                }
+            });
+            member.blogs.currentBanner = currentBlog.banner;
+            member.blogs.currentThumbnail  = currentBlog.thumbnail;
+            $("#updateBlogTitle").val(currentBlog.title);
+            $("#updateBlogExcerpt").val(currentBlog.excerpt);
+            $("#updateBlogReadTime").val(currentBlog.readtime);
+            quillEditors.updateBlogBody.container.firstChild.innerHTML = currentBlog.blog_text;
+        }
+    }
+}
+
 var QuilltoolbarOptions = [
     ['bold', 'italic', 'underline', 'strike'], // toggled buttons
     ['blockquote', 'code-block'],
@@ -548,40 +876,7 @@ function checkUrl() {
             $(`.left-menu-single-item[linked-to="${path.parts[1]}"]`).addClass('active');
             $(`.right-menu-single-item:not([linked-to="${path.parts[1]}"])`).slideUp();
             $(`.right-menu-single-item[linked-to="${path.parts[1]}"]`).slideDown();
-            if (path.parts[1] == "gallery") {
-                /* setTimeout(() => {
-                    $('.dropzone_1').html5imageupload({
-                        onAfterProcessImage: function() {
-                            $('.file_name_' + currentimage).val($(this.element).data('name'));
-                            if ($(this)[0].element.classList[2] == 'dropzone_myphoto') {
-                                Snackbar.show({
-                                    pos: 'bottom-center',
-                                    showAction: false,
-                                    text: 'Successfully updated your photo'
-                                });
-                            }
-                        },
-                        onAfterCancel: function() {
-                            $('#filename').val('');
-                        }
-                    });
-                    $('.dropzone_2').html5imageupload({
-                        onAfterProcessImage: function() {
-                            $('.file_name_' + currentimage).val($(this.element).data('name'));
-                            if ($(this)[0].element.classList[2] == 'dropzone_myphoto') {
-                                Snackbar.show({
-                                    pos: 'bottom-center',
-                                    showAction: false,
-                                    text: 'Successfully updated your photo'
-                                });
-                            }
-                        },
-                        onAfterCancel: function() {
-                            $('#filename').val('');
-                        }
-                    });
-                }, 1000); */
-            } else if (path.parts[1] == "personal") {
+           if (path.parts[1] == "personal") {
                 if (!quillEditors.aboutEditSection) {
                     quillEditors.aboutEditSection = new Quill('.about-edit-section', {
                         theme: 'snow'
@@ -608,7 +903,7 @@ function checkUrl() {
                 auth.checkPasswords();
             } else if (path.parts[1] == "blogs") {
                 if (!path.parts[2]) {
-
+                    member.blogs.populate();
                 } else if (path.parts[2] == "add") {
                     if (!quillEditors.newBlogBody) {
                         quillEditors.newBlogBody = new Quill('.new-blog-body-editor', {
@@ -630,7 +925,7 @@ function checkUrl() {
                     }
                     $('.new_blog_banner').html5imageupload({
                         onAfterProcessImage: function() {
-                            $('.file_name_' + currentimage).val($(this.element).data('name'));
+                            member.blogs.currentBanner = ImageUploadedResponse?.filename;
                             if ($(this)[0].element.classList[2] == 'dropzone_myphoto') {
                                 Snackbar.show({
                                     pos: 'bottom-center',
@@ -645,7 +940,7 @@ function checkUrl() {
                     });
                     $('.new_blog_thumb').html5imageupload({
                         onAfterProcessImage: function() {
-                            $('.file_name_' + currentimage).val($(this.element).data('name'));
+                            member.blogs.currentThumbnail = ImageUploadedResponse?.filename;
                             if ($(this)[0].element.classList[2] == 'dropzone_myphoto') {
                                 Snackbar.show({
                                     pos: 'bottom-center',
@@ -658,57 +953,20 @@ function checkUrl() {
                             $('#filename').val('');
                         }
                     });
-                } else {
-                    if (!quillEditors.updateBlogBody) {
-                        quillEditors.updateBlogBody = new Quill('.edit-blog-body-editor', {
-                            theme: 'snow',
-                            modules: {
-                                'toolbar': [
-                                    [{ 'size': [] }],
-                                    ['bold', 'italic', 'underline', 'strike'],
-                                    [{ 'color': [] }, { 'background': [] }],
-                                    [{ 'script': 'super' }, { 'script': 'sub' }],
-                                    ['blockquote', 'code-block'],
-                                    [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
-                                    ['direction', { 'align': [] }],
-                                    ['link', 'image'],
-                                    ['clean']
-                                ]
-                            }
-                        })
-                        quillEditors.updateBlogBody.container.firstChild.innerHTML = $(".single-complete-blog-body:eq(0)").html();
-                    }
-                    $('.update_blog_banner').html5imageupload({
-                        onAfterProcessImage: function() {
-                            $('.file_name_' + currentimage).val($(this.element).data('name'));
-                            if ($(this)[0].element.classList[2] == 'dropzone_myphoto') {
-                                Snackbar.show({
-                                    pos: 'bottom-center',
-                                    showAction: false,
-                                    text: 'Successfully updated your photo'
-                                });
-                            }
-                        },
-                        onAfterCancel: function() {
-                            $('#filename').val('');
-                        }
-                    });
-                    $('.update_blog_thumb').html5imageupload({
-                        onAfterProcessImage: function() {
-                            $('.file_name_' + currentimage).val($(this.element).data('name'));
-                            if ($(this)[0].element.classList[2] == 'dropzone_myphoto') {
-                                Snackbar.show({
-                                    pos: 'bottom-center',
-                                    showAction: false,
-                                    text: 'Successfully updated your photo'
-                                });
-                            }
-                        },
-                        onAfterCancel: function() {
-                            $('#filename').val('');
-                        }
-                    });
+                } else if(path.parts[2]){
+                    member.blogs.startEdit();
                 }
+            }else if (path.parts[1] == "gallery") {
+                $('#addEditPhotoInputDropZone').html5imageupload({
+                    onAfterProcessImage: function() {
+                        
+                    },
+                    onAfterCancel: function() {
+                        $('#filename').val('');
+                    }
+                });
+                member.image.populateMyPhotos();
+                member.image.checkCurrent();
             }
         }
     })

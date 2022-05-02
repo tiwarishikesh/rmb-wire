@@ -13,7 +13,8 @@
         "footer": ["body", "Loading menu items"],
         "blog": ["appbody", "Loading menu items"],
         "gallery": ["appbody", "Loading gallery and images"],
-        "account":["appbody","Loading account sections"]
+        "account":["appbody","Loading account sections"],
+        "templates":["body","Loading templates"]
     },
     "keys": {
         "Razorpay": {

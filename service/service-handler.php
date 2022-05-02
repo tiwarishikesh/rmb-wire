@@ -25,7 +25,19 @@ $routes = array(
     ["PATCH","auth","build/authentication.php","logInMagicLink","",[]],
     ["GET","member","build/member.php","getmember","auth",[]],
     ["POST","member","build/member.php","updatemember","auth",[]],
-    ["POST","profile_photo","build/member.php","upload_profilephoto","auth",[]]
+    ["POST","profile_photo","build/member.php","upload_profilephoto","auth",[]],
+    ["POST","gallery_photo","build/member.php","upload_galleryphoto","auth",[]],
+    
+    ["GET","gallery_photo","build/member.php","getMyPhotos","auth",[]],
+    ["PUT","gallery_photo","build/member.php","updatePhotoData","auth",[]],
+    ["PUT","gallery_photo/change","build/member.php","updatePhotoUrl","auth",[]],
+    ["DELETE","gallery_photo","build/member.php","deleteMemberPhoto","auth",[]],
+    ["POST","blogimage","build/member.php","uploadblogPhoto","auth",[]],
+
+    ["POST","myBlog","build/blog.php","createNewBlog","auth",[]],
+    ["GET","myBlog","build/blog.php","getMyBlogs","auth",[]],
+    ["PUT","myBlog","build/blog.php","updateMyBlog","auth",[]],
+
 );
 
 foreach ($routes as $route) {

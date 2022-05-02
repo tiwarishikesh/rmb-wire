@@ -185,111 +185,45 @@
             </div>
         </div>
     </div>
-    <div class="right-menu-single-item" linked-to="gallery">
+    <div class="right-menu-single-item" linked-to="gallery" style="overflow: hidden">
         <div class="myGalleryEditLeft">
             <h4>My Images</h4>
             <div class="editGalleryExistingImages">
-                <div class="container single-photo-upload-container col-md-4 col-sm-6">
-                    <img src="http://property.mq.edu.au/__data/assets/image/0005/365036/75T_G800sm.jpg" alt="">
-                    <h5>Title of the image</h5>
-                    <h6>Description of the image</h6>
-                    <div class="container w-full p-0">
-                        <div class="button small glassed red" style="width:150px;display: inline-block">
-                            <p>DELETE</p>
-                        </div>
-                        <div class="button small bordered-button glassed" style="width:150px;display: inline-block;margin-left:20px;">
-                            <p>EDIT</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="container single-photo-upload-container col-md-4 col-sm-6">
-                    <img src="http://property.mq.edu.au/__data/assets/image/0005/365036/75T_G800sm.jpg" alt="">
-                    <h5>Title of the image</h5>
-                    <h6>Description of the image</h6>
-                    <div class="container w-full p-0">
-                        <div class="button small glassed red" style="width:150px;display: inline-block">
-                            <p>DELETE</p>
-                        </div>
-                        <div class="button small bordered-button glassed" style="width:150px;display: inline-block;margin-left:20px;">
-                            <p>EDIT</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="container single-photo-upload-container col-md-4 col-sm-6">
-                    <img src="http://property.mq.edu.au/__data/assets/image/0005/365036/75T_G800sm.jpg" alt="">
-                    <h5>Title of the image</h5>
-                    <h6>Description of the image</h6>
-                    <div class="container w-full p-0">
-                        <div class="button small glassed red" style="width:150px;display: inline-block">
-                            <p>DELETE</p>
-                        </div>
-                        <div class="button small bordered-button glassed" style="width:150px;display: inline-block;margin-left:20px;">
-                            <p>EDIT</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="container single-photo-upload-container col-md-4 col-sm-6">
-                    <img src="http://property.mq.edu.au/__data/assets/image/0005/365036/75T_G800sm.jpg" alt="">
-                    <h5>Title of the image</h5>
-                    <h6>Description of the image</h6>
-                    <div class="container w-full p-0">
-                        <div class="button small glassed red" style="width:150px;display: inline-block">
-                            <p>DELETE</p>
-                        </div>
-                        <div class="button small bordered-button glassed" style="width:150px;display: inline-block;margin-left:20px;">
-                            <p>EDIT</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="container single-photo-upload-container col-md-4 col-sm-6">
-                    <img src="http://property.mq.edu.au/__data/assets/image/0005/365036/75T_G800sm.jpg" alt="">
-                    <h5>Title of the image</h5>
-                    <h6>Description of the image</h6>
-                    <div class="container w-full p-0">
-                        <div class="button small glassed red" style="width:150px;display: inline-block">
-                            <p>DELETE</p>
-                        </div>
-                        <div class="button small bordered-button glassed" style="width:150px;display: inline-block;margin-left:20px;">
-                            <p>EDIT</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="container single-photo-upload-container col-md-4 col-sm-6">
-                    <img src="http://property.mq.edu.au/__data/assets/image/0005/365036/75T_G800sm.jpg" alt="">
-                    <h5>Title of the image</h5>
-                    <h6>Description of the image</h6>
-                    <div class="container w-full p-0">
-                        <div class="button small glassed red" style="width:150px;display: inline-block">
-                            <p>DELETE</p>
-                        </div>
-                        <div class="button small bordered-button glassed" style="width:150px;display: inline-block;margin-left:20px;">
-                            <p>EDIT</p>
-                        </div>
-                    </div>
-                </div>
+                
             </div>
         </div>
         <div class="myGalleryEditRight">
             <div class="AddEditImage">
                 <h4> &nbsp; Add Image</h4>
                 <br>
-                <div class="container w-full p-0">
+                <div class="container w-full p-0 orientationselect">
                     <div class="radio col-xs-4">
-                        <input type="radio" id="landscape" name="newImageAspectRatio" value="male">
+                        <input type="radio" id="landscape" name="newImageAspectRatio" value="landscape" checked>
                         <label for="landscape"><i class="fa-solid fa-rectangle-wide"></i> Landscape</label><br>
                     </div>
                     <div class="radio col-xs-4">
-                        <input type="radio" id="potrait" name="newImageAspectRatio" value="female">
+                        <input type="radio" id="potrait" name="newImageAspectRatio" value="potrait">
                         <label for="potrait"><i class="fa-solid fa-rectangle-vertical"></i> Potrait</label><br>
                     </div>
                     <div class="radio col-xs-4">
-                        <input type="radio" id="square" name="newImageAspectRatio" value="other">
+                        <input type="radio" id="square" name="newImageAspectRatio" value="square">
                         <label for="square"><!-- <i class="fa-solid fa-square"></i> --> Square</label>
                     </div>
                 </div>
+                <div id="addEditPhotoInput" class="container w-full p-0" style="height:400px;display:flex;align-items:center;justify-items:center;justify-content: center;align-content: center;">
+                    <div class="dropzone_addEditPhotoInput dropzone dropzone_square smalltools" id="addEditPhotoInputDropZone" data-width="1920" data-height="1080" data-url="/service/gallery_photo" data-image="" style="max-width:100%;width: 100%;aspect-ratio:1">
+                        <input type="file" accept=".png, .jpg, .jpeg" name="thumb" />
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <input type="text" placeholder="Title" name="" id="addEditImageTitle">
+                </div>
+                <div class="col-sm-12">
+                    <textarea placeholder="Description" name="" id="addEditImageDescription"></textarea>
+                </div>
             </div>
-            <div class="button small glassed" style="width:350px;">
-                <p>Add Image</p>
+            <div class="button small glassed" style="width:350px;" onclick="member.image.addNew()">
+                <p>Add New Image</p>
             </div>
         </div>
     </div>
@@ -302,35 +236,12 @@
         </div>
         <br>
         <div class="container w-full" id="my-blog-archive">
-            <div class="container my-blog-single-card">
-                <img src="https://5.imimg.com/data5/GG/BR/MY-24252948/social-media-marketing-services-500x500.jpg" alt="">
-                <h4>A Complete guide to modern social media Engineering</h4>
-                <p>The more you know about your competitors’ SEO strategy, the better your own site can perform.</p>
-                <div class="button" style="width: 150px;float:left;transform:scale(0.8);transform-origin:top right" onclick="route('account/blogs/edit')">
-                    <p>EDIT</p>
-                </div>        
-            </div>
-            <div class="container my-blog-single-card">
-                <img src="https://5.imimg.com/data5/GG/BR/MY-24252948/social-media-marketing-services-500x500.jpg" alt="">
-                <h4>A Complete guide to modern social media Engineering</h4>
-                <p>The more you know about your competitors’ SEO strategy, the better your own site can perform.</p>
-                <div class="button" style="width: 150px;float:left;transform:scale(0.8);transform-origin:top right" onclick="route('account/blogs/edit')">
-                    <p>EDIT</p>
-                </div>        
-            </div>
-            <div class="container my-blog-single-card">
-                <img src="https://5.imimg.com/data5/GG/BR/MY-24252948/social-media-marketing-services-500x500.jpg" alt="">
-                <h4>A Complete guide to modern social media Engineering</h4>
-                <p>The more you know about your competitors’ SEO strategy, the better your own site can perform.</p>
-                <div class="button" style="width: 150px;float:left;transform:scale(0.8);transform-origin:top right" onclick="route('account/blogs/edit')">
-                    <p>EDIT</p>
-                </div>        
-            </div>
+            
         </div>
         <div class="container w-full" id="my-blog-add" style="border-top:1px solid #dedede;">
             <div class="container w-full">
                 <h4 style="display: inline-block;float:left">Add New Blog</h4>
-                <div class="button" style="width: 250px;float:left;transform:scale(0.8);transform-origin:top right" onclick="route('account/blogs/add')">
+                <div class="button bordered-button glassy" style="width: 250px;float:left;transform:scale(0.8);transform-origin:top right" onclick="member.blogs.add()">
                     <p>UPLOAD BLOG</p>
                 </div>
             </div>
@@ -340,26 +251,26 @@
                     <div class="col-sm-12 p-0">
                         <div class="col-md-7 p-l-0">
                             <h5>Primary Image</h5>
-                            <div class="new_blog_banner dropzone dropzone_square smalltools" data-width="1080" data-height="720" data-url="php/build/upload_user_photo.php" data-image="" style="width: 100%;aspect-ratio:1.5">
+                            <div class="new_blog_banner dropzone dropzone_square smalltools" data-width="1080" data-height="720" data-url="/service/blogimage" data-image="" style="width: 100%;aspect-ratio:1.5">
                                 <input type="file" accept=".png, .jpg, .jpeg" name="thumb" />
                             </div>
                         </div>
                         <div class="col-md-5 p-r-0">
                             <h5>Thumbnail</h5>
-                            <div class="new_blog_thumb dropzone dropzone_square smalltools" data-width="1080" data-height="720" data-url="php/build/upload_user_photo.php" data-image="" style="width: 100%;aspect-ratio:1">
+                            <div class="new_blog_thumb dropzone dropzone_square smalltools" data-width="1080" data-height="720" data-url="/service/blogimage" data-image="" style="width: 100%;aspect-ratio:1">
                                 <input type="file" accept=".png, .jpg, .jpeg" name="thumb" />
                             </div>
                         </div>
                     </div>
                     <br>
                     <div class="col-sm-12 p-0">
-                        <input type="text" placeholder="Blog Title" name="" id="">
+                        <input type="text" placeholder="Blog Title" name="" id="newBlogTitle">
                     </div>
                     <div class="col-sm-12 p-0">
-                        <input type="number" placeholder="Read time in minutes" name="" id="">
+                        <input type="number" placeholder="Read time in minutes" name="" id="newBlogReadTime">
                     </div>
                     <div class="col-sm-12 p-0">
-                        <textarea name="" placeholder="Excerpt" id="" style="height: unset;" rows="5"></textarea>
+                        <textarea name="" placeholder="Excerpt" id="newBlogExcerpt" style="height: unset;" rows="5"></textarea>
                     </div>
                 </div>
                 <div class="col-sm-8">
@@ -370,7 +281,7 @@
         <div class="container w-full" id="my-blog-edit"style="border-top:1px solid #dedede; ">
             <div class="container w-full">
                 <h4 style="display: inline-block;float:left">Update Blog</h4>
-                <div class="button" style="width: 250px;float:left;transform:scale(0.8);transform-origin:top right" onclick="route('account/blogs/add')">
+                <div class="button bordered-button glassy" style="width: 250px;float:left;transform:scale(0.8);transform-origin:top right" onclick="member.blogs.update()">
                     <p>SAVE CHANGES</p>
                 </div>
             </div>
@@ -378,28 +289,28 @@
             <div class="container w-full">
                 <div class="col-sm-4" style="border-left: 1px solid #dedede;float:right">
                     <div class="col-sm-12 p-0">
-                        <div class="col-md-7 p-l-0">
+                        <div id="update_blog_banner_container" class="col-md-7 p-l-0">
                             <h5>Primary Image</h5>
-                            <div class="update_blog_banner dropzone dropzone_square smalltools" data-width="1080" data-height="720" data-url="php/build/upload_user_photo.php" data-image="https://shanebarker.com/wp-content/uploads/2020/05/The-Future-of-Social-Media-Marketing-11-Trends-You-Need-to-Know.jpg" style="width: 100%;aspect-ratio:1.5">
+                            <div class="update_blog_banner dropzone dropzone_square smalltools" data-width="1080" data-height="720" data-url="php/build/upload_user_photo.php"  style="width: 100%;aspect-ratio:1.7">
                                 <input type="file" accept=".png, .jpg, .jpeg" name="thumb" />
                             </div>
                         </div>
-                        <div class="col-md-5 p-r-0">
+                        <div id="update_blog_thumb_container" class="col-md-5 p-r-0">
                             <h5>Thumbnail</h5>
-                            <div class="update_blog_thumb dropzone dropzone_square smalltools" data-width="1080" data-height="720" data-url="php/build/upload_user_photo.php" data-image="https://5.imimg.com/data5/GG/BR/MY-24252948/social-media-marketing-services-500x500.jpg" style="width: 100%;aspect-ratio:1">
+                            <div class="update_blog_thumb dropzone dropzone_square smalltools" data-width="1080" data-height="1080" data-url="php/build/upload_user_photo.php" style="width: 100%;aspect-ratio:1">
                                 <input type="file" accept=".png, .jpg, .jpeg" name="thumb" />
                             </div>
                         </div>
                     </div>
                     <br>
                     <div class="col-sm-12 p-0">
-                        <input type="text" placeholder="Blog Title" value="A Complete guide to modern social media Engineering" name="" id="">
+                        <input type="text" placeholder="Blog Title" value="A Complete guide to modern social media Engineering" name="" id="updateBlogTitle">
                     </div>
                     <div class="col-sm-12 p-0">
-                        <input type="number" placeholder="Read time in minutes" value="24" name="" id="">
+                        <input type="number" placeholder="Read time in minutes" value="24" name="" id="updateBlogReadTime">
                     </div>
                     <div class="col-sm-12 p-0">
-                        <textarea name="" placeholder="Excerpt" id="" value="The more you know about your competitors’ SEO strategy, the better your own site can perform." style="height: unset;" rows="5"></textarea>
+                        <textarea name="" placeholder="Excerpt" id="updateBlogExcerpt" value="The more you know about your competitors’ SEO strategy, the better your own site can perform." style="height: unset;" rows="5"></textarea>
                     </div>
                 </div>
                 <div class="col-sm-8">

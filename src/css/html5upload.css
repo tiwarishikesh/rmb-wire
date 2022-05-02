@@ -5,12 +5,12 @@ body {
 }
 
 .dropzone {
-    background-color: #eeeeee;
+    background-color: #eeeeee44;
     text-align: center;
     position: relative;
     border: 1px solid #dddddd;
     display: inline-block;
-}
+backdrop-filter: blur(15px);box-shadow: 0 4px 16px 0 rgb(31 38 135 / 7%);border-radius: 10px;}
 
 .dropzone:after {
     content: 'Drop your image here or click to add one!';
@@ -113,7 +113,8 @@ body {
     opacity: 0;
     cursor: pointer;
     z-index: 2;
-    height: 100%/* IE HACK*/
+    height: 100%/* IE HACK*/;
+    background: transparent;
 }
 
 .dropzone>input[type=text] {

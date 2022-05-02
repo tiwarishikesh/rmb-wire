@@ -1,0 +1,38 @@
+<div>
+    <div data-img-id="{{id}}" class="container single-photo-upload-container col-md-4 col-sm-6">
+        <div class="container w-full" style="aspect-ratio: 1;">
+            <img src="/assets/membergallery/{{photo_name}}" alt="">
+        </div>
+        <div class="container w-full" style="background-image: url('/assets/membergallery/{{photo_name}}');"></div>
+        <h5>{{photo_title}}</h5>
+        <h6>{{photo_description}}</h6>
+        <div class="container w-full p-0">
+            <div class="editDeleteOtion">
+                <div class="button small glassed red" style="width:150px;display: inline-block" onclick="$(this).parent().parent().parent().addClass('confirmDelete')">
+                    <p>DELETE</p>
+                </div>
+                <div class="button small bordered-button glassed" onclick="member.image.edit(`{{id}}`)" style="width:150px;display: inline-block;margin-left:20px;">
+                    <p>EDIT</p>
+                </div>
+            </div>
+            <div class="confirmDeleteOption">
+                <div class="button small red glassed" style="width:250px;display: inline-block;margin-left:20px;" onclick="member.image.delete('{{id}}')">
+                    <p>CONFIRM DELETE</p>
+                </div>
+                <div class="button bordered-button small glassed" style="width:50px;display: inline-block" onclick="$(this).parent().parent().parent().removeClass('confirmDelete')">
+                    <p>X</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div>
+    <div class="container my-blog-single-card">
+        <img src="/assets/blogImages/{{banner}}" alt="">
+        <h4>{{title}}</h4>
+        <p>{{excerpt}}</p>
+        <div class="button glassy bordered-button" style="width: 150px;float:left;transform:scale(0.8);transform-origin:top right" onclick="route('account/blogs/edit/{{id}}')">
+            <p>EDIT</p>
+        </div>        
+    </div>
+</div>

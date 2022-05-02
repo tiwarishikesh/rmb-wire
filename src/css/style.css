@@ -942,6 +942,28 @@ gallery h4{
     position: relative;
 }
 
+.confirmDeleteOption,
+.editDeleteOtion{
+     height:50px;   
+}
+
+.confirmDeleteOption .button{
+    float:right;
+    margin-left:10px;
+}
+
+.confirmDeleteOption{
+    display:none;
+}
+
+.single-photo-upload-container.confirmDelete .confirmDeleteOption{
+    display: block;
+}
+
+.single-photo-upload-container.confirmDelete .editDeleteOtion{
+    display: none;
+}
+
 
 .myGalleryEditRight{
     height:calc(100vh - 65px);
@@ -1091,9 +1113,22 @@ margin-top: -5px;font-style: italic;}
 .single-photo-upload-container:nth-of-type(3n){
     border:none;
 }
+
+.single-photo-upload-container .container:nth-of-type(1){
+    aspect-ratio:1;
+    overflow: hidden;
+display: flex;justify-content: center;justify-self: center;justify-items: center;align-items: center;}
+
+.single-photo-upload-container h5{
+    height:45px;
+}
+.single-photo-upload-container h6{
+    height:45px;
+}
+
 .single-photo-upload-container img{
     border-radius: 12px;
-}
+max-height: 100%;width: unset;max-width: 100%;}
 
 .single-photo-upload-container .dropzone:after{
     font-size:20px;
@@ -1583,8 +1618,7 @@ border: 1px solid rgba( 255, 255, 255, 0.18 );}
 padding-top: 12px;border: 1px solid #3153BC;}
 
 .button.small p{
-    font-size:16px
-}
+    font-size:16px;}
 
 .checkbox,
 .radio{
