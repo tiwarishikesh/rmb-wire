@@ -491,6 +491,59 @@ function checkPersonalDataUpdate() {
     }, 1000))
 }
 
+function registerMember() {
+    let error = false;
+    let payload = {
+        fname: $("#fname_new").val() ? $("#fname_new").val() : (error = true, showsnackbar('Please provide your name')),
+        lname: $("#lname_new").val() ? $("#lname_new").val() : (error = true, showsnackbar('Please provide your name')),
+        gender: $(`[name="newgender"]`).val() == "other" ? ($("#new_gender").val() ? $("#new_gender").val(): 'N.A.') : $(`[name="newgender"]`).val(),
+        club: $("#clubname").val() ? $("#clubname").val() : (error = true, showsnackbar('Please provide your club name')),
+        clubsecretary: $("#clubnamesecretary").val() ? $("#clubnamesecretary").val() : (error = true, showsnackbar(`Please provide your Club Secretary's Name`)),
+        clubsecretaryemail: $("#clubsecretaryemail").val() ? $("#clubsecretaryemail").val() : (error = true, showsnackbar(`Please provide your Club Secretary's Email`)),
+        dob: $("#dobnew").val() ? $("#dobnew").val(): (showsnackbar('Please provide your date of birth'), error = true),
+        dateofjoining: $("#dateofjoiningnew").val() ? $("#dateofjoiningnew").val(): (showsnackbar('Please provide date of joining rotary'), error = true),
+        business_name: $("#organisation_name_new").val() ? $("#organisation_name_new").val() : (showsnackbar('Please provide Business Name'), error = true),
+        position: $("#position_new").val() ? $("#position_new").val() : (showsnackbar('Please specify your position in organisation'), error = true),
+        address: $("#business_adress_new").val() ? $("#business_adress_new").val() : (showsnackbar('Please provide Business Address'), error = true),
+        about: quillEditors.aboutNewSection.root.innerHTML.replace(/<[^>]*>?/gm, '').length ? quillEditors.aboutNewSection.root.innerHTML: (showsnackbar('Please provide a short introduction'), error = true),
+        business_descritption: quillEditors.aboutBusinessNewSection.root.innerHTML.replace(/<[^>]*>?/gm, '').length ? quillEditors.aboutBusinessNewSection.root.innerHTML: (showsnackbar('Please provide a short business description'), error = true),
+        phone1: $("#phone1new").val()?.length>5 ? ('+' + window.phone1New.getSelectedCountryData().dialCode + $("#phone1new").val()) : (error=true, showsnackbar('Please provide a valid phone nummber')),
+        email1: RegexCheck.regexes.email.test($("#email1New").val()) ? $("#email1New").val() : (error=true, showsnackbar('Please provide a valid email id')),
+        chapter: $("#newMemberChapter").val() ? $("#newMemberChapter").val() : (showsnackbar('Please specify which chapter you would like to join'), error = true),
+        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
+    }
+    if(ImageUploadedResponse?.type == "newmember"){
+        payload.photo = ImageUploadedResponse?.filename;
+    }
+    if($("#phone1new").val()?.length){
+        payload.phone2 = ('+' + window.phone2New.getSelectedCountryData().dialCode + $("#phone2new").val())
+    }
+    if($("#email2New").val() && RegexCheck.regexes.email.test($("#email2New").val())){
+        payload.email2 = $("#email2New").val();
+    }
+    if(!$("#newBusinessClassification").val()){
+        error = true;
+        showsnackbar("Please include your business classification");
+    }else if($("#newBusinessClassification").val() == '0'){
+        payload.classification = $("#newClassification").val() || (showsnackbar('Please specify your business classification'),error = true);
+    }else{
+        payload.classification = $("#newBusinessClassification").val();
+    }
+
+    if(!error){
+        xhttp.post('register',payload).then((response)=>{
+            if(response.status == "failed" && response.cause=="conflict"){
+                showsnackbar(`${response.details} is already in use by a member`);
+            }else if(response.status == "success"){
+                showsnackbar('Your request has been registered and will be processed shortly');
+                route('home');
+                window.location.reload();
+            }
+        })
+    }
+}
+
+
 var member = {
     image: {
         addNew: function () {
@@ -871,7 +924,41 @@ function checkUrl() {
                 x.destroy();
             }) */
         $('menu').removeClass('active')
-        if (path.parts[0] == "account" && path.parts[1]) {
+        if (path.parts[0] == "register"){
+            $('#new_personal_photo').html5imageupload({
+                onAfterProcessImage: function() {
+                    member.blogs.currentBanner = ImageUploadedResponse?.filename;
+                    ImageUploadedResponse.type = "newmember";
+                },
+                onAfterCancel: function() {
+                    $('#filename').val('');
+                }
+            });
+            if (!quillEditors.aboutNewSection) {
+                quillEditors.aboutNewSection = new Quill('.about-new-section', {
+                    theme: 'snow'
+                });
+            }
+            if (!quillEditors.aboutBusinessNewSection) {
+                quillEditors.aboutBusinessNewSection = new Quill('.business-details-new-section', {
+                    theme: 'snow'
+                });
+            }
+            $("#newBusinessClassification").select2({
+                placeholder: "Select a classification"
+            });
+            $("#newMemberChapter").select2({
+                placeholder: "Select a Chapter"
+            });
+            tempDatepickers.push($("#dateofjoiningnew").bootstrapMaterialDatePicker({
+                format: 'DD MMMM YYYY',
+                time: false,
+            }));
+            tempDatepickers.push($("#dobnew").bootstrapMaterialDatePicker({
+                format: 'DD MMMM YYYY',
+                time: false
+            }));
+        }else if (path.parts[0] == "account" && path.parts[1]) {
             $('.left-menu-single-item').removeClass('active');
             $(`.left-menu-single-item[linked-to="${path.parts[1]}"]`).addClass('active');
             $(`.right-menu-single-item:not([linked-to="${path.parts[1]}"])`).slideUp();
@@ -926,13 +1013,6 @@ function checkUrl() {
                     $('.new_blog_banner').html5imageupload({
                         onAfterProcessImage: function() {
                             member.blogs.currentBanner = ImageUploadedResponse?.filename;
-                            if ($(this)[0].element.classList[2] == 'dropzone_myphoto') {
-                                Snackbar.show({
-                                    pos: 'bottom-center',
-                                    showAction: false,
-                                    text: 'Successfully updated your photo'
-                                });
-                            }
                         },
                         onAfterCancel: function() {
                             $('#filename').val('');

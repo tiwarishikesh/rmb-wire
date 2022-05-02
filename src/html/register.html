@@ -1,0 +1,137 @@
+<div class="container">
+<h1 style="font-size:x-large;text-align:center">Become a Member</h1>
+        
+        <br>
+        <div class="container" style="max-width: 1400px;">
+            <div class="col-sm-12">
+                <div class="col-sm-4 p-l-0">
+                    <div class="dropzone_profile dropzone dropzone_square smalltools" id="new_personal_photo" data-width="1080" data-height="1080" data-url="/service/profile_photo" data-image="" style="max-width:100%;width: 100%;aspect-ratio:1">
+                        <input type="file" accept=".png, .jpg, .jpeg" name="thumb" />
+                    </div>
+                </div>
+                <div class="col-sm-8 p-r-0">
+                    <div class="col-sm-6 p-0">
+                        <input type="text" class="big-no-border" placeholder="First Name" name="" id="fname_new">
+                    </div>
+                    <div class="col-sm-6 p-0">
+                        <input type="text" class="big-no-border" placeholder="Last Name" name="" id="lname_new">
+                    </div>
+                    <div class="col-sm-12 p-0">
+                        <div class="radio col-xs-3">
+                            <input type="radio" id="newmale" name="newgender" value="male" checked>
+                            <label for="newmale">Male</label><br>
+                        </div>
+                        <div class="radio col-xs-3">
+                            <input type="radio" id="newfemale" name="newgender" value="female">
+                            <label for="newfemale">Female</label><br>
+                        </div>
+                        <div class="radio col-xs-3">
+                            <input type="radio" id="newother" name="newgender" value="other">
+                            <label for="newother">Other</label>
+                        </div>
+                        <div class="col-sm-3 p-0">
+                            <input type="text" placeholder="Please Specify" style="text-transform: capitalize;" name="" id="new_gender">
+                        </div>
+                    </div>
+                    <div class="col-sm-12 p-0" style="margin-top:20px;margin-bottom:25px;">
+                        <input type="text" placeholder="Club Name" class="medium-no-border" name="" id="clubname">
+                    </div>
+                    <div class="container w-full p-0">
+                        <div class="col-sm-6 p-0" style="margin-top:20px;margin-bottom:25px;">
+                            <input type="text" placeholder="Club Secretary" class="medium-no-border" name="" id="clubnamesecretary">
+                        </div>
+                        <div class="col-sm-6 p-0" style="margin-top:20px;margin-bottom:25px;">
+                            <input type="text" placeholder="Club Secretary Email" class="medium-no-border" name="" id="clubsecretaryemail">
+                        </div>
+                    </div>
+                    <br>
+                    <div class="col-sm-6 p-l-0">
+                        <p>Date Of Birth</p>
+                        <input type="text" placeholder="Date of Birth" name="" id="dobnew">
+                    </div>
+                    <div class="col-sm-6 p-0">
+                        <p>In Rotary Since</p>
+                        <input type="text" placeholder="Date of Joining Rotary" name="" id="dateofjoiningnew">
+                        <select name="" id="newMemberChapter">
+                            <option value=""></option>
+                            <option value="1">Chapter 1</option>
+                        </select>
+                    </div>
+                </div>
+                <br>
+                </br>
+                <div class="col-sm-6 p-l-0">
+                    <h4>Contact Information</h4>
+                    <div class="col-sm-12 p-0">
+                        <input type="text" placeholder="Phone 1" data-variable="phone1New" name="phone" id="phone1new">
+                    </div>
+                    <div class="col-sm-12 p-0">
+                        <input type="text" placeholder="Phone 2" data-variable="phone2New" name="phone" id="phone2new">
+                    </div>
+                    <div class="col-sm-12 p-0">
+                        <input type="text" placeholder="Email 1" name="" id="email1New">
+                    </div>
+                    <div class="col-sm-12 p-0">
+                        <input type="text" placeholder="Email 2" name="" id="email2New">
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <h4>Tell Us About Yourself</h4>
+                    <div class="about-new-section" style="min-height: 350px;">
+    
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container" style="max-width: 1400px;border-top:1px solid #efefef;margin-top:50px;">
+            <h4>Business Information</h4>
+            </br>
+        </div>
+        <br>
+        <div class="container" style="max-width: 1400px;">
+            <div class="col-sm-12">
+                <div class="col-sm-12 p-0">
+                    <input type="text" placeholder="Organisation Name" name=""class="big-no-border"  id="organisation_name_new">
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <div class="col-sm-6 p-r-0">
+                    <div class="col-sm-12 p-0">
+                        <input type="text" placeholder="Position Occupied" name="" id="position_new">
+                    </div>
+                    <div class="col-sm-12 p-0">
+                        <textarea name="" placeholder="Address" id="business_adress_new" rows="5" style="height:unset"></textarea>
+                    </div>
+                    <div class="col-sm-12 p-0">
+                        <div class="col-sm-6 p-0">
+                            <select name="" onchange="if($('#newBusinessClassification').val()=='0'){$('#newClassification').addClass('disabled')}else{$('#newClassification').removeClass('disabled')}"  id="newBusinessClassification">
+                                <option value=""></option>
+                                <optgroup>
+                                    <option value="0">Others</option>
+                                </optgroup>
+                                <optgroup>
+                                    <option value="1">IT Services</option>
+                                </optgroup>
+                            </select>
+                        </div>
+                        <div class="col-sm-6 p-r-0">
+                            <input type="text" class="disabled" placeholder="Please Specify" data-placeholder="Classification" name="" id="newClassification">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="business-details-new-section" style="min-height: 350px;">
+    
+                    </div>
+                </div>
+                <br>
+                </br>
+            </div>
+        </div>
+        <div class="container" style="padding-bottom:50px;padding-top:50px;">
+            <div class="button bordered-button small glassed" style="width:350px;" onclick="registerMember()">
+                <p>Apply For Membership</p>
+            </div>
+            <br>
+        </div>
+</div>

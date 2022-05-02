@@ -93,4 +93,48 @@ function logInMagicLink($conn, $payload){
         return array("status"=>"failed");
     }
 }
+
+function register($conn, $payload){
+    $result = mysqli_query($conn, "SELECT * FROM `member_contact` WHERE `details`='$payload->phone1' OR `details`='$payload->email1'");
+    if(mysqli_num_rows($result)>0){
+        return array("status"=>"failed","cause"=>"conflict","details"=>mysqli_getarray($result)[0]->details);
+    }
+
+    if(isset($payload->email2)){
+        $result = mysqli_query($conn, "SELECT * FROM `member_contact` WHERE `details`='$payload->email2'");
+        if(mysqli_num_rows($result)>0){
+            return array("status"=>"failed","cause"=>"conflict","details"=>mysqli_getarray($result)[0]->details);
+        }
+    }
+    if(isset($payload->phone2)){
+        $result = mysqli_query($conn, "SELECT * FROM `member_contact` WHERE `details`='$payload->phone2'");
+        if(mysqli_num_rows($result)>0){
+            return array("status"=>"failed","cause"=>"conflict","details"=>mysqli_getarray($result)[0]->details);
+        }
+    }
+
+    $photo = $payload->photo ?? null;
+    $time = getdate()[0];
+
+    mysqli_query($conn, "INSERT INTO `member`(`fname`, `lname`, `membership_status`, `role`, `club`, `club_secretary`, `club_secretary_email`, `about`, `photo`, `chapter`, `registered_on`, `gender`, `dateofjoining`, `dateofbirth`, `timezone`)
+                                        VALUES('$payload->fname','$payload->lname','0','member','$payload->club','$payload->clubsecretary','$payload->clubsecretaryemail','$payload->about','$photo','$payload->chapter','$time','$payload->gender','$payload->dateofjoining','$payload->dob','$payload->timezone')");
+
+    $id = $conn->insert_id;
+
+    mysqli_query($conn, "INSERT INTO `member_profession`(`organisation_name`, `position`, `description`, `classification`, `member_id`, `organisation_address`) 
+                        VALUES ('$payload->business_name','$payload->position','$payload->business_descritption','$payload->classification','$id','$payload->address')");
+
+    mysqli_multi_query($conn,"INSERT INTO `member_contact`(`member_id`, `contact_type`, `details`) VALUES ('$id','phone','$payload->phone1');INSERT INTO `member_contact`(`member_id`, `contact_type`, `details`) VALUES ('$id','email','$payload->email1')");
+
+    
+    if(isset($payload->email2)){
+        $result = mysqli_query($conn, "INSERT INTO `member_contact`(`member_id`, `contact_type`, `details`) VALUES ('$id','email','$payload->email2')");
+    }
+    if(isset($payload->phone2)){
+        $result = mysqli_query($conn, "INSERT INTO `member_contact`(`member_id`, `contact_type`, `details`) VALUES ('$id','phone','$payload->phone2')");
+        
+    }
+
+    return array("status"=>"success");
+}
 ?>

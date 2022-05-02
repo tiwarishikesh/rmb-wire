@@ -18,6 +18,7 @@ echo header("Connection: close");
 
 $routes = array(
     ["POST","auth","build/authentication.php","login","",[]],
+    ["POST","register","build/authentication.php","register","",[]],
     ["GET","auth","build/authentication.php","checkauth","auth",[]],
     ["DELETE","auth","build/authentication.php","logout","auth",[]],
     ["PUT","auth","build/authentication.php","newpassword","auth",[]],
@@ -27,6 +28,8 @@ $routes = array(
     ["POST","member","build/member.php","updatemember","auth",[]],
     ["POST","profile_photo","build/member.php","upload_profilephoto","auth",[]],
     ["POST","gallery_photo","build/member.php","upload_galleryphoto","auth",[]],
+
+
     
     ["GET","gallery_photo","build/member.php","getMyPhotos","auth",[]],
     ["PUT","gallery_photo","build/member.php","updatePhotoData","auth",[]],

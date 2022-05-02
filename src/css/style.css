@@ -67,7 +67,17 @@ img{
 :root{
     --text-color-1:rgb(10 13 53);
 }
-
+register{
+    position: fixed;
+    width:100vw;
+    height:100vh;
+    z-index:998;
+    top:0;
+    left:0;
+    display:none;
+    padding-top:100px;
+    overflow-y: scroll;
+}
 
 
 /* 
@@ -91,6 +101,8 @@ http://patorjk.com/software/taag/#p=testall&h=0&v=0&f=Big%20Money-se&t=Sections
                                                                                                                                                                                                                         
 
 
+
+
 db   db d88888b  .d8b.  d8888b. d88888b d8888b. 
 88   88 88'     d8' `8b 88  `8D 88'     88  `8D 
 88ooo88 88ooooo 88ooo88 88   88 88ooooo 88oobY' 
@@ -111,7 +123,8 @@ header{
     backdrop-filter: blur(5px);
     border-bottom: 1px solid #707de3;
     z-index: 999;
-box-shadow: 0px 0px 1px 2px #707de322;}
+    box-shadow: 0px 0px 1px 2px #707de322;
+}
 
 header i {
     float: right;
@@ -1418,7 +1431,7 @@ h1.headings span{
 }
 
 input, textarea{
-    background-color: #fff9;
+    background-color: #fff5;
     border: 1px solid #dfdfdf;
     width: 100%;
     height: 45px;
@@ -1427,7 +1440,7 @@ input, textarea{
     border-radius: 10px;
     font-size: 16px;
     outline: none;
-}
+backdrop-filter: blur(6px);}
 
 input.disabled, textarea.disabled{
     opacity: 0.4;
@@ -1747,6 +1760,14 @@ body[path_part_0="account"][path_part_1="blogs"][path_part_2="edit"] #my-blog-ar
 body[path_part_0="account"][path_part_1="blogs"][path_part_2="add"] #my-blog-add,
 body[path_part_0="account"][path_part_1="blogs"][path_part_2="edit"] #my-blog-edit{
     display: block;
+}
+
+body[auth="false"][path_part_0="register"] register{
+    display: block;
+}
+
+body[auth="false"][path_part_0="register"] footer{
+    display: none;
 }
 
 
