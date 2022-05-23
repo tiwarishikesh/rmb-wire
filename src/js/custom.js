@@ -250,7 +250,11 @@ let auth = {
             $('.fname').text(user?.fname);
             $('.lname').text(user?.lname);
             xhttp.get('member', {}, {}).then((response) => {
+                if(response.data.personal.role == "admin" || response.data.personal.role == "superadmin"){
+                    admin.load();
+                }
                 auth.memberData = response.data;
+                $('body').attr('role',response.data.personal.role);
                 $("#fname_edit").val(response.data.personal.fname);
                 $("#lname_edit").val(response.data.personal.lname);
                 $('.fname').val(response.data.personal.fname);
@@ -496,10 +500,10 @@ function registerMember() {
     let payload = {
         fname: $("#fname_new").val() ? $("#fname_new").val() : (error = true, showsnackbar('Please provide your name')),
         lname: $("#lname_new").val() ? $("#lname_new").val() : (error = true, showsnackbar('Please provide your name')),
-        gender: $(`[name="newgender"]`).val() == "other" ? ($("#new_gender").val() ? $("#new_gender").val(): 'N.A.') : $(`[name="newgender"]`).val(),
+        gender: $(`[name="newgender"]:checked`).val() == "other" ? ($("#new_gender").val() ? $("#new_gender").val(): 'N.A.') : $(`[name="newgender"]:checked`).val(),
         club: $("#clubname").val() ? $("#clubname").val() : (error = true, showsnackbar('Please provide your club name')),
         clubsecretary: $("#clubnamesecretary").val() ? $("#clubnamesecretary").val() : (error = true, showsnackbar(`Please provide your Club Secretary's Name`)),
-        clubsecretaryemail: $("#clubsecretaryemail").val() ? $("#clubsecretaryemail").val() : (error = true, showsnackbar(`Please provide your Club Secretary's Email`)),
+        clubsecretaryemail: $("#clubsecretaryemail").val() && RegexCheck.regexes.email.test($("#clubsecretaryemail").val()) ? $("#clubsecretaryemail").val() : (error = true, showsnackbar(`Please provide your Club Secretary's valid Email`)),
         dob: $("#dobnew").val() ? $("#dobnew").val(): (showsnackbar('Please provide your date of birth'), error = true),
         dateofjoining: $("#dateofjoiningnew").val() ? $("#dateofjoiningnew").val(): (showsnackbar('Please provide date of joining rotary'), error = true),
         business_name: $("#organisation_name_new").val() ? $("#organisation_name_new").val() : (showsnackbar('Please provide Business Name'), error = true),
@@ -515,7 +519,7 @@ function registerMember() {
     if(ImageUploadedResponse?.type == "newmember"){
         payload.photo = ImageUploadedResponse?.filename;
     }
-    if($("#phone1new").val()?.length){
+    if($("#phone2new").val()?.length){
         payload.phone2 = ('+' + window.phone2New.getSelectedCountryData().dialCode + $("#phone2new").val())
     }
     if($("#email2New").val() && RegexCheck.regexes.email.test($("#email2New").val())){
@@ -923,8 +927,14 @@ function checkUrl() {
             /* tempDatepickers.forEach((x)=>{
                 x.destroy();
             }) */
-        $('menu').removeClass('active')
+        $('menu').removeClass('active');
+        if(path.parts[0] == "account" && !auth.memberData){
+            route('home');
+        }
         if (path.parts[0] == "register"){
+            if(auth.memberData){
+                route('home');
+            }
             $('#new_personal_photo').html5imageupload({
                 onAfterProcessImage: function() {
                     member.blogs.currentBanner = ImageUploadedResponse?.filename;
@@ -1047,6 +1057,25 @@ function checkUrl() {
                 });
                 member.image.populateMyPhotos();
                 member.image.checkCurrent();
+            }else if(path.parts[1] == 'admin-members'){
+                if (!quillEditors.AdminAboutSection) {
+                    quillEditors.AdminAboutSection = new Quill('.admin-about-edit-section', {
+                        theme: 'snow'
+                    });
+                }
+                if (!quillEditors.adminAboutBusinessSection) {
+                    quillEditors.adminAboutBusinessSection = new Quill('.admin-business-details-edit-section', {
+                        theme: 'snow'
+                    });
+                }
+                tempDatepickers.push($("#admin_dateofjoining").bootstrapMaterialDatePicker({
+                    format: 'DD MMMM YYYY',
+                    time: false,
+                }));
+                tempDatepickers.push($("#admin_dob").bootstrapMaterialDatePicker({
+                    format: 'DD MMMM YYYY',
+                    time: false
+                }));
             }
         }
     })

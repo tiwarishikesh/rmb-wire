@@ -104,7 +104,7 @@
                     </div>
                     <div class="col-sm-12 p-0">
                         <div class="col-sm-6 p-0">
-                            <select name="" onchange="if($('#newBusinessClassification').val()=='0'){$('#newClassification').addClass('disabled')}else{$('#newClassification').removeClass('disabled')}"  id="newBusinessClassification">
+                            <select name="" onchange="if($('#newBusinessClassification').val()!='0'){$('#newClassification').addClass('disabled')}else{$('#newClassification').removeClass('disabled')}"  id="newBusinessClassification">
                                 <option value=""></option>
                                 <optgroup>
                                     <option value="0">Others</option>

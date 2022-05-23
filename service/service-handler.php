@@ -41,6 +41,11 @@ $routes = array(
     ["GET","myBlog","build/blog.php","getMyBlogs","auth",[]],
     ["PUT","myBlog","build/blog.php","updateMyBlog","auth",[]],
 
+    ["GET","admin","build/admin.php","load","auth",[]],
+
+    ["GET","admin/member","build/admin.php","member_get_one","auth",[]],
+    ["POST","admin/member","build/admin.php","member_update","auth",[]]
+
 );
 
 foreach ($routes as $route) {

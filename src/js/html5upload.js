@@ -661,7 +661,6 @@ let ImageUploadedResponse = '';
                 },
                 data: JSON.stringify($.extend(obj, options.data)),
                 success: function(response) {
-                    console.log('line 662');
                     if (response.status == "success") {
                         response = response.payload;
                         ImageUploadedResponse = response;

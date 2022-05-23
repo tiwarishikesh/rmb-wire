@@ -1,0 +1,203 @@
+<div class="right-menu-single-item" linked-to="admin-members" style="padding-top: 0;padding-bottom:0px;">
+    <div class="main-admin-view">
+        <h4>My Members</h4>
+        <div class="container w-full">
+            <table id="myMembersTable">
+                <thead>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Role</th>
+                    <th>Status</th>
+                    <th></th>
+                </thead>
+                <tbody>
+                    
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+    <div class="side-panel view-member" style="opacity:0;">
+        <div class="side-panel-upper">
+            <div class="container w-full" style="padding-bottom: 7px;margin-bottom:15px; border-bottom: 1px solid #cecece;">
+                <h4 class="name"></h4>
+            </div>
+            <div class="container w-full p-0">
+                <div class="col-sm-6">
+                    <div style="width:60px;margin-left:5px;float: left;">
+                        <div class="toggle-wrapper toggle-wrapper">
+                            <input id="editMemberApproved" type="checkbox" checked="">
+                            <label class="toggle" for="editMemberApproved">
+                                <span class="toggle--handler"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <p style="display: inline-block;font-size: 18px;margin-bottom:0;cursor: pointer" onclick="$(this).parent().find('.toggle--handler').click()">Approved</p>
+                </div>
+                <div class="col-sm-6">
+                    <div style="width:60px;margin-left:5px;float: left;">
+                        <div class="toggle-wrapper toggle-wrapper">
+                            <input id="editMemberPaid" type="checkbox" checked="">
+                            <label class="toggle" for="editMemberPaid">
+                                <span class="toggle--handler green"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <p style="display: inline-block;font-size: 18px;margin-bottom:0;cursor:pointer" onclick="$(this).parent().find('.toggle--handler').click()">Paid</p>
+                </div>
+            </div>
+            <div class="container w-full superadmin-only">
+                <div class="radio col-xs-4">
+                    <input type="radio" id="member" name="memberRoles" value="member">
+                    <label for="member">Member</label><br>
+                </div>
+                <div class="radio col-xs-4">
+                    <input type="radio" id="admin" name="memberRoles" value="admin">
+                    <label for="admin">Admin</label><br>
+                </div>
+                <div class="radio col-xs-4">
+                    <input type="radio" id="superadmin" name="memberRoles" value="superadmin">
+                    <label for="superadmin">Super Admin</label><br>
+                </div>
+            </div>
+            <h4>Personal Information</h4>
+        <br>
+        <br>
+        <div class="container w-full p-0" style="max-width: 1400px;float:left;">
+            <div class="col-sm-12">
+                <div class="col-sm-12 p-0">
+                    <div class="col-sm-6 p-0">
+                        <input type="text" placeholder="First Name" name="" id="admin_fname_edit">
+                    </div>
+                    <div class="col-sm-6 p-0">
+                        <input type="text" placeholder="Last Name" name="" id="admin_lname_edit">
+                    </div>
+                    <div class="col-sm-12 p-0">
+                        <div class="radio col-xs-3">
+                            <input type="radio" id="adminmale" name="admingender" value="male">
+                            <label for="adminmale">Male</label><br>
+                        </div>
+                        <div class="radio col-xs-3">
+                            <input type="radio" id="adminfemale" name="admingender" value="female">
+                            <label for="adminfemale">Female</label><br>
+                        </div>
+                        <div class="radio col-xs-3">
+                            <input type="radio" id="adminother" name="admingender" value="other">
+                            <label for="adminother">Other</label>
+                        </div>
+                        <div class="col-sm-3 p-0">
+                            <input type="text" placeholder="Please Specify" style="text-transform: capitalize;" name="" id="admingender">
+                        </div>
+                    </div>
+                    <div class="col-sm-12 p-0" style="margin-top:20px;margin-bottom:25px;">
+                        <input type="text" placeholder="Club Name" name="" id="admin_clubname_edit">
+                    </div>
+                    <br>
+                    <div class="col-sm-6 p-l-0">
+                        <p>Date Of Birth</p>
+                        <input type="text" placeholder="Date of Birth" name="" id="admin_dob">
+                    </div>
+                    <div class="col-sm-6 p-0">
+                        <p>In Rotary Since</p>
+                        <input type="text" placeholder="Date of Joining Rotary" name="" id="admin_dateofjoining">
+                    </div>
+                </div>
+                <br>
+                </br>
+                <h4>Contact Information</h4>
+                <div class="col-sm-6 p-l-0">
+                    <input type="text" placeholder="Phone 1" data-variable="admin_phone1Edit" name="phone" id="admin_phone1">
+                </div>
+                <div class="col-sm-6 p-r-0">
+                    <input type="text" placeholder="Phone 2" data-variable="admin_phone2Edit" name="phone" id="admin_phone2">
+                </div>
+                <div class="col-sm-6 p-l-0">
+                    <input type="text" placeholder="Email 1" name="" id="admin_email1">
+                </div>
+                <div class="col-sm-6 p-r-0">
+                    <input type="text" placeholder="Email 2" name="" id="admin_email2">
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <div class="admin-about-edit-section" style="min-height: 350px;">
+
+                </div>
+            </div>
+        </div>
+        <div class="container" style="max-width: 1400px;float:left;border-top:1px solid #efefef;margin-top:50px;">
+            <h4>Business Information</h4>
+        </div>
+        <div class="container w-full p-0" style="max-width: 1400px;float:left;">
+                <div class="col-sm-12">
+                    <div class="col-sm-12 p-0">
+                        <input type="text" placeholder="Organisation Name" name="" id="admin_organisation_name">
+                    </div>
+                    <div class="col-sm-12 p-0">
+                        <input type="text" placeholder="Position Occupied" name="" id="admin_position">
+                    </div>
+                    <div class="col-sm-12 p-0">
+                        <textarea name="" placeholder="Address" id="admin_business_adress" rows="5" style="height:unset"></textarea>
+                    </div>
+                </div>
+                <br>
+                </br>                
+            <div class="col-sm-12 w-full">
+                <div class="admin-business-details-edit-section" style="min-height: 350px;">
+
+                </div>
+            </div>
+        </div>
+        </br>
+        </br>
+        </div>
+        <div class="side-panel-lower">
+            <div class="container w-full p-0">
+                <div class="button bordered-button small glassy" onclick="admin.member.save()" style="width:150px;display: inline-block;margin-left:25px;">
+                    <p>SAVE CHANGES</p>
+                </div>
+                <div class="button bordered-button small glassy red" onclick="admin.member.cancelEdit()" style="width:150px;display: inline-block;margin-left:25px;">
+                    <p>CANCEL</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    .main-admin-view{
+        float:left;
+        height:100vh;
+        width:calc(100% - 500px);
+        overflow-y: scroll;
+        padding-top: 60px;
+    }
+
+    .side-panel{
+        float:right;
+        width: 500px;
+        height: calc(100vh);
+        border-left:1px solid #707de3cc;
+    }
+
+    .side-panel-upper{
+        width: 100%;
+        height:calc(100vh - 70px);
+        overflow-y:scroll;
+        padding-top: 60px;
+    }
+
+    .side-panel-lower{
+        height:70px;
+        border-top: 1px solid #707de3ee;
+        width:100%;
+    }
+
+    tbody tr:nth-child(2n){
+        background-color: #fff4;
+    }
+
+    select[name="myMembersTable_length"]{
+        /* margin-top: 40px !important; */
+        position: relative !important;
+        width:100px !important;
+    }
+</style>

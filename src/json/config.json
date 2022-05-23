@@ -15,12 +15,20 @@
         "gallery": ["appbody", "Loading gallery and images"],
         "account":["appbody","Loading account sections"],
         "register":["body",""],
-        "templates":["body","Loading templates"]
+        "templates":["body","Loading templates"],
+        "admin-panel":["account","Loading admin components"]
     },
     "keys": {
         "Razorpay": {
             "key_id": "rzp_test_leGW5HZJFyiTf4"
         }
+    },
+    "membership_status":{
+        "0": "Applied",
+        "1": "Approved",
+        "2": "Approved Unpaid",
+        "3": "Approved Expired",
+        "4": "Banned"
     },
     "env": "dev"
 }

@@ -120,21 +120,30 @@ function register($conn, $payload){
                                         VALUES('$payload->fname','$payload->lname','0','member','$payload->club','$payload->clubsecretary','$payload->clubsecretaryemail','$payload->about','$photo','$payload->chapter','$time','$payload->gender','$payload->dateofjoining','$payload->dob','$payload->timezone')");
 
     $id = $conn->insert_id;
+    echo is_numeric($payload->classification);
+    if(!is_numeric($payload->classification)){
+        mysqli_query($conn, "INSERT INTO `member_profession_classifications`( `name`, `status`) VALUES ('$payload->classification',1)");
+        $payload->classification = $conn->insert_id;
+    }
 
-    mysqli_query($conn, "INSERT INTO `member_profession`(`organisation_name`, `position`, `description`, `classification`, `member_id`, `organisation_address`) 
+    $result=  mysqli_query($conn, "INSERT INTO `member_profession`(`organisation_name`, `position`, `description`, `classification`, `member_id`, `organisation_address`) 
                         VALUES ('$payload->business_name','$payload->position','$payload->business_descritption','$payload->classification','$id','$payload->address')");
 
-    mysqli_multi_query($conn,"INSERT INTO `member_contact`(`member_id`, `contact_type`, `details`) VALUES ('$id','phone','$payload->phone1');INSERT INTO `member_contact`(`member_id`, `contact_type`, `details`) VALUES ('$id','email','$payload->email1')");
+    $result=  mysqli_query($conn,"INSERT INTO `member_contact`(`member_id`, `contact_type`, `details`) VALUES ('$id','phone','$payload->phone1')");
+    mysqli_query($conn,"INSERT INTO `member_contact`(`member_id`, `contact_type`, `details`) VALUES ('$id','email','$payload->email1')");
 
     
     if(isset($payload->email2)){
         $result = mysqli_query($conn, "INSERT INTO `member_contact`(`member_id`, `contact_type`, `details`) VALUES ('$id','email','$payload->email2')");
     }
     if(isset($payload->phone2)){
-        $result = mysqli_query($conn, "INSERT INTO `member_contact`(`member_id`, `contact_type`, `details`) VALUES ('$id','phone','$payload->phone2')");
-        
+        $conn1 = getConnection();
+        $result = mysqli_query($conn1, "INSERT INTO `member_contact`(`member_id`, `contact_type`, `details`) VALUES ('$id','phone','$payload->phone2')");   
     }
 
-    return array("status"=>"success");
+    $password = password_hash("Password", PASSWORD_DEFAULT);
+    $result=  mysqli_query($conn, "INSERT INTO `member_authentication`( `member_id`, `password`, `set_on`) VALUES ('$id','$password','$time')");
+
+    return array("status"=>"success","details"=>$conn->error);
 }
 ?>

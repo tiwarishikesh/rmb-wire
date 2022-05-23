@@ -17,11 +17,25 @@
     <div class="left-menu-single-item" linked-to="network" onclick="route('account/network')">
         <h4><i class="fa-solid fa-users"></i> Network</h4>
     </div>
+    <tag class="admin-only">
+        <div class="left-menu-single-item" style="pointer-events:none;height: unset;">
+            <p style="font-size: 16px;font-weight: 600;color: #9f9fff;margin-top: 25px;">ADMIN</p>
+            <p style="color: #666;font-size: 14px;">Control Member and Member Generated Data</p>
+        </div>
+        <div class="left-menu-single-item" linked-to="admin-members" onclick="route('account/admin-members')">
+            <h4><i class="fa-solid fa-user"></i>My Members</h4>
+        </div>
+        <div class="left-menu-single-item" style="pointer-events:none;height: unset;">
+            <p style="font-size: 16px;font-weight: 600;color: #9f9fff;margin-top: 25px;">WEBMASTER</p>
+            <p style="color: #666;font-size: 14px;">Control Website images and options</p>
+        </div>
+    </tag>
     <div class="left-menu-single-item" style="position: absolute;bottom: 0;border-top: 1px solid #e3e3e3;border-radius: 0;max-width: 250px;right: 0;background: transparent;" onclick="auth.logout()">
         <h4><i class="fa-solid fa-users"></i> Logout</h4>
     </div>
 </div>
 <div class="account-right-section">
+    <admin-panel></admin-panel>
     <div class="right-menu-single-item" linked-to="personal">
         <h4>Personal Information</h4>
         <br>
@@ -97,7 +111,7 @@
         </div>
         <div class="container" style="max-width: 1400px;float:left;">
             <div class="col-sm-6">
-                <div class="col-sm-6 p-l-0">
+                <div class="col-sm-6 p-l-0" style="display: none">
                     <div class="dropzone_logo dropzone dropzone_square smalltools" data-width="1080" data-height="1080" data-url="php/build/upload_user_photo.php" data-image="" style="width: 100%;aspect-ratio:1">
                         <input type="file" accept=".png, .jpg, .jpeg" name="thumb" />
                     </div>
