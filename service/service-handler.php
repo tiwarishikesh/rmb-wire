@@ -27,9 +27,11 @@ $routes = array(
     ["GET","member","build/member.php","getmember","auth",[]],
     ["POST","member","build/member.php","updatemember","auth",[]],
     ["POST","profile_photo","build/member.php","upload_profilephoto","auth",[]],
+    ["POST","business_photo","build/member.php","upload_businessphoto","auth",[]],
     ["POST","gallery_photo","build/member.php","upload_galleryphoto","auth",[]],
 
-
+    ["POST","new_profile_photo","build/member.php","reg_upload_profilephoto","",[]],
+    ["POST","new_business_photo","build/member.php","reg_upload_businessphoto","",[]],
     
     ["GET","gallery_photo","build/member.php","getMyPhotos","auth",[]],
     ["PUT","gallery_photo","build/member.php","updatePhotoData","auth",[]],
@@ -41,10 +43,31 @@ $routes = array(
     ["GET","myBlog","build/blog.php","getMyBlogs","auth",[]],
     ["PUT","myBlog","build/blog.php","updateMyBlog","auth",[]],
 
+    ["GET","myTestimonials","build/testimonials.php","getMyTestimonials","auth",[]],
+    ["POST","myTestimonial","build/testimonials.php","updateMyTestimonials","auth",[]],
+    ["DELETE","myTestimonial","build/testimonials.php","deleteMyTestimonials","auth",[]],
+
+    ["GET","myEvents","build/events.php","getMyEvents","auth",[]],
+    ["POST","myEvents","build/events.php","updateMyEvent","auth",[]],
+    ["DELETE","myEvent","build/events.php","deleteMyEvent","auth",[]],
+
+    ["GET","myAds","build/advertisement.php","getMyAds","auth",[]],
+    ["POST","myAd","build/advertisement.php","updateMyAds","auth",[]],
+    ["DELETE","myAd","build/advertisement.php","deleteMyAds","auth",[]],
+    ["POST","myAdPhoto","build/advertisement.php","myAdPhoto","auth",[]],
+
+
     ["GET","admin","build/admin.php","load","auth",[]],
 
     ["GET","admin/member","build/admin.php","member_get_one","auth",[]],
-    ["POST","admin/member","build/admin.php","member_update","auth",[]]
+    ["POST","admin/member","build/admin.php","member_update","auth",[]],
+
+
+    ["GET","website/legal","build/website.php","getlegal","",[]],
+    ["POST","website/legal","build/website.php","updatelegal","auth",[]],
+
+    ["GET","website/home","build/website.php","gethome","",[]],
+    ["POST","website/home","build/website.php","updatehome","auth",[]]
 
 );
 

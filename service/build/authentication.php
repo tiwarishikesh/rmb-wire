@@ -113,6 +113,8 @@ function register($conn, $payload){
         }
     }
 
+    $gps = $payload->lat.'-'.$payload->lng;
+
     $photo = $payload->photo ?? null;
     $time = getdate()[0];
 
@@ -126,8 +128,8 @@ function register($conn, $payload){
         $payload->classification = $conn->insert_id;
     }
 
-    $result=  mysqli_query($conn, "INSERT INTO `member_profession`(`organisation_name`, `position`, `description`, `classification`, `member_id`, `organisation_address`) 
-                        VALUES ('$payload->business_name','$payload->position','$payload->business_descritption','$payload->classification','$id','$payload->address')");
+    $result=  mysqli_query($conn, "INSERT INTO `member_profession`(`organisation_name`, `position`, `description`, `classification`, `member_id`, `organisation_address`,`organisation_gps`,`organisation_photo`) 
+                        VALUES ('$payload->business_name','$payload->position','$payload->business_descritption','$payload->classification','$id','$payload->address','$gps','$payload->business_photo')");
 
     $result=  mysqli_query($conn,"INSERT INTO `member_contact`(`member_id`, `contact_type`, `details`) VALUES ('$id','phone','$payload->phone1')");
     mysqli_query($conn,"INSERT INTO `member_contact`(`member_id`, `contact_type`, `details`) VALUES ('$id','email','$payload->email1')");

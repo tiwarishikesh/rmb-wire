@@ -27,9 +27,14 @@ var admin= {
             $('[name="adminMemberStatus"]').prop('checked',false);
             $(".view-member .name").text(`${member.fname} ${member.lname}`);
             this.currentMember = member;
-            if(this.currentMember.membership_status == "1" || this.currentMember.membership_status == "2" || this.currentMember.membership_status == "3"){
+            if(this.currentMember.membership_status == "2" || this.currentMember.membership_status == "3"){
+                $("#editMemberPaid").prop('checked',true);
+            }else {
+                $("#editMemberPaid").prop('checked',false);
+            }
+            if(this.currentMember.membership_status == "2" || this.currentMember.membership_status == "3"){
                 $("#editMemberApproved").prop('checked',true);
-            }else if(this.currentMember.membership_status == "4"){
+            }else{
                 $("#editMemberApproved").prop('checked',false);
             }
             $(`#${this.currentMember.role}`).prop("checked",true);
@@ -79,14 +84,18 @@ var admin= {
                 role: $('[name="memberRoles"]:checked').val()
             }
 
-            if(["1","2","3"].includes(this.currentMember.membership_status)){
-                if($('#editMemberApproved').is(":checked")){
-                    payload.membership_status = admin.member.currentMember.membership_status;
-                }else{
+            if(!$("#editMemberApproved").is(":checked") && !$("#editMemberPaid").is(":checked")){
+                if(this.currentMember.membership_status != 0){
                     payload.membership_status = 4;
+                }else{
+                    payload.membership_status = 0;
                 }
-            }else{
-                payload.membership_status = $('#editMemberPaid').is(":checked") == "approved" ? 2 : 4;
+            }else if($("#editMemberApproved").is(":checked") && !$("#editMemberPaid").is(":checked")){
+                payload.membership_status = 1;
+            }else if($("#editMemberApproved").is(":checked") && $("#editMemberPaid").is(":checked")){
+                payload.membership_status = 2;
+            }else if(!$("#editMemberApproved").is(":checked") && $("#editMemberPaid").is(":checked")){
+                payload.membership_status = 3;
             }
 
             let error = false;
@@ -162,5 +171,153 @@ var admin= {
             $(".view-member").css('opacity',0);
             $(".view-member").css('pointer-events: none',1);
         }
+    },
+    legal: {
+        load: function () {
+            return new Promise((resolve, reject)=>{
+                xhttp.get('website/legal').then((response)=>{
+                    this.Storage = response;
+                    resolve();
+                })
+            });
+        },
+        selectionChanged: function () {
+            this.read().then(()=>{
+                let currentEdit = this.Storage.filter((x)=> x.title == $("#edit-legal-section").val())[0];
+                quillEditors.legalSection.container.firstChild.innerHTML = currentEdit.text;
+            })
+        },
+        read: function () {
+            return new Promise((resolve, reject)=>{
+                if(this.Storage){
+                    resolve();
+                }else{
+                    this.load().then(()=>{
+                        resolve();
+                    })
+                }
+            })
+        },
+        save: function () {
+            xhttp.post('website/legal',{
+                title: $("#edit-legal-section").val(),
+                text: quillEditors.legalSection.container.firstChild.innerHTML || 'NA'
+            }).then((response)=>{
+                showsnackbar(`${$('#edit-legal-section').select2('data')[0]?.text} Updated successfully`);
+                this.load().then(this.selectionChanged);
+            })
+        }
+    },
+    about: {
+        load: function () {
+            return new Promise((resolve, reject)=>{
+                xhttp.get('website/legal').then((response)=>{
+                    this.Storage = response;
+                    resolve();
+                })
+            });
+        },
+        selectionChanged: function () {
+            this.read().then(()=>{
+                let currentEdit = this.Storage.filter((x)=> x.title == $("#edit-about-section").val())[0];
+                quillEditors.aboutSection.container.firstChild.innerHTML = currentEdit.text;
+            })
+        },
+        read: function () {
+            return new Promise((resolve, reject)=>{
+                if(this.Storage){
+                    resolve();
+                }else{
+                    this.load().then(()=>{
+                        resolve();
+                    })
+                }
+            })
+        },
+        save: function () {
+            xhttp.post('website/legal',{
+                title: $("#edit-about-section").val(),
+                text: quillEditors.aboutSection.container.firstChild.innerHTML || 'NA'
+            }).then((response)=>{
+                showsnackbar(`${$('#edit-about-section').select2('data')[0]?.text} Updated successfully`);
+                this.load().then(this.selectionChanged);
+            })
+        }
+    },
+    home: {
+        load: function () {
+            return new Promise((resolve, reject)=>{
+                xhttp.get('website/home').then((response)=>{
+                    this.Storage = response;
+                    resolve();
+                })
+            });
+        },
+        read: function () {
+            return new Promise((resolve, reject)=>{
+                if(this.Storage){
+                    resolve();
+                }else{
+                    this.load().then(()=>{
+                        resolve();
+                    })
+                }
+            })
+        },
+        populate: function () {
+            this.read().then(()=>{
+                $("#stat1title").val(this.Storage.statistics[0].name);
+                $("#stat1").val(this.Storage.statistics[0].number);
+                $("#stat2title").val(this.Storage.statistics[1].name);
+                $("#stat2").val(this.Storage.statistics[1].number);
+                $("#stat3title").val(this.Storage.statistics[2].name);
+                $("#stat3").val(this.Storage.statistics[2].number);
+                $("#stat4title").val(this.Storage.statistics[3].name);
+                $("#stat4").val(this.Storage.statistics[3].number);
+            })
+            admin.about.read().then(()=>{
+                let x = admin.about.Storage;
+                $("#landingViewtext").val(x.filter((y)=> y.title == 'landing-view-text')[0].text);
+                $("#legendtext").val(x.filter((y)=> y.title == 'legend-text')[0].text);
+            })
+        },
+        save: function () {
+            let payload = {
+                landingViewText : $("#landingViewtext").val() || 'NA',
+                legendText: $("#legendtext").val() || 'NA',
+                stats : [
+                    {
+                        title: $("#stat1title").val(),
+                        stat: $("#stat1").val()
+                    },
+                    {
+                        title: $("#stat2title").val(),
+                        stat: $("#stat2").val()
+                    },
+                    {
+                        title: $("#stat3title").val(),
+                        stat: $("#stat3").val()
+                    },
+                    {
+                        title: $("#stat4title").val(),
+                        stat: $("#stat4").val()
+                    }
+                ]
+            };
+            xhttp.post('website/home',payload).then(()=>{
+                Promise.all([this.load(),admin.about.load()]).then(()=>{
+                    this.populate();
+                })
+
+            })
+        }
     }
+}
+
+
+let member_states = {
+    0: 'unpaid, unaaproved',
+    1: 'unpaid, approved',
+    2: 'paid, approved',
+    3: 'paid, unapproved'
 }

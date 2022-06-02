@@ -16,7 +16,8 @@
         "account":["appbody","Loading account sections"],
         "register":["body",""],
         "templates":["body","Loading templates"],
-        "admin-panel":["account","Loading admin components"]
+        "admin-panel":["account","Loading admin components"],
+        "website-control-panel":["account","Loading admin components"]
     },
     "keys": {
         "Razorpay": {

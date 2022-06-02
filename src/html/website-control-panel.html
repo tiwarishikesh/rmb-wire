@@ -1,0 +1,117 @@
+<div class="right-menu-single-item" linked-to="legal" style="padding-top: 0;padding-bottom:0px;">
+    <div class="main-admin-view">
+        <h4>Legal</h4>
+        <p><i>Change Terms and Conditions, Disclaimer, Privacy Policy</i></p>
+        </br>
+        <div class="container w-full">
+            <div class="col-sm-4">
+                <select name="" id="edit-legal-section" onchange="admin.legal.selectionChanged()">
+                    <option value=""></option>
+                    <option value="terms-and-conditions">Terms and Conditions</option>
+                    <option value="disclaimer">Disclaimers</option>
+                    <option value="privacy-policy">Privacy Policy</option>
+                    <option value="gdpr-policy">GDPR Policy</option>
+                    <option value="bylaws">Bylaws</option>
+                </select>
+            </div>
+            <div class="col-sm-4 col-sm-offset-4">
+                <div class="button small glassed" style="width:150px;" onclick="admin.legal.save()">
+                    <p>Save Changes</p>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="container w-full">
+            <div class="edit-website-legal-section" style="min-height: 80vw">
+
+            </div>
+        </div>
+        <br>
+    </div>
+</div>
+<div class="right-menu-single-item" linked-to="website-about-edit" style="padding-top: 0;padding-bottom:0px;">
+    <div class="main-admin-view">
+        <h4>Legal</h4>
+        <p><i>Change Legend, history, purpose</i></p>
+        </br>
+        <div class="container w-full">
+            <div class="col-sm-4">
+                <select name="" id="edit-about-section" onchange="admin.about.selectionChanged()">
+                    <option value=""></option>
+                    <option value="legend">Legend</option>
+                    <option value="purpose">Pupose</option>
+                    <option value="history">History</option>
+                    <option value="about">About</option>
+                </select>
+            </div>
+            <div class="col-sm-4 col-sm-offset-4">
+                <div class="button small glassed" style="width:150px;" onclick="admin.about.save()">
+                    <p>Save Changes</p>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="container w-full">
+            <div class="edit-website-about-section" style="min-height: 80vw">
+
+            </div>
+        </div>
+        <br>
+    </div>
+</div>
+<div class="right-menu-single-item" linked-to="website-home-edit" style="padding-top: 0;padding-bottom:0px;">
+    <div class="main-admin-view">
+        <h4>Statistics</h4>
+        <br>
+        <div class="container- w-full p-0">
+            <div class="col-sm-8">
+                <input type="text" placeholder="Statistic One title" name="" id="stat1title">
+            </div>
+            <div class="col-sm-4">
+                <input type="text" placeholder="Statistic one" name="" id="stat1">
+            </div>
+        </div>
+        <div class="container- w-full p-0">
+            <div class="col-sm-8">
+                <input type="text" placeholder="Statistic Two title" name="" id="stat2title">
+            </div>
+            <div class="col-sm-4">
+                <input type="text" placeholder="Statistic two" name="" id="stat2">
+            </div>
+        </div>
+        <div class="container- w-full p-0">
+            <div class="col-sm-8">
+                <input type="text" placeholder="Statistic Three title" name="" id="stat3title">
+            </div>
+            <div class="col-sm-4">
+                <input type="text" placeholder="Statistic three" name="" id="stat3">
+            </div>
+        </div>
+        <div class="container- w-full p-0">
+            <div class="col-sm-8">
+                <input type="text" placeholder="Statistic Four title" name="" id="stat4title">
+            </div>
+            <div class="col-sm-4">
+                <input type="text" placeholder="Statistic four" name="" id="stat4">
+            </div>
+        </div>
+        </br>
+        <h4>Landing Banner</h4>
+        <div class="col-sm-8">
+            <textarea name="" id="landingViewtext" style="height:unset" cols="30" rows="10"></textarea>
+        </div>
+        <br>
+        <h4>Legend Text</h4>
+        <div class="col-sm-8">
+            <textarea name="" id="legendtext" cols="30" style="height:unset" rows="10"></textarea>
+        </div>
+        <br>
+        <div class="container w-full">
+            <div class="col-sm-4">
+                <div class="button small bordered-button glassed" style="width:150px;float:left" onclick="admin.home.save()">
+                    <p>Save Changes</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,11 +1,11 @@
-<div class="container">
+<div class="container register-section">
 <h1 style="font-size:x-large;text-align:center">Become a Member</h1>
         
         <br>
         <div class="container" style="max-width: 1400px;">
             <div class="col-sm-12">
                 <div class="col-sm-4 p-l-0">
-                    <div class="dropzone_profile dropzone dropzone_square smalltools" id="new_personal_photo" data-width="1080" data-height="1080" data-url="/service/profile_photo" data-image="" style="max-width:100%;width: 100%;aspect-ratio:1">
+                    <div class="dropzone_profile dropzone dropzone_square smalltools" id="new_personal_photo" data-width="1080" data-height="1080" data-url="/service/new_profile_photo" data-image="" style="max-width:100%;width: 100%;aspect-ratio:1">
                         <input type="file" accept=".png, .jpg, .jpeg" name="thumb" />
                     </div>
                 </div>
@@ -96,36 +96,63 @@
             </div>
             <div class="col-sm-12">
                 <div class="col-sm-6 p-r-0">
-                    <div class="col-sm-12 p-0">
-                        <input type="text" placeholder="Position Occupied" name="" id="position_new">
-                    </div>
-                    <div class="col-sm-12 p-0">
-                        <textarea name="" placeholder="Address" id="business_adress_new" rows="5" style="height:unset"></textarea>
-                    </div>
-                    <div class="col-sm-12 p-0">
-                        <div class="col-sm-6 p-0">
-                            <select name="" onchange="if($('#newBusinessClassification').val()!='0'){$('#newClassification').addClass('disabled')}else{$('#newClassification').removeClass('disabled')}"  id="newBusinessClassification">
-                                <option value=""></option>
-                                <optgroup>
-                                    <option value="0">Others</option>
-                                </optgroup>
-                                <optgroup>
-                                    <option value="1">IT Services</option>
-                                </optgroup>
-                            </select>
+                    <div class="container w-full p-0">
+                        <div class="col-sm-12 p-0" style="max-width:350px;display:block;">
+                            <div class="dropzone_profile dropzone dropzone_square smalltools" id="new_business_photo" data-width="1080" data-height="1080" data-url="/service/new_business_photo" data-image="" style="max-width:100%;width: 100%;aspect-ratio:1">
+                                <input type="file" accept=".png, .jpg, .jpeg" name="thumb" />
+                            </div>
                         </div>
-                        <div class="col-sm-6 p-r-0">
-                            <input type="text" class="disabled" placeholder="Please Specify" data-placeholder="Classification" name="" id="newClassification">
+                        <div class="col-sm-12 p-0">
+                            <input type="text" placeholder="Position Occupied" name="" id="position_new">
+                        </div>
+                        <div class="col-sm-12 p-0">
+                            <div class="col-sm-6 p-0">
+                                <select name="" onchange="if($('#newBusinessClassification').val()!='0'){$('#newClassification').addClass('disabled')}else{$('#newClassification').removeClass('disabled')}"  id="newBusinessClassification">
+                                    <option value=""></option>
+                                    <optgroup>
+                                        <option style="border-bottom:1px solid #555;" value="0">Others</option>
+                                    </optgroup>
+                                    <optgroup>
+                                        <option value="1">IT Services</option>
+                                    </optgroup>
+                                </select>
+                            </div>
+                            <div class="col-sm-6 p-r-0">
+                                <input type="text" class="disabled" placeholder="Please Specify" data-placeholder="Classification" name="" id="newClassification">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="container w-full p-0">
+                        <h4>Tell Us About your Business</h4>
+                        <div class="business-details-new-section" style="min-height: 350px;">
+        
                         </div>
                     </div>
                 </div>
                 <div class="col-sm-6">
-                    <div class="business-details-new-section" style="min-height: 350px;">
-    
+                    <div class="container map-container w-full p-0" style="height:350px">
+                        <div id="google-map" style="width:100%;height:100%"></div>
+                    </div>
+                    <div class="col-sm-12 p-0" style="margin-top:20px;">
+                        <textarea name="" placeholder="Address" data="use_map_autofill_here" onkeyup="$('#registermapauto').prop('checked',false)" data="" id="business_adress_new" rows="5" style="height:unset"></textarea>
+                        <div class="col-sm-6">
+                            <div style="width:60px;margin-left:5px;float: left;">
+                                <div class="toggle-wrapper toggle-wrapper">
+                                    <input data='use_map_autofill' id="registermapauto" checked="checked" type="checkbox">
+                                    <label class="toggle" for="registermapauto">
+                                        <span class="toggle--handler" onclick=""></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <p style="display: inline-block;font-size: 18px;margin-bottom:0;cursor: pointer" onclick="$(this).parent().find('.toggle--handler').click()">Autofill Address</p>
+                        </div>
                     </div>
                 </div>
                 <br>
                 </br>
+            </div>
+            <div class="container w-full p-0" style="height:450px;">
+                
             </div>
         </div>
         <div class="container" style="padding-bottom:50px;padding-top:50px;">

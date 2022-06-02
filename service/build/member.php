@@ -42,13 +42,17 @@ function updatemember($conn, $payload){
     if($user->id !== $personal->id){
         my_error(403);
     }
+
+    $temp = $professional->gps;
+    $gps = $temp->lat.'-'.$temp->lng;
+
     $result1 = mysqli_query($conn, "UPDATE `member` SET `fname`='$personal->fname',`lname`='$personal->lname',`club`='$personal->club',`about`='$personal->about',`gender`='$personal->gender',`dateofjoining`='$personal->dateofjoining', `dateofbirth` = '$personal->dateofbirth', `timezone`='$personal->timezone' WHERE `id` = '$user->id'");
     $result2 = '';
     if(mysqli_num_rows(mysqli_query($conn, "SELECT * FROM `member` WHERE `id`='$user->id'"))>0){
         $result2 = mysqli_query($conn, "UPDATE `member_profession` SET `organisation_name`='$professional->organisation_name',`position`='$professional->position',`description`='$professional->description',`organisation_address`='$professional->organisation_address' WHERE `member_id`= '$user->id'");
     }else{
-        $result2 = mysqli_query($conn, "INSERT INTO `member_profession`(`organisation_name`, `position`, `description`, `classification`, `member_id`, `organisation_address`) VALUES 
-                                        '$professional->organisation_name','$professional->position', '$professional->description','1', '$user->id', '$professional->organisation_address' ");
+        $result2 = mysqli_query($conn, "INSERT INTO `member_profession`(`organisation_name`, `position`, `description`, `classification`, `member_id`, `organisation_address`,`organisation_gps`) VALUES 
+                                        '$professional->organisation_name','$professional->position', '$professional->description','1', '$user->id', '$professional->organisation_address', '$gps' ");
     }
     mysqli_query($conn, "DELETE FROM `member_contact` WHERE `member_id` = '$user->id'");
     foreach ($payload->contact as $contact) {
@@ -56,6 +60,68 @@ function updatemember($conn, $payload){
     }
 
     return array("status"=>"success");
+}
+
+function reg_upload_profilephoto($conn, $payload){
+
+    header('Content-Type: application/json');
+    //ini_set('memory_limit','16M');
+
+    $error					= false;
+
+    $absolutedir			= dirname(__FILE__);
+    $dir					= '/';
+    $serverdir				= $absolutedir.$dir;
+
+    $tmp					= explode(',',$payload->data);
+    $imgdata 				= base64_decode($tmp[1]);
+    $explode=explode('.',$payload-> name);
+    $end = end($explode);
+    $extension				= strtolower($end);
+    $filename				= substr($payload->name,0,-(strlen($extension) + 1)).'.'.substr(sha1(time()),0,6).'.'.$extension;
+
+    $handle					= fopen($serverdir.$filename,'w');
+    fwrite($handle, $imgdata);
+    fclose($handle);
+
+    $response = array(
+            "status" 		=> "success",
+            "url" 			=> $dir.$filename.'?'.time(), //added the time to force update when editting multiple times
+            "filename" 		=> $filename
+    );
+
+    return $response;
+}
+
+function reg_upload_businessphoto($conn, $payload){
+
+    header('Content-Type: application/json');
+    //ini_set('memory_limit','16M');
+
+    $error					= false;
+
+    $absolutedir			= dirname(__FILE__);
+    $dir					= '/';
+    $serverdir				= $absolutedir.$dir;
+
+    $tmp					= explode(',',$payload->data);
+    $imgdata 				= base64_decode($tmp[1]);
+    $explode=explode('.',$payload-> name);
+    $end = end($explode);
+    $extension				= strtolower($end);
+    $filename				= substr($payload->name,0,-(strlen($extension) + 1)).'.'.substr(sha1(time()),0,6).'.'.$extension;
+
+    $handle					= fopen($serverdir.$filename,'w');
+    fwrite($handle, $imgdata);
+    fclose($handle);
+
+    $response = array(
+            "status" 		=> "success",
+            "url" 			=> $dir.$filename.'?'.time(), //added the time to force update when editting multiple times
+            "filename" 		=> $filename
+    );
+
+    return $response;
 }
 
 function upload_profilephoto($conn, $payload){
@@ -88,6 +154,39 @@ function upload_profilephoto($conn, $payload){
 
     $user = $payload->jwt_vars;
     mysqli_query($conn, "UPDATE `member` SET `photo` = '$filename' WHERE `id`='$user->id'");
+
+    return $response;
+}
+
+function upload_businessphoto($conn, $payload){
+    header('Content-Type: application/json');
+    //ini_set('memory_limit','16M');
+
+    $error					= false;
+
+    $absolutedir			= dirname(__FILE__);
+    $dir					= '/';
+    $serverdir				= $absolutedir.$dir;
+
+    $tmp					= explode(',',$payload->data);
+    $imgdata 				= base64_decode($tmp[1]);
+    $explode=explode('.',$payload-> name);
+    $end = end($explode);
+    $extension				= strtolower($end);
+    $filename				= substr($payload->name,0,-(strlen($extension) + 1)).'.'.substr(sha1(time()),0,6).'.'.$extension;
+
+    $handle					= fopen($serverdir.$filename,'w');
+    fwrite($handle, $imgdata);
+    fclose($handle);
+
+    $response = array(
+            "status" 		=> "success",
+            "url" 			=> $dir.$filename.'?'.time(), //added the time to force update when editting multiple times
+            "filename" 		=> $filename
+    );
+
+    $user = $payload->jwt_vars;
+    mysqli_query($conn, "UPDATE `member_profession` SET `organisation_photo` = '$filename' WHERE `member_id`='$user->id'");
 
     return $response;
 }

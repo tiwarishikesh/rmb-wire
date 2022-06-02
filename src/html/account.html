@@ -1,42 +1,69 @@
 <div class="account-left-section">
-    <div class="left-menu-single-item" linked-to="personal" onclick="route('account/personal')">
-        <h4><i class="fa-solid fa-user"></i> Personal Details</h4>
-    </div>
-    <div class="left-menu-single-item" linked-to="security" onclick="route('account/security')">
-        <h4><i class="fa-solid fa-user-shield"></i> Security</h4>
-    </div>
-    <div class="left-menu-single-item" linked-to="membership" onclick="route('account/membership')">
-        <h4><i class="fa-solid fa-receipt"></i> Membership Details</h4>
-    </div>
-    <div class="left-menu-single-item" linked-to="gallery" onclick="route('account/gallery')">
-        <h4><i class="fa-solid fa-images"></i> Gallery</h4>
-    </div>
-    <div class="left-menu-single-item" linked-to="blogs" onclick="route('account/blogs')">
-        <h4><i class="fa-solid fa-blog"></i> My Blogs</h4>
-    </div>
-    <div class="left-menu-single-item" linked-to="network" onclick="route('account/network')">
-        <h4><i class="fa-solid fa-users"></i> Network</h4>
-    </div>
-    <tag class="admin-only">
-        <div class="left-menu-single-item" style="pointer-events:none;height: unset;">
-            <p style="font-size: 16px;font-weight: 600;color: #9f9fff;margin-top: 25px;">ADMIN</p>
-            <p style="color: #666;font-size: 14px;">Control Member and Member Generated Data</p>
+    <div class="account-left-section-top">
+        <div class="left-menu-single-item" linked-to="personal" onclick="route('account/personal')">
+            <h4><i class="fa-solid fa-user"></i> Personal Details</h4>
         </div>
-        <div class="left-menu-single-item" linked-to="admin-members" onclick="route('account/admin-members')">
-            <h4><i class="fa-solid fa-user"></i>My Members</h4>
+        <div class="left-menu-single-item" linked-to="security" onclick="route('account/security')">
+            <h4><i class="fa-solid fa-user-shield"></i> Security</h4>
         </div>
-        <div class="left-menu-single-item" style="pointer-events:none;height: unset;">
-            <p style="font-size: 16px;font-weight: 600;color: #9f9fff;margin-top: 25px;">WEBMASTER</p>
-            <p style="color: #666;font-size: 14px;">Control Website images and options</p>
+        <div class="left-menu-single-item" linked-to="membership" onclick="route('account/membership')">
+            <h4><i class="fa-solid fa-receipt"></i> Membership Details</h4>
         </div>
-    </tag>
+        <div class="left-menu-single-item" linked-to="gallery" onclick="route('account/gallery')">
+            <h4><i class="fa-solid fa-images"></i> Gallery</h4>
+        </div>
+        <div class="left-menu-single-item" linked-to="blogs" onclick="route('account/blogs')">
+            <h4><i class="fa-solid fa-blog"></i> My Blogs</h4>
+        </div>
+        <div class="left-menu-single-item" linked-to="my-events" onclick="route('account/my-events')">
+            <h4><i class="fa-solid fa-comment"></i> Events</h4>
+        </div>
+        <div class="left-menu-single-item" linked-to="my-adverts" onclick="route('account/my-adverts')">
+            <h4><i class="fa-solid fa-comment"></i> Advertisements</h4>
+        </div>
+        <div class="left-menu-single-item" linked-to="my-testimonials" onclick="route('account/my-testimonials')">
+            <h4><i class="fa-solid fa-comment"></i> Testimonials</h4>
+        </div>
+        <div class="left-menu-single-item" linked-to="network" onclick="route('account/network')">
+            <h4><i class="fa-solid fa-users"></i> Network</h4>
+        </div>
+        <tag class="admin-only">
+            <div class="left-menu-single-item" style="pointer-events:none;height: unset;">
+                <p style="font-size: 16px;font-weight: 600;color: #9f9fff;margin-top: 25px;">ADMIN</p>
+                <p style="color: #666;font-size: 14px;">Control Member and Member Generated Data</p>
+            </div>
+            <div class="left-menu-single-item" linked-to="admin-members" onclick="route('account/admin-members')">
+                <h4><i class="fa-solid fa-user"></i>My Members</h4>
+            </div>
+            <!-- <div class="left-menu-single-item" style="pointer-events:none;height: unset;">
+                <p style="font-size: 16px;font-weight: 600;color: #9f9fff;margin-top: 25px;">WEBMASTER</p>
+                <p style="color: #666;font-size: 14px;">Control Website images and options</p>
+            </div> -->
+        </tag>
+        <tag class="superadmin-only">
+            <div class="left-menu-single-item" style="pointer-events:none;height: unset;">
+                <p style="font-size: 16px;font-weight: 600;color: #9f9fff;margin-top: 25px;">WEBMASTER</p>
+                <p style="color: #666;font-size: 14px;">Control Website images and options</p>
+            </div>
+            <div class="left-menu-single-item" linked-to="website-home-edit" onclick="route('account/website-home-edit')">
+                <h4><i class="fa-solid fa-house"></i>Home</h4>
+            </div>
+            <div class="left-menu-single-item" linked-to="website-about-edit" onclick="route('account/website-about-edit')">
+                <h4><i class="fa-solid fa-file-circle-info"></i>About</h4>
+            </div>
+            <div class="left-menu-single-item" linked-to="legal" onclick="route('account/legal')">
+                <h4><i class="fa-solid fa-gavel"></i>Legal</h4>
+            </div>
+        </tag>
+    </div>
     <div class="left-menu-single-item" style="position: absolute;bottom: 0;border-top: 1px solid #e3e3e3;border-radius: 0;max-width: 250px;right: 0;background: transparent;" onclick="auth.logout()">
         <h4><i class="fa-solid fa-users"></i> Logout</h4>
     </div>
 </div>
 <div class="account-right-section">
     <admin-panel></admin-panel>
-    <div class="right-menu-single-item" linked-to="personal">
+    <website-control-panel></website-control-panel>
+    <div class="right-menu-single-item edit-my-profile" linked-to="personal">
         <h4>Personal Information</h4>
         <br>
         <br>
@@ -110,30 +137,61 @@
             <h4>Business Information</h4>
         </div>
         <div class="container" style="max-width: 1400px;float:left;">
-            <div class="col-sm-6">
-                <div class="col-sm-6 p-l-0" style="display: none">
-                    <div class="dropzone_logo dropzone dropzone_square smalltools" data-width="1080" data-height="1080" data-url="php/build/upload_user_photo.php" data-image="" style="width: 100%;aspect-ratio:1">
-                        <input type="file" accept=".png, .jpg, .jpeg" name="thumb" />
+            <div class="container w-full p-0">
+                <div class="col-sm-12 p-0">
+                    <input type="text" class="big-no-border"  placeholder="Organisation Name" name="" id="organisation_name">
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <div class="col-sm-6 p-l-0">
+                    <div class="container w-full p-0" style="max-width:350px;">
+                        <div class="dropzone_profile dropzone dropzone_square smalltools" id="edit_business_photo" data-width="1080" data-height="1080" data-url="/service/business_photo" data-image="" style="max-width:350px;width: 100%;aspect-ratio:1">
+                            <input type="file" accept=".png, .jpg, .jpeg" name="thumb" />
+                        </div>
                     </div>
                 </div>
                 <div class="col-sm-6 p-r-0">
-                    <div class="col-sm-12 p-0">
-                        <input type="text" placeholder="Organisation Name" name="" id="organisation_name">
+                    <div class="container w-full p-0">
+                        <div class="col-sm-12 p-0">
+                            <input type="text" placeholder="Position Occupied" name="" id="position">
+                        </div>
                     </div>
-                    <div class="col-sm-12 p-0">
-                        <input type="text" placeholder="Position Occupied" name="" id="position">
-                    </div>
-                    <div class="col-sm-12 p-0">
-                        <textarea name="" placeholder="Address" id="business_adress" rows="5" style="height:unset"></textarea>
+                    <div class="container w-full p-0">
+                        <div class="business-details-edit-section" style="min-height: 350px;">
+
+                        </div>
                     </div>
                 </div>
                 <br>
                 </br>
-                
             </div>
-            <div class="col-sm-6">
-                <div class="business-details-edit-section" style="min-height: 350px;">
-
+            <br/>
+            <div class="col-sm-12">
+                <div class="col-sm-6">
+                    <div class="container map_container w-full p-0" style="height:350px">
+                        
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="col-sm-12 p-0" style="margin-top:20px;">
+                        <div class="col-sm-6">
+                            <div style="width:60px;margin-left:5px;float: left;">
+                                <div class="toggle-wrapper toggle-wrapper">
+                                    <input data='use_map_autofill' id="updatebusinessmapauto" checked="checked" type="checkbox">
+                                    <label class="toggle" for="updatebusinessmapauto">
+                                        <span class="toggle--handler" onclick=""></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <p style="display: inline-block;font-size: 18px;margin-bottom:0;cursor: pointer" onclick="$(this).parent().find('.toggle--handler').click()">Autofill Address</p>
+                        </div>
+                        <textarea name="" placeholder="Address" data="use_map_autofill_here" onkeyup="$('#registermapauto').prop('checked',false)" data="" id="business_adress" rows="5" style="height:unset"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="container w-full p-0">
+                <div class="button small bordered-button glassed" onclick="checkPersonalDataUpdate()" style="width:250px;display: inline-block;margin-left:20px;">
+                    <p>SAVE CHANGES</p>
                 </div>
             </div>
         </div>
@@ -413,6 +471,159 @@
                             <p>Look at that sky! I so want to be there.. Can we arrange a trip? Is that a possibility? Please!!!</p>
                             <img src="http://angular-material.fusetheme.com/assets/images/cards/14-640x480.jpg" alt="">
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="right-menu-single-item p-0" linked-to="my-testimonials" style="padding:0;">
+        <div class="main-admin-view">
+            <h4>My Testimonials</h4>
+            <br>
+            <div class="my-testimonials-archive">
+
+            </div>
+        </div>
+        <div class="side-panel" style="opacity:1;">
+            <div class="side-panel-upper">
+                <div class="container w-full" style="padding-bottom: 7px;margin-bottom:15px; border-bottom: 1px solid #cecece;">
+                    <h4>Add New</h4>
+                </div>
+                <div class="container w-full">
+                    <textarea name="" id="my-testimonial-edit" cols="30" style="height: unset;" rows="30"></textarea>
+                </div>
+            </div>
+            <div class="side-panel-lower">
+                <div class="container w-full p-0">
+                    <div class="button bordered-button small glassy" onclick="member.testimonial.save()" style="width:150px;display: inline-block;margin-left:25px;">
+                        <p>SAVE CHANGES</p>
+                    </div>
+                    <div class="button bordered-button small glassy red" onclick="member.testimonial.cancelEdit()" style="width:150px;display: inline-block;margin-left:25px;">
+                        <p>CANCEL</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="right-menu-single-item p-0" linked-to="my-adverts" style="padding:0;">
+        <div class="main-admin-view">
+            <h4>My Advertisements</h4>
+            <br>
+            <div class="my-advertisements-archive">
+                
+            </div>
+        </div>
+        <div class="side-panel" style="opacity:1;">
+            <div class="side-panel-upper">
+                <div class="container w-full" style="padding-bottom: 7px;margin-bottom:15px; border-bottom: 1px solid #cecece;">
+                    <h4>Add New</h4>
+                </div>
+                <div class="container- w-full p-0" id="myAdPhotoSection" style="overflow: hidden;">
+
+                </div>
+                <div class="container w-full">
+                    <input type="text" placeholder="Title*" name="" id="add_ad_name">
+                </div>
+                <div class="container w-full">
+                    <textarea type="text" rows="3" style="height:unset" placeholder="Details*" id="add_ad_description"></textarea>
+                </div>
+                <div class="container w-full">
+                    <input type="text" placeholder="Redirect Link" name="" id="add_ad_link">
+                </div>
+                <div class="container w-full">
+                    <input type="number" placeholder="Days advertisement has to run for" name="" id="add_ad_days">
+                </div>
+                <div class="container w-full p-0">
+                    <div class="col-sm-6">
+                        <div style="width:60px;margin-left:5px;float: left;">
+                            <div class="toggle-wrapper toggle-wrapper">
+                                <input id="add_advert_photo_footer" type="checkbox">
+                                <label class="toggle" for="add_advert_photo_footer">
+                                    <span class="toggle--handler" onclick=""></span>
+                                </label>
+                            </div>
+                        </div>
+                        <p style="display: inline-block;font-size: 18px;margin-bottom:0;cursor: pointer" onclick="$(this).parent().find('.toggle--handler').click()">Footer Advertisement</p>
+                    </div>
+                </div>
+            </div>
+            <div class="side-panel-lower">
+                <div class="container w-full p-0">
+                    <div class="button bordered-button small glassy" onclick="member.advertisement.save()" style="width:150px;display: inline-block;margin-left:25px;">
+                        <p>SAVE CHANGES</p>
+                    </div>
+                    <div class="button bordered-button small glassy red" onclick="member.advertisement.cancelEdit()" style="width:150px;display: inline-block;margin-left:25px;">
+                        <p>CANCEL</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="right-menu-single-item p-0" linked-to="my-events" style="padding:0;">
+        <div class="main-admin-view">
+            <h4>My Events</h4>
+            <br>
+            <div class="my-events-archive">
+                
+            </div>
+        </div>
+        <div class="side-panel" style="opacity:1;">
+            <div class="side-panel-upper">
+                <div class="container w-full" style="padding-bottom: 7px;margin-bottom:15px; border-bottom: 1px solid #cecece;">
+                    <h4>Add New</h4>
+                </div>
+                <div class="container w-full">
+                    <input type="text" placeholder="Event Name" name="" id="add_event_name">
+                </div>
+                <div class="container w-full">
+                    <textarea type="text" rows="3" style="height:unset" placeholder="Event Details" id="add_event_description"></textarea>
+                </div>
+                <div class="container w-full">
+                    <div class="col-sm-6 p-0">
+                        <p>Date and Time</p>
+                        <input type="text" placeholder="Date and Time of the event" name="" id="add_event_date">
+                    </div>
+                </div>
+                <div class="container w-full p-0">
+                    <div class="col-sm-6">
+                        <div style="width:60px;margin-left:5px;float: left;">
+                            <div class="toggle-wrapper toggle-wrapper">
+                                <input id="add_event_online" type="checkbox">
+                                <label class="toggle" for="add_event_online">
+                                    <span class="toggle--handler" onclick="member.events.toggleOnlineOffline()"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <p style="display: inline-block;font-size: 18px;margin-bottom:0;cursor: pointer" onclick="$(this).parent().find('.toggle--handler').click()">Online</p>
+                    </div>
+                </div>
+                <div class="container w-full p-0" id="new_event_details_online" style="display: none;">
+                    <div class="container w-full">
+                        <textarea type="text" placeholder="Event Link*" name="" id="add_event_link"></textarea>
+                    </div>
+                    <div class="container w-full">
+                        <textarea type="text" placeholder="Meeting Password" name="" id="add_event_password"></textarea>
+                    </div>
+                </div>
+                <div class="container w-full p-0" id="new_event_details_offline">
+                    <div class="container w-full">
+                        <input type="text" placeholder="Venue Name" name="" id="add_event_venue">
+                    </div>
+                    <div class="container w-full">
+                        <textarea type="text" placeholder="Address*" name="" style="height: unset" id="add_event_address"></textarea>
+                    </div>
+                    <div class="container w-full">
+                        <input type="text" placeholder="Google Maps Link" name="" id="add_event_map_link">
+                    </div>
+                </div>
+            </div>
+            <div class="side-panel-lower">
+                <div class="container w-full p-0">
+                    <div class="button bordered-button small glassy" onclick="member.events.save()" style="width:150px;display: inline-block;margin-left:25px;">
+                        <p>SAVE CHANGES</p>
+                    </div>
+                    <div class="button bordered-button small glassy red" onclick="member.events.cancelEdit()" style="width:150px;display: inline-block;margin-left:25px;">
+                        <p>CANCEL</p>
                     </div>
                 </div>
             </div>

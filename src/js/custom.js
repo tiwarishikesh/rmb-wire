@@ -56,7 +56,8 @@ async function startRMB() {
             separateDialCode: true,
             initialCountry: IP.IPData.countryCode || 'auto'
         });
-    })
+    });
+    myGoogleMap.init('register-section');
     setInterval(() => {
         checkUrl();
     }, 50);
@@ -302,9 +303,33 @@ let auth = {
                     <input type="file" accept=".png, .jpg, .jpeg" name="thumb" />
                 </div>`);
                 $("#edit_personal_photo").attr('data-image', '/service/build/' + response.data.personal.photo || '');
+
+                $("#edit_business_photo").parent().html(`<div class="dropzone_profile dropzone dropzone_square smalltools" id="edit_personal_photo" data-width="1080" data-height="1080" data-url="/service/business_photo" data-image="" style="max-width:100%;width: 100%;aspect-ratio:1">
+                    <input type="file" accept=".png, .jpg, .jpeg" name="thumb" />
+                </div>`);
+                $("#edit_business_photo").attr('data-image', '/service/build/' + response.data.professional.organisation_photo || '');
+                
                 $(".network_photo").attr('src', '/service/build/' + response.data.personal.photo);
+
                 setTimeout(() => {
                     $('#edit_personal_photo').html5imageupload({
+                        onAfterProcessImage: function() {
+                            auth.getMember();
+                            $('.file_name_' + currentimage).val($(this.element).data('name'));
+                            if ($(this)[0].element.classList[2] == 'dropzone_myphoto') {
+                                Snackbar.show({
+                                    pos: 'bottom-center',
+                                    showAction: false,
+                                    text: 'Successfully updated your photo'
+                                });
+                            }
+                        },
+                        onAfterCancel: function() {
+                            $('#filename').val('');
+                        }
+                    });
+
+                    $('#edit_business_photo').html5imageupload({
                         onAfterProcessImage: function() {
                             auth.getMember();
                             $('.file_name_' + currentimage).val($(this.element).data('name'));
@@ -325,13 +350,22 @@ let auth = {
                 $(".feed-home-about p:eq(1)").html(auth.memberData.personal.club.replace(/<\/?[a-z][a-z0-9]*[^<>]*>/ig, ""));
                 $(".feed-home-about p:eq(2)").html(auth.memberData.professional.position + ', ' + auth.memberData.professional.organisation_name);
                 $(".feed-home-about p:eq(3)").html('');
+
+                myGoogleMap.init('edit-my-profile');
+
+                if(auth.memberData.professional.gps){
+                    myGoogleMap.setMarker({
+                        lat: auth.memberData.professional.gps.split(' - ')[0],
+                        lng: auth.memberData.professional.gps.split(' - ')[1],
+                    })
+                }
             })
         })
     },
     getMemberdata: function() {
         return new Promise((resolve, reject) => {
             let data = localStorage.getItem('memberData');
-
+            resolve();
         })
     },
     checkPasswords: function () {
@@ -364,135 +398,88 @@ let auth = {
 }
 
 function checkPersonalDataUpdate() {
-    if (!auth.memberData) {
-        setTimeout(() => {
-            checkPersonalDataUpdate();
-        }, 500);
+    let error = false;
+    let tempData = $.extend(true, {}, auth.memberData);
+    tempData.personal.fname = $("#fname_edit").val() || (showsnackbar('Please provide your name'),error=true);
+    tempData.personal.lname = $("#lname_edit").val() || (showsnackbar('Please provide your name'),error=true);
+    tempData.personal.gender = $('[name="gender"]:checked').val() == "other" ? ($("#gender").val() || 'non binary') : $('[name="gender"]:checked').val();
+    if ($("#other").prop("checked") == true) {
+        $("#gender").removeClass('disabled');
+    } else {
+        $("#gender").addClass('disabled');
     }
-    tempIntervals.push(setInterval(() => {
-        let error = false;
-        let tempData = $.extend(true, {}, auth.memberData);
-        tempData.personal.fname = $("#fname_edit").val();
-        tempData.personal.lname = $("#lname_edit").val();
-        tempData.personal.gender = $('[name="gender"]:checked').val() == "other" ? ($("#gender").val() || 'non binary') : $('[name="gender"]:checked').val();
-        if ($("#other").prop("checked") == true) {
-            $("#gender").removeClass('disabled');
-        } else {
-            $("#gender").addClass('disabled');
-        }
-        tempData.personal.club = $("#clubname_edit").val();
-        tempData.personal.dateofbirth = $("#dob").val();
-        tempData.personal.dateofjoining = $("#dateofjoining").val();
-        tempData.personal.timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    tempData.personal.club = $("#clubname_edit").val()|| (showsnackbar(`Please provide your club's name`),error=true);;
+    tempData.personal.dateofbirth = $("#dob").val() || (showsnackbar('Please provide your Date of Birth'),error=true);;
+    tempData.personal.dateofjoining = $("#dateofjoining").val() || (showsnackbar('Please let us knwo how long you have been with us'),error=true);;
+    tempData.personal.timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
 
-        if (tempData) {
-            tempData.personal.about = quillEditors.aboutEditSection.container.firstChild.innerHTML;
-        }
+    if (tempData) {
+        tempData.personal.about = quillEditors.aboutEditSection.container.firstChild.innerHTML || 'NA';
+    }
 
-        if (tempData.contact.filter(x => x.contact_type == "email")[0]) {
-            tempData.contact.filter(x => x.contact_type == "email")[0].details = $("#email1").val() || "";
-        }
-        if($("#email2").val()){
-            if(RegexCheck.regexes.email.test($("#email2").val())){
-                if (tempData.contact.filter(x => x.contact_type == "email")[1]) {
-                    tempData.contact.filter(x => x.contact_type == "email")[1].details = $("#email2").val() || "";
-                }else{
-                    tempData.contact.push({
-                        contact_type: "email",
-                        details: $("#email2").val(),
-                        member_id: auth.memberData.personal.id
-                    });
-                }
-            }else{
-                showsnackbar("Please Enter Valid Second Email ID");
-            }
-        }
-        
-        if (tempData.contact.filter(x => x.contact_type == "phone")[0] && $("phone1").val()?.length > 5) {
-            tempData.contact.filter(x => x.contact_type == "phone")[0].details = $("#phone1").val() ? ('+' + window.phone1Edit.getSelectedCountryData().dialCode + $("#phone1").val()) : "";
-        }
-        if($("#phone2").val().length > 5){
-            if (tempData.contact.filter(x => x.contact_type == "phone")[1]) {
-                tempData.contact.filter(x => x.contact_type == "phone")[1].details = ('+' + window.phone2Edit.getSelectedCountryData().dialCode + $("#phone2").val());
+    if (tempData.contact.filter(x => x.contact_type == "email")[0]) {
+        tempData.contact.filter(x => x.contact_type == "email")[0].details = $("#email1").val() || "";
+    }
+    if($("#email2").val()){
+        if(RegexCheck.regexes.email.test($("#email2").val())){
+            if (tempData.contact.filter(x => x.contact_type == "email")[1]) {
+                tempData.contact.filter(x => x.contact_type == "email")[1].details = $("#email2").val() || "";
             }else{
                 tempData.contact.push({
-                    contact_type: "phone",
-                    details: '+' + window.phone2Edit.getSelectedCountryData().dialCode + $("#phone2").val(),
+                    contact_type: "email",
+                    details: $("#email2").val(),
                     member_id: auth.memberData.personal.id
-                })
+                });
             }
+        }else{
+            showsnackbar("Please Enter Valid Second Email ID");
         }
+    }
 
-        tempData.professional.organisation_name = $("#organisation_name").val();
-        tempData.professional.organisation_address = $("#business_adress").val();
-        tempData.professional.position = $("#position").val();
-        tempData.professional.description = quillEditors.aboutBusinessEditSection.container.firstChild.innerHTML;
-
-        if (JSON.stringify(tempData) !== JSON.stringify(auth.memberData)) {
-            setTimeout(() => {
-                let tempData1 = $.extend(true, {}, auth.memberData);
-                tempData1.personal.fname = $("#fname_edit").val();
-                tempData1.personal.lname = $("#lname_edit").val();
-                tempData1.personal.gender = $('[name="gender"]:checked').val() == "other" ? ($("#gender").val() || 'non binary') : $('[name="gender"]:checked').val();
-                tempData1.personal.club = $("#clubname_edit").val();
-                tempData1.personal.dateofbirth = $("#dob").val();
-                tempData1.personal.dateofjoining = $("#dateofjoining").val();
-                tempData1.personal.timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-
-                if (tempData1) {
-                    tempData1.personal.about = quillEditors.aboutEditSection.container.firstChild.innerHTML;
-                }
-
-                if (tempData1.contact.filter(x => x.contact_type == "email")[0]) {
-                    tempData1.contact.filter(x => x.contact_type == "email")[0].details = $("#email1").val() || "";
-                }
-                if($("#email2").val()){
-                    if(RegexCheck.regexes.email.test($("#email2").val())){
-                        if (tempData1.contact.filter(x => x.contact_type == "email")[1]) {
-                            tempData1.contact.filter(x => x.contact_type == "email")[1].details = $("#email2").val() || "";
-                        }else{
-                            tempData1.contact.push({
-                                    contact_type: "email",
-                                    details: $("#email2").val(),
-                                    member_id: auth.memberData.personal.id
-                                });
-                        }
-                    }
-                }
-                if (tempData1.contact.filter(x => x.contact_type == "phone")[0]) {
-                    tempData1.contact.filter(x => x.contact_type == "phone")[0].details = $("#phone1").val() ? ('+' + window.phone1Edit.getSelectedCountryData().dialCode + $("#phone1").val()) : "";
-                }
-                if($("#phone2").val()){
-                    if (tempData1.contact.filter(x => x.contact_type == "phone")[1]) {
-                        tempData1.contact.filter(x => x.contact_type == "phone")[1].details = ('+' + window.phone2Edit.getSelectedCountryData().dialCode + $("#phone2").val());
-                    }else{
-                        tempData1.contact.push({
-                            contact_type: "phone",
-                            details: '+' + window.phone2Edit.getSelectedCountryData().dialCode + $("#phone2").val(),
-                            member_id: auth.memberData.personal.id
-                        })
-                    }
-                }
-
-                tempData1.professional.organisation_name = $("#organisation_name").val();
-                tempData1.professional.organisation_address = $("#business_adress").val();
-                tempData1.professional.position = $("#position").val();
-                if (tempData1) {
-                    tempData1.professional.description = quillEditors.aboutBusinessEditSection.container.firstChild.innerHTML;
-                }
-                if (JSON.stringify(tempData) == JSON.stringify(tempData1)) {
-                    showsnackbar('Your profile has been updated');
-                    tempIntervals.forEach((x) => {
-                        clearInterval(x);
-                    })
-                    xhttp.post('member', tempData, {}).then(() => {
-                        auth.getMember().then(checkPersonalDataUpdate);
-                    })
-                }
-            }, 5000);
+    if(!$("#email1").val() && $("#email2").val()){
+        showsnackbar('Please provide your emailID');error=true;
+    }
+    
+    if (tempData.contact.filter(x => x.contact_type == "phone")[0] && $("phone1").val()?.length > 5) {
+        tempData.contact.filter(x => x.contact_type == "phone")[0].details = $("#phone1").val() ? ('+' + window.phone1Edit.getSelectedCountryData().dialCode + $("#phone1").val()) : "";
+    }
+    if($("#phone2").val().length > 5){
+        if (tempData.contact.filter(x => x.contact_type == "phone")[1]) {
+            tempData.contact.filter(x => x.contact_type == "phone")[1].details = ('+' + window.phone2Edit.getSelectedCountryData().dialCode + $("#phone2").val());
+        }else{
+            tempData.contact.push({
+                contact_type: "phone",
+                details: '+' + window.phone2Edit.getSelectedCountryData().dialCode + $("#phone2").val(),
+                member_id: auth.memberData.personal.id
+            })
         }
-    }, 1000))
+    }
+
+    if(!$("#phone1").val() && $("#phone2").val()){
+        showsnackbar('Please provide your emailID');
+        error=true;
+    }
+
+    tempData.professional.organisation_name = $("#organisation_name").val() || (showsnackbar(`Please provide organisation's  name`),error=true);;
+    tempData.professional.organisation_address = $("#business_adress").val() || (showsnackbar('Please provide a valid adress'),error=true);;
+    tempData.professional.position = $("#position").val() || (showsnackbar('What do you do in your organisation ?'),error=true);;
+    tempData.professional.description = quillEditors.aboutBusinessEditSection.container.firstChild.innerHTML || 'NA';
+
+    if(error){
+        return false;
+    }
+
+    
+    tempData.professional.gps = {
+        lat: myGoogleMap.getCurrentPosition?.lat() || myGoogleMap.browserCoords.lat,
+        lng: myGoogleMap.getCurrentPosition?.lng() || myGoogleMap.browserCoords.lng
+    }
+
+    xhttp.post('member', tempData, {}).then(() => {
+        showsnackbar('Data updated succesfully');
+        auth.getMember();
+    })
 }
 
 function registerMember() {
@@ -514,7 +501,10 @@ function registerMember() {
         phone1: $("#phone1new").val()?.length>5 ? ('+' + window.phone1New.getSelectedCountryData().dialCode + $("#phone1new").val()) : (error=true, showsnackbar('Please provide a valid phone nummber')),
         email1: RegexCheck.regexes.email.test($("#email1New").val()) ? $("#email1New").val() : (error=true, showsnackbar('Please provide a valid email id')),
         chapter: $("#newMemberChapter").val() ? $("#newMemberChapter").val() : (showsnackbar('Please specify which chapter you would like to join'), error = true),
-        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
+        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+        lat: myGoogleMap.currentPosition?.lat() || (showsnackbar('Please select position on the map'), error = true),
+        lng: myGoogleMap.currentPosition?.lng() || (showsnackbar('Please select position on the map'), error = true),
+        business_photo: member.new_bphoto || 'NA',
     }
     if(ImageUploadedResponse?.type == "newmember"){
         payload.photo = ImageUploadedResponse?.filename;
@@ -596,7 +586,8 @@ var member = {
                 data-width="${this.aspectRatios[this.currentOrientation].width}"
                 data-height="${this.aspectRatios[this.currentOrientation].height}"
                 data-url="/service/gallery_photo"
-                data-image="/assets/membergallery/${this.currentPhotoEdit.photo_name}" style="max-width:${this.aspectRatios[this.currentOrientation].constrain}%;width: 100%;aspect-ratio:${this.aspectRatios[this.currentOrientation].ratio}">
+                data-image="/assets/membergallery/${this.currentPhotoEdit.photo_name}"
+                style="max-width:${this.aspectRatios[this.currentOrientation].constrain}%;width: 100%;aspect-ratio:${this.aspectRatios[this.currentOrientation].ratio}">
                         <input type="file" accept=".png, .jpg, .jpeg" name="thumb" />
                     </div>`);
             $('#addEditPhotoInputDropZone').html5imageupload({
@@ -873,7 +864,427 @@ var member = {
             $("#updateBlogReadTime").val(currentBlog.readtime);
             quillEditors.updateBlogBody.container.firstChild.innerHTML = currentBlog.blog_text;
         }
+    },
+    testimonial:{
+        load: function () {
+            return new Promise((resolve, reject)=>{
+                xhttp.get('myTestimonials').then((response)=>{
+                    this.Storage = response;
+                    resolve();
+                })
+            })
+        },
+        read: function () {
+            return new Promise((resolve, reject)=>{
+                if(this.Storage){
+                    resolve(this.Storage);
+                }else{
+                    this.load().then(()=>{
+                        resolve(this.Storage);
+                    })
+                }
+            })
+        },
+        populate: function(){
+            this.read().then(()=>{
+                $('[linked-to="my-testimonials"] .my-single-testimonial').remove();
+                this.Storage.forEach((x)=>{
+                    x.verboseStatus = x.status == '0' ? `<span style="color:gray">UNDER REVIEW</span>` : x.status == '1' ? `<span style="color:green">APPROVED</span>` : x.status == '2' ? `<span style="color:red">REJECTED</span>`: null;
+                })
+                template_engine('.my-single-testimonial', this.Storage,'.my-testimonials-archive');
+            })
+        },
+        edit: function (id) {
+            let x = this.Storage.filter((x) => x.id == id)[0];
+            if(!x){
+                return false;
+            }
+            $("#my-testimonial-edit").data('current',x.id);
+            $("#my-testimonial-edit").val(x.testimonial_text);
+            $(`[linked-to="my-testimonials"] .side-panel-upper h4:eq(0)`).text('Edit Testimonial');
+        },
+        save: function () {
+            if(!$("#my-testimonial-edit").val()){
+                showsnackbar('Please fill out testimonial text');
+            }
+            let payload = {
+                id: $("#my-testimonial-edit").data('current') || 'NA',
+                testimonial: $("#my-testimonial-edit").val()
+            }
+            xhttp.post('myTestimonial',payload).then(()=>{
+                showsnackbar('Testimonial Recorded Successfully');
+                $(`[linked-to="my-testimonials"] .side-panel-upper h4:eq(0)`).text('Add New');
+                $("#my-testimonial-edit").val('');
+                $("#my-testimonial-edit").data('current',null);
+                this.load().then(()=>{
+                    this.populate();
+                })
+            })
+        },
+        cancelEdit: function () {
+            $(`[linked-to="my-testimonials"] .side-panel-upper h4:eq(0)`).text('Add New');
+            $("#my-testimonial-edit").val('');
+            $("#my-testimonial-edit").data('current',null);
+            this.load().then(()=>{
+                this.populate();
+            })
+        },
+        delete: function (id) {
+            xhttp.delete('myTestimonial',{id: id}).then(()=>{
+                showsnackbar('Testimonial deleted successfully');
+                this.load().then(()=>{
+                    this.populate();
+                })
+            })
+        }
+    },
+    events : {
+        load: function () {
+            return new Promise((resolve, reject)=>{
+                xhttp.get('myEvents').then((response)=>{
+                    this.Storage = response;
+                    this.Storage.forEach((x)=>{
+                        x.verboseStatus = x.status == '0' ? `<span style="color:gray">UNDER REVIEW</span>` : x.status == '1' ? `<span style="color:green">APPROVED</span>` : x.status == '2' ? `<span style="color:red">REJECTED</span>`: null;
+                        x.details = JSON.parse(x.details);
+                        x.date = (new Date(Number(x.event_datetime))).toString().slice(8, 11) + ' ' + (new Date(Number(x.event_datetime))).toLocaleString('default', { month: 'long' }) + ' '+(new Date(Number(x.event_datetime))).toString().slice(11, 15);
+                        x.time = (new Date(Number(x.event_datetime))).toString().slice(16, 21);
+                        if(x.event_type == "online"){
+                            x.venue = "Link" + x.details.link;
+                            x.venue_details = "Password: "+x.details.password;
+                        }else{
+                            x.venue = x.details.venue_name + '<br>' + x.details.venue_address;
+                            x.venue_details = "Map : <a href='"+x.details.venue_link+"'>"+ x.details.venue_link+"</a>";
+                        }
+                    })
+                    resolve();
+                })
+            })
+        },
+        read: function () {
+            return new Promise((resolve, reject)=>{
+                if(this.Storage){
+                    resolve(this.Storage);
+                }else{
+                    this.load().then(()=>{
+                        resolve(this.Storage);
+                    })
+                }
+            })
+        },
+        populate: function(){
+            this.read().then(()=>{
+                $('[linked-to="my-events"] .my-single-event').remove();
+                template_engine('.my-single-event', this.Storage,'.my-events-archive');
+            })
+        },
+        toggleOnlineOffline: function () {
+            setTimeout(() => {
+                if($("#add_event_online").is(":checked")){
+                    $("#new_event_details_online").slideDown();
+                    $("#new_event_details_offline").slideUp();
+                }else{
+                    $("#new_event_details_online").slideUp();
+                    $("#new_event_details_offline").slideDown();
+                }
+            }, 100);
+        },
+        edit: function(id){
+            let x = this.Storage.filter((x) => x.id == id)[0];
+            if(!x){
+                return false;
+            }
+            $(`[linked-to="my-events"]`).data('current',x.id);
+            $(`[linked-to="my-events"] .side-panel-upper h4:eq(0)`).text('Edit Testimonial');
+
+            $("#add_event_name").val(x.event_title);
+            $("#add_event_description").val(x.event_description);
+            $("#add_event_online").prop('checked',x.event_type=="online");
+            if(x.event_type=="online"){
+                $("#add_event_link").val(x.details.link);
+                $("#add_event_password").val(x.details.password);
+            }else{
+                $("#add_event_venue").val(x.details.venue_name);
+                $("#add_event_address").val(x.details.venue_address);
+                $("#add_event_map_link").val(x.details.venue_link);
+            }
+            $("#add_event_date").val(x.date +' - '+x.time);
+            this.toggleOnlineOffline();
+        },
+        cancelEdit: function(){
+            $(`[linked-to="my-events"] .side-panel-upper h4:eq(0)`).text('Add New');
+            $(`[linked-to="my-events"]`).data('current',null);
+            $(`[linked-to="my-events"] .side-panel-upper input`).val('');
+            $(`[linked-to="my-events"] .side-panel-upper textarea`).val('');
+        },
+        save: function () {
+            let error = false;
+            let payload = {
+                id: $(`[linked-to="my-events"]`).data('current') || "NA",
+                title: $("#add_event_name").val() || (showsnackbar('Please specify Event Title'), error = true),
+                description: $("#add_event_description").val() || (showsnackbar('Please specify Event Title'), error = true),
+                datetime: $("#add_event_date").val() ? (new Date($("#add_event_date").val())).getTime() : (showsnackbar('Please specify a date and time'), error = true),
+                type: $("#add_event_online").is(":checked") ? 'online': 'offline'
+            };
+            if($("#add_event_online").is(":checked")){
+                payload.details = {
+                    link: $("#add_event_link").val() || (showsnackbar('Please include event link'), error = true),
+                    password: $("#add_event_password").val() || "NA"
+                }
+            }else{
+                payload.details = {
+                    venue_name: $("#add_event_venue").val() || (showsnackbar('Please include Venue name'), error=true),
+                    venue_address: $("#add_event_address").val() || (showsnackbar('Please include Venue adress'), error=true),
+                    venue_link: $("#add_event_map_link").val() || (showsnackbar('Please include Venue map link'), error=true),
+                }
+            }
+            if(error){
+                return false;
+            }
+            xhttp.post('myEvents',payload).then(()=>{
+                showsnackbar('Event Added Successfully');
+                $(`[linked-to="my-events"] .side-panel-upper h4:eq(0)`).text('Add New');
+                $(`[linked-to="my-events"]`).data('current',null);
+                $(`[linked-to="my-events"] .side-panel-upper input`).val('');
+                $(`[linked-to="my-events"] .side-panel-upper textarea`).val('');
+                this.load().then(()=>{
+                    this.populate();
+                })
+            })
+        },
+        delete: function (id) {
+            xhttp.delete('myEvent',{id: id}).then(()=>{
+                showsnackbar('Event deleted successfully');
+                this.load().then(()=>{
+                    this.populate();
+                })
+            })
+        }
+    },
+    advertisement : {
+        load: function () {
+            return new Promise((resolve, reject)=>{
+                xhttp.get('myAds').then((response)=>{
+                    this.Storage = response;
+                    resolve();
+                })
+            })
+        },
+        read: function () {
+            return new Promise((resolve, reject)=>{
+                if(this.Storage){
+                    resolve(this.Storage);
+                }else{
+                    this.load().then(()=>{
+                        resolve(this.Storage);
+                    })
+                }
+            })
+        },
+        populate: function(){
+            this.read().then(()=>{
+                $('[linked-to="my-adverts"] .my-single-advert').remove();
+                this.Storage.forEach((x)=>{
+                    x.verboseStatus = x.status == '0' ? `<span style="color:gray">UNDER REVIEW</span>` : x.status == '1' ? `<span style="color:green">APPROVED</span>` : x.status == '2' ? `<span style="color:red">REJECTED</span>`: null;
+                   /*  x.details = JSON.parse(x.details);
+                    x.date = (new Date(Number(x.event_datetime))).toString().slice(8, 11) + ' ' + (new Date(Number(x.event_datetime))).toLocaleString('default', { month: 'long' }) + ' '+(new Date(Number(x.event_datetime))).toString().slice(11, 15);
+                    x.time = (new Date(Number(x.event_datetime))).toString().slice(16, 21);
+                    if(x.event_type == "online"){
+                        x.venue = "Link" + x.details.link;
+                        x.venue_details = "Password: "+x.details.password;
+                    }else{
+                        x.venue = x.details.venue_name + '<br>' + x.details.venue_address;
+                        x.venue_details = "Map : <a href='"+x.details.venue_link+"'>"+ x.details.venue_link+"</a>";
+                    } */
+                })
+                template_engine('.my-single-advert', this.Storage,'.my-advertisements-archive');
+            })
+        },
+        toggleOnlineOffline: function () {
+            setTimeout(() => {
+                if($("#add_event_online").is(":checked")){
+                    $("#new_event_details_online").slideDown();
+                    $("#new_event_details_offline").slideUp();
+                }else{
+                    $("#new_event_details_online").slideUp();
+                    $("#new_event_details_offline").slideDown();
+                }
+            }, 100);
+        },
+        new: function () {
+            $("#myAdPhotoSection").html(`
+                <div class="dropzone dropzone_square smalltools" id="addAdvertisementPhoto"
+                    data-width="512"
+                    data-height="512"
+                    data-url="/service/myAdPhoto"
+                    style="max-width:300px;width: 100%;aspect-ratio:1;display:block;margin:auto;">
+                        <input type="file" accept=".png, .jpg, .jpeg" name="thumb" />
+                </div>`
+            );
+            /* data-image="/assets/membergallery/${this.currentPhotoEdit.photo_name}" */
+            $('#addAdvertisementPhoto').html5imageupload({
+                onAfterProcessImage: function(x) {
+                    $("#addEditPhotoInput").attr('data-img',ImageUploadedResponse.filename);
+                    member.advertisement.newImageUploaded();
+                },
+                onAfterCancel: function() {
+                    $('#filename').val('');
+                }
+            });  
+            this.filename = null;
+        },
+        newImageUploaded: function () {
+            this.filename = ImageUploadedResponse?.filename;
+            /* ImageUploadedResponse?.image_id */
+        },
+        edit: function(id){
+            let x = this.Storage.filter((x) => x.id == id)[0];
+            if(!x){
+                return false;
+            }
+            $(`[linked-to="my-adverts"]`).data('current',x.id);
+            $(`[linked-to="my-adverts"] .side-panel-upper h4:eq(0)`).text('Edit Advertisement');
+
+            $("#myAdPhotoSection").html(`
+                <div class="dropzone dropzone_square smalltools" id="addAdvertisementPhoto"
+                    data-width="512"
+                    data-height="512"
+                    data-url="/service/myAdPhoto"
+                    data-image="/assets/advertisement/${x.image}"
+                    style="max-width:300px;width: 100%;aspect-ratio:1;display:block;margin:auto;">
+                        <input type="file" accept=".png, .jpg, .jpeg" name="thumb" />
+                </div>`
+            );
+
+            $('#addAdvertisementPhoto').html5imageupload({
+                onAfterProcessImage: function(x) {
+                    $("#addEditPhotoInput").attr('data-img',ImageUploadedResponse.filename);
+                    member.advertisement.newImageUploaded();
+                },
+                onAfterCancel: function() {
+                    $('#filename').val('');
+                }
+            });  
+
+            $("#add_ad_name").val(x.title);
+            $("#add_ad_description").val(x.description);
+            $("#add_ad_link").val(x.link);
+            $("#add_ad_days").val(x.days);
+            $("#add_advert_photo_footer").prop("checked",x.type=="footer");
+            this.filename = x.image;
+        },
+        cancelEdit: function(){
+            $(`[linked-to="my-adverts"] .side-panel-upper h4:eq(0)`).text('Add New');
+            $(`[linked-to="my-adverts"]`).data('current',null);
+            $(`[linked-to="my-adverts"] .side-panel-upper input`).val('');
+            $(`[linked-to="my-adverts"] .side-panel-upper textarea`).val('');
+            this.new();
+        },
+        save: function () {
+            let error = false;
+            let payload = {
+                id: $(`[linked-to="my-adverts"]`).data('current') || "NA",
+                title: $("#add_ad_name").val() || (showsnackbar('Please specify Event Title'), error = true),
+                description: $("#add_ad_description").val() || (showsnackbar('Please specify Event Title'), error = true),
+                link: $("#add_ad_link").val() || "NA",
+                duration: $("#add_ad_days").val() || (showsnackbar('Please specify duration ad has to run'), error = true),
+                type: $("#add_advert_photo_footer").is(":checked") ? 'footer': 'home',
+                photo: this.filename || (showsnackbar('Please include a creative'), error = true)
+            };
+            if(error){
+                return false;
+            }
+            xhttp.post('myAd',payload).then(()=>{
+                showsnackbar('Advertisement submitted Successfully');
+                $(`[linked-to="my-adverts"] .side-panel-upper h4:eq(0)`).text('Add New');
+                $(`[linked-to="my-adverts"]`).data('current',null);
+                $(`[linked-to="my-adverts"] .side-panel-upper input`).val('');
+                $(`[linked-to="my-adverts"] .side-panel-upper textarea`).val('');
+                this.filename = null;
+                this.load().then(()=>{
+                    this.populate();
+                })
+            })
+        },
+        delete: function (id) {
+            xhttp.delete('myAd',{id: id}).then(()=>{
+                showsnackbar('Advertisement deleted successfully');
+                this.load().then(()=>{
+                    this.populate();
+                })
+            })
+        }
     }
+}
+
+let home = {
+    load: function () {
+        if(this.first == true){
+            return false;
+        }
+        this.first = true;
+        setTimeout(() => {
+            gsap.to(".points-of-legend",{
+                scrollTrigger:{
+                    trigger: ".points-of-legend",
+                    pin:".image-of-legend",
+                    start:"top top",
+                    end:"bottom bottom",
+                    scrub: true
+                }
+            });
+    
+            (Array.from($(".points-of-legend h1"))).forEach((x, i) => {
+                const tl = gsap.timeline({
+                    scrollTrigger: {
+                        trigger: x,
+                        start: "+=133 65%",
+                        end: "+=200 20%",
+                        scrub: true,
+                        toggleActions: "play reverse play reverse",
+                    }
+                });
+                tl
+                    .to(x, { opacity: 1, duration: 0.4, stagger: 0.1 })
+                    .to(x, { opacity: 0.4, duration: 0.4, stagger: 0.1 }, 0.8 );
+            });
+
+            gsap.to(".big-banner",{
+                scrollTrigger:{
+                    trigger: ".updates-section",
+                    pin:".big-banner",
+                    start:"top 100px",
+                    end:"bottom bottom",
+                    scrub: true
+                }
+            });
+
+            (Array.from($(".stats-single"))).forEach((x,i)=>{
+                gsap.to(x, {
+                  opacity: 1,
+                  ease: 'none',
+                  scrollTrigger: {
+                    trigger: x,
+                    start: `${50*i}px 80%`,
+                    end: `${50*i}px 45%`,
+                    scrub: true
+                  }
+                });
+            });
+
+            gsap.to(".home-black-section",{
+                scrollTrigger:{
+                    trigger: ".home-black-section-body",
+                    pin:".home-black-section-divider",
+                    start:"top 80px",
+                    end:"bottom 90%",
+                    endTrigger: ".testimonial-stats-section",
+                    scrub: true
+                }
+            });
+
+        }, 100);
+    },
+    first: false
 }
 
 var QuilltoolbarOptions = [
@@ -931,7 +1342,9 @@ function checkUrl() {
         if(path.parts[0] == "account" && !auth.memberData){
             route('home');
         }
-        if (path.parts[0] == "register"){
+        if (path.parts[0] == "home"){
+            home.load();
+        }else if (path.parts[0] == "register"){
             if(auth.memberData){
                 route('home');
             }
@@ -942,6 +1355,16 @@ function checkUrl() {
                 },
                 onAfterCancel: function() {
                     $('#filename').val('');
+                }
+            });
+            $('#new_business_photo').html5imageupload({
+                onAfterProcessImage: function() {
+                    member.new_bphoto = ImageUploadedResponse?.filename;
+                    ImageUploadedResponse.type = "newmember";
+                },
+                onAfterCancel: function() {
+                    $('#filename').val('');
+                    member.new_bphoto = null;
                 }
             });
             if (!quillEditors.aboutNewSection) {
@@ -985,9 +1408,6 @@ function checkUrl() {
                     });
                 }
                 auth.getMember();
-                setTimeout(() => {
-                    checkPersonalDataUpdate();
-                }, 1000);
                 tempDatepickers.push($("#dateofjoining").bootstrapMaterialDatePicker({
                     format: 'DD MMMM YYYY',
                     time: false,
@@ -1057,6 +1477,18 @@ function checkUrl() {
                 });
                 member.image.populateMyPhotos();
                 member.image.checkCurrent();
+            }else if(path.parts[1] == 'my-testimonials'){
+                member.testimonial.populate();
+            }else if(path.parts[1] == "my-events"){
+                member.events.populate();
+                tempDatepickers.push($("#add_event_date").bootstrapMaterialDatePicker({
+                    format: 'DD MMMM YYYY - HH:mm',
+                    time: true,
+                    minDate : new Date()
+                }));
+            }else if(path.parts[1] == "my-adverts"){
+                member.advertisement.new();
+                member.advertisement.populate();
             }else if(path.parts[1] == 'admin-members'){
                 if (!quillEditors.AdminAboutSection) {
                     quillEditors.AdminAboutSection = new Quill('.admin-about-edit-section', {
@@ -1076,6 +1508,28 @@ function checkUrl() {
                     format: 'DD MMMM YYYY',
                     time: false
                 }));
+            }else if (path.parts[1] == 'legal'){
+                if (!quillEditors.legalSection) {
+                    quillEditors.legalSection = new Quill('.edit-website-legal-section', {
+                        theme: 'snow'
+                    });
+                    $("#edit-legal-section").select2({
+                        placeholder: "Select a document to edit"
+                    });
+                    admin.legal.load();
+                }
+            }else if (path.parts[1] == 'website-about-edit'){
+                if (!quillEditors.legalSection) {
+                    quillEditors.aboutSection = new Quill('.edit-website-about-section', {
+                        theme: 'snow'
+                    });
+                    $("#edit-about-section").select2({
+                        placeholder: "Select a section to edit"
+                    });
+                    admin.about.load();
+                }
+            }else if(path.parts[1] == "website-home-edit"){
+                admin.home.populate();
             }
         }
     })
@@ -1435,4 +1889,126 @@ RegexCheck = {
          email: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,5})+$/,
          password: /^(?=.*[0-9])(?=.*[!@#$%^&*-])[a-zA-Z0-9!@#$%^&*-]{6,30}$/
      }
+}
+
+async function GeoLocationAPICall(){
+    return new Promise((resolve,reject)=>{
+        navigator.geolocation.getCurrentPosition((response)=>{
+            resolve({lat: response.coords.latitude, lng: response.coords.longitude});
+        },((error)=>{
+            console.log(error);
+            resolve('');
+        }))
+    })
+}
+
+let myGoogleMap = {
+    init: async function(target){
+        if(!this.initialized){
+            this.browserCoords = await GeoLocationAPICall() || this.defaultPosition;
+            this.map_instance = new google.maps.Map(document.getElementById('google-map'), {
+                zoom: 10,
+                center: new google.maps.LatLng(this.browserCoords.lat, this.browserCoords.lng),
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            });
+            this.draggable_marker = new google.maps.Marker({
+                position: new google.maps.LatLng(this.browserCoords.lat, this.browserCoords.lng),
+                title: 'My Draggable Marker',
+                map: this.map_instance,
+                draggable: true
+            });
+            google.maps.event.addListener(myGoogleMap.draggable_marker, 'dragend', function() {
+                myGoogleMap.geocodePosition(myGoogleMap.draggable_marker.getPosition());
+            });
+            this.initialized = true;
+        }
+        this.target = target || 'checkout_add_address';
+        this.transferMap();
+    },
+    transferMap: function(){
+        if(!$(`.${this.target} .map_container`).innerHtml){
+            $(`.${this.target} .map_container`).html($('#google-map'));
+            $(`.${this.target} input[data='use_map']`).prop(":checked",false);
+        }
+    },
+    setMarker: function(position){
+        if(!this.initialized){
+            setTimeout(() => {
+                this.setMarker(position);
+            }, 1000);
+            return false;
+        }
+        let new_pos;
+        position.lat = Number.parseFloat(position.lat);
+        position.lng = Number.parseFloat(position.lng);
+        if(!isNaN(position?.lat) && !isNaN(position?.lng)){
+            new_pos = new google.maps.LatLng(position);
+            $(`.${this.target} input[data='use_map']`).prop(":checked",true);
+        }else{
+            new_pos = new google.maps.LatLng(myGoogleMap.defaultPosition);
+            $(`.${this.target} input[data='use_map']`).prop(":checked",false);
+        }
+        myGoogleMap.map_instance.setCenter(new_pos);
+        myGoogleMap.draggable_marker.setPosition(new_pos);
+    },
+    handleMarkerChange: function(position){
+        console.log(position);
+    },
+    geocodePosition: function(pos) {
+        this.currentPosition = pos;
+        let geocoder = new google.maps.Geocoder();
+        geocoder.geocode({
+            latLng: pos
+        }, function(responses) {
+            if (responses && responses.length > 0) {
+                myGoogleMap.updateMarkerAddress(responses);
+            } else {
+                console.log('Cannot determine address at this location.');
+            }
+        });
+    },
+    updateMarkerAddress: function(response){
+        if(!response.length){
+            return false;
+        }
+        this.geocode_response = response;
+        this.parseResponse();
+    },
+    parseResponse: async function(){
+        this.currentAddress = {
+            line1: await this.filter_by_type('premise'),
+            line2: await this.filter_by_type('route'),
+            line3: await this.filter_by_type('locality') + ', ' +await this.filter_by_type('administrative_area_level_2'),
+            country: await this.filter_by_type('country'),
+            state: await this.filter_by_type('administrative_area_level_1'),
+            pincode: await this.filter_by_type('postal_code')
+        };
+        this.updateUI('line2');
+        this.updateUI('line3');
+        this.updateUI('pincode');
+        $(`.${this.target} input[data='use_map']`).prop("checked",true);
+        if($(`.${this.target} input[data='use_map_autofill']`).is(":checked") == true){
+            $(`.${this.target} [data="use_map_autofill_here"]`).val(`${this.currentAddress.line1}, ${this.currentAddress.line2}, ${this.currentAddress.line3}, ${this.currentAddress.state}, ${this.currentAddress.country} - ${this.currentAddress.pincode}`);
+        }
+    },
+    filter_by_type: async function(type){
+        return new Promise((resolve,reject)=>{
+            resolve(this.geocode_response.map(x => x.address_components.filter(x => x.types.includes(type))[0]).map(x => x?.long_name).filter(x => x)[0] || '');
+        })
+    },
+    updateUI: function(data_point){
+        data_point = data_point || 'pincode';
+        let parent = this.parentDiv[this.target];
+        let value;
+        if($(`${this.parentDiv[this.target]} input[data='${data_point}']`).attr('auto') == "true" || !$(`${this.parentDiv[this.target]} input[data='${data_point}']`).val()){
+            $(`${this.parentDiv[this.target]} input[data='${data_point}']`).val(this.currentAddress[data_point]);
+            $(`${this.parentDiv[this.target]} input[data='${data_point}']`).attr('auto', true);
+        }
+    },
+    parentDiv: {
+        checkout_add_address: ".section_for_address",
+        add_address: ".add_address",
+        edit_address: ".edit_address",
+    },
+    defaultPosition: {lat:19.00, lng:72.125}
 }
