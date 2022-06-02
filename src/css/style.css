@@ -131,6 +131,66 @@ YP   YP Y88888P YP   YP Y8888D' Y88888P 88   YD
                                                                   
 */
 
+search{
+    position:fixed;
+    width:100vw;
+    height:100vh;
+    background: #efefefaa;
+    top: -100vh;
+    left:0;
+    transition: 0.4s;
+    transition-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1);
+z-index: 999;padding-top: 40px;backdrop-filter: blur(8px);}
+
+search.show{
+    top:0;
+}
+
+search input{
+    background:transparent !important;
+}
+
+.search_body{
+    height:calc(100vh - 100px);
+}
+
+#search_members,
+#search_events,
+#search_blogs{
+    float:left;
+    width:33%;
+    height:calc(100vh - 100px);
+    overflow-y:scroll;
+    position:relative;
+}
+
+#search_members::after,
+#search_events::after{
+    content:'';
+    position:absolute;
+    top:0;
+    right:0;
+    width:1px;
+    height:100%;
+    background:linear-gradient(to bottom, transparent, #747474, transparent);
+}
+
+.search-single-member,
+.search-single-event,
+.search-single-blog{
+    margin-top:50px;
+    position: relative;
+    width: 100%;
+}
+
+.search-single-member h3,
+.search-single-blog h3,
+.search-single-event h3{
+    font-size:26px;
+    color:#000425;
+    margin-top:0px;
+}
+
 header{
     position: fixed;
     width: 100vw;
@@ -1637,7 +1697,7 @@ input.big-no-border{
     border-bottom: 1px solid #cecece;
     border-radius: 0;
     padding-left: 0;
-}
+backdrop-filter: none;}
 
 input.medium-no-border{
     background: transparent;

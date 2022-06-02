@@ -32,7 +32,7 @@ var admin= {
             }else {
                 $("#editMemberPaid").prop('checked',false);
             }
-            if(this.currentMember.membership_status == "2" || this.currentMember.membership_status == "3"){
+            if(this.currentMember.membership_status == "1" || this.currentMember.membership_status == "2"){
                 $("#editMemberApproved").prop('checked',true);
             }else{
                 $("#editMemberApproved").prop('checked',false);

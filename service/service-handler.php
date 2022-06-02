@@ -67,7 +67,9 @@ $routes = array(
     ["POST","website/legal","build/website.php","updatelegal","auth",[]],
 
     ["GET","website/home","build/website.php","gethome","",[]],
-    ["POST","website/home","build/website.php","updatehome","auth",[]]
+    ["POST","website/home","build/website.php","updatehome","auth",[]],
+
+    ["GET","search","build/search.php","search","",[]]
 
 );
 

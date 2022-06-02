@@ -26,10 +26,10 @@
     },
     "membership_status":{
         "0": "Applied",
-        "1": "Approved",
-        "2": "Approved Unpaid",
-        "3": "Approved Expired",
-        "4": "Banned"
+        "1": "Approved Unpaid",
+        "2": "Approved Paid",
+        "4": "Approved Expired",
+        "3": "Paid Banned"
     },
     "env": "dev"
 }
