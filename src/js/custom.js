@@ -994,7 +994,7 @@ var member = {
                 return false;
             }
             $(`[linked-to="my-events"]`).data('current',x.id);
-            $(`[linked-to="my-events"] .side-panel-upper h4:eq(0)`).text('Edit Testimonial');
+            $(`[linked-to="my-events"] .side-panel-upper h4:eq(0)`).text('Edit Event');
 
             $("#add_event_name").val(x.event_title);
             $("#add_event_description").val(x.event_description);
@@ -1217,11 +1217,37 @@ var member = {
 }
 
 let home = {
-    load: function () {
+    load: async function () {
         if(this.first == true){
             return false;
         }
         this.first = true;
+
+        
+        await Promise.all([[admin.home.read(),admin.about.read()]]).then(()=>{
+            
+        });
+
+        let data = await xhttp.get('website/home');
+        console.log(data);
+        
+        console.log(admin.home.Storage, admin.about.Storage);
+
+        data.statistics.forEach((x, i)=>{
+            console.log(x);
+            $(`.stats-single:eq(${i}) h5`).text(x.number);
+            $(`.stats-single:eq(${i}) p`).text(x.name);
+        })
+
+        let currentImage = 0;
+        setInterval(() => {
+            $(".slider img").attr('src','/assets/'+data.banners[currentImage].photo);
+        }, 1000);
+
+        let data1 = await xhttp.get('website/legal');
+        $(".landing-banner h2").text(data1.filter((x) => x.title=="landing-view-text")[0].text);
+        $(".points-of-legend p:eq(0)").html(data1.filter((x) => x.title=="legend-text")[0].text);
+
         setTimeout(() => {
             gsap.to(".points-of-legend",{
                 scrollTrigger:{
@@ -1530,6 +1556,13 @@ function checkUrl() {
                 }
             }else if(path.parts[1] == "website-home-edit"){
                 admin.home.populate();
+            }else if(path.parts[1] == "admin-events"){
+                admin.events.populate();
+                tempDatepickers.push($("#admin_event_date").bootstrapMaterialDatePicker({
+                    format: 'DD MMMM YYYY - HH:mm',
+                    time: true,
+                    minDate : new Date()
+                }));
             }
         }
     })

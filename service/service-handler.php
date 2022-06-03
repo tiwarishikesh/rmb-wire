@@ -62,12 +62,17 @@ $routes = array(
     ["GET","admin/member","build/admin.php","member_get_one","auth",[]],
     ["POST","admin/member","build/admin.php","member_update","auth",[]],
 
+    ["GET","admin/events","build/admin.php","get_events","auth",[]],
+    ["POST","admin/events","build/admin.php","post_events","auth",[]],
+
 
     ["GET","website/legal","build/website.php","getlegal","",[]],
     ["POST","website/legal","build/website.php","updatelegal","auth",[]],
 
     ["GET","website/home","build/website.php","gethome","",[]],
     ["POST","website/home","build/website.php","updatehome","auth",[]],
+    ["POST","bannerPhoto","build/website.php","homeLandingImage","auth",[]],
+    ["DELETE","bannerPhoto","build/website.php","deletehomeLandingImage","auth",[]],
 
     ["GET","search","build/search.php","search","",[]]
 

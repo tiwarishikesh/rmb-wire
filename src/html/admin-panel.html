@@ -1,3 +1,84 @@
+<div class="right-menu-single-item p-0" linked-to="admin-events" style="padding:0;">
+    <div class="main-admin-view">
+        <h4>All Events</h4>
+        <br>
+        <div class="admin-events-archive">
+            
+        </div>
+    </div>
+    <div class="side-panel" style="opacity:1;">
+        <div class="side-panel-upper">
+            <div class="container w-full" style="padding-bottom: 7px;margin-bottom:15px; border-bottom: 1px solid #cecece;">
+                <h4>Add New</h4>
+            </div>
+            <div class="col-sm-6 admin_event_approve_section">
+                <div style="width:60px;margin-left:5px;float: left;">
+                    <div class="toggle-wrapper toggle-wrapper">
+                        <input id="admin_event_approve" type="checkbox">
+                        <label class="toggle" for="admin_event_approve">
+                            <span class="toggle--handler" onclick="member.events.toggleOnlineOffline()"></span>
+                        </label>
+                    </div>
+                </div>
+                <p style="display: inline-block;font-size: 18px;margin-bottom:0;cursor: pointer" onclick="$(this).parent().find('.toggle--handler').click()">Approve</p>
+            </div>
+            <div class="container w-full">
+                <input type="text" placeholder="Event Name" name="" id="admin_event_name">
+            </div>
+            <div class="container w-full">
+                <textarea type="text" rows="3" style="height:unset" placeholder="Event Details" id="admin_event_description"></textarea>
+            </div>
+            <div class="container w-full">
+                <div class="col-sm-6 p-0">
+                    <p>Date and Time</p>
+                    <input type="text" placeholder="Date and Time of the event" name="" id="admin_event_date">
+                </div>
+            </div>
+            <div class="container w-full p-0">
+                <div class="col-sm-6">
+                    <div style="width:60px;margin-left:5px;float: left;">
+                        <div class="toggle-wrapper toggle-wrapper">
+                            <input id="admin_event_online" type="checkbox">
+                            <label class="toggle" for="admin_event_online">
+                                <span class="toggle--handler" onclick="member.events.toggleOnlineOffline()"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <p style="display: inline-block;font-size: 18px;margin-bottom:0;cursor: pointer" onclick="$(this).parent().find('.toggle--handler').click()">Online</p>
+                </div>
+            </div>
+            <div class="container w-full p-0" id="admin_event_details_online" style="display: none;">
+                <div class="container w-full">
+                    <textarea type="text" placeholder="Event Link*" name="" id="admin_event_link"></textarea>
+                </div>
+                <div class="container w-full">
+                    <textarea type="text" placeholder="Meeting Password" name="" id="admin_event_password"></textarea>
+                </div>
+            </div>
+            <div class="container w-full p-0" id="admin_event_details_offline">
+                <div class="container w-full">
+                    <input type="text" placeholder="Venue Name" name="" id="admin_event_venue">
+                </div>
+                <div class="container w-full">
+                    <textarea type="text" placeholder="Address*" name="" style="height: unset" id="admin_event_address"></textarea>
+                </div>
+                <div class="container w-full">
+                    <input type="text" placeholder="Google Maps Link" name="" id="admin_event_map_link">
+                </div>
+            </div>
+        </div>
+        <div class="side-panel-lower">
+            <div class="container w-full p-0">
+                <div class="button bordered-button small glassy" onclick="admin.events.save()" style="width:150px;display: inline-block;margin-left:25px;">
+                    <p>SAVE CHANGES</p>
+                </div>
+                <div class="button bordered-button small glassy red" onclick="admin.events.cancelEdit()" style="width:150px;display: inline-block;margin-left:25px;">
+                    <p>CANCEL</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="right-menu-single-item" linked-to="admin-members" style="padding-top: 0;padding-bottom:0px;">
     <div class="main-admin-view">
         <h4>My Members</h4>

@@ -58,4 +58,33 @@ function member_update($conn, $payload){
 
     return array("status"=>"success", "details"=>$payload);
 }
+
+function get_events($conn, $payload){
+    $user = $payload->jwt_vars;
+
+    if($user->role != 'admin' && $user->role != 'superadmin'){
+        my_error(403);
+    }
+
+    $time = getdate()[0] * 1000;
+
+    return mysqli_getarray(mysqli_query($conn, "SELECT *, member_events.id as id from member_events JOIN member ON member.id = member_events.member_id WHERE member_events.event_datetime > '$time'"));
+}
+
+function post_events($conn, $payload){
+    $user = $payload->jwt_vars;
+    $time = getdate()[0];
+
+    $status = $payload->approval == 'yes' ? '1' : '0';
+
+    $details = json_encode($payload->details);
+    if($payload->id == 'NA'){
+        mysqli_query($conn, "INSERT INTO `member_events`(`event_title`, `event_description`, `event_type`, `event_datetime`, `details`, `member_id`, `status`) VALUES
+                                ('$payload->title','$payload->description','$payload->type', '$payload->datetime', '$details', '$user->id', '1' )");
+    }else{
+        mysqli_query($conn, "UPDATE `member_events` SET `event_title`='$payload->title', `event_description`='$payload->description', `event_type`='$payload->type',`event_datetime`='$payload->datetime',`details`='$details' ,`status`='$status' WHERE `id`='$payload->id'");
+    }
+
+    return null;
+}
 ?>

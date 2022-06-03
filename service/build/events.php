@@ -15,7 +15,7 @@ function updateMyEvent($conn, $payload){
         mysqli_query($conn, "INSERT INTO `member_events`(`event_title`, `event_description`, `event_type`, `event_datetime`, `details`, `member_id`, `status`) VALUES
                                 ('$payload->title','$payload->description','$payload->type', '$payload->datetime', '$details', '$user->id', '0' )");
     }else{
-        mysqli_query($conn, "UPDATE `member_events` SET `event_title`='$payload->title', `event_description`='$payload->description', `event_type`='$payload->type',`event_datetime`='$payload->datetime',`details`='$payload->details' ,`status`='0' WHERE `id`='$payload->id'");
+        mysqli_query($conn, "UPDATE `member_events` SET `event_title`='$payload->title', `event_description`='$payload->description', `event_type`='$payload->type',`event_datetime`='$payload->datetime',`details`='$details' ,`status`='0' WHERE `id`='$payload->id'");
     }
 
     return null;

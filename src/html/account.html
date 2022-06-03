@@ -24,7 +24,7 @@
         <div class="left-menu-single-item" linked-to="my-testimonials" onclick="route('account/my-testimonials')">
             <h4><i class="fa-solid fa-comment"></i> Testimonials</h4>
         </div>
-        <div class="left-menu-single-item" linked-to="network" onclick="route('account/network')">
+        <div class="left-menu-single-item" style="display: none;" linked-to="network" onclick="route('account/network')">
             <h4><i class="fa-solid fa-users"></i> Network</h4>
         </div>
         <tag class="admin-only">
@@ -34,6 +34,9 @@
             </div>
             <div class="left-menu-single-item" linked-to="admin-members" onclick="route('account/admin-members')">
                 <h4><i class="fa-solid fa-user"></i>My Members</h4>
+            </div>
+            <div class="left-menu-single-item" linked-to="admin-events" onclick="route('account/admin-events')">
+                <h4><i class="fa-solid fa-comment"></i> Events</h4>
             </div>
             <!-- <div class="left-menu-single-item" style="pointer-events:none;height: unset;">
                 <p style="font-size: 16px;font-weight: 600;color: #9f9fff;margin-top: 25px;">WEBMASTER</p>
@@ -391,7 +394,7 @@
             </div>
         </div>
     </div>
-    <div class="right-menu-single-item" linked-to="network" style="overflow-y: hidden;">
+    <div class="right-menu-single-item" linked-to="network" style="overflow-y: hidden;opacity:0">
         <div class="container w-full network-header">
             <div class="col-sm-3">
                 <img src="https://www.rotarymeansbusiness.in/images/userphotos/1582107447657.1ddcca.jpg" class="network_photo" alt="">

@@ -94,6 +94,38 @@
     </div>
 </div>
 <div>
+    <div class="container admin-single-event {{event_type}}" style="/* max-width:500px; */padding:25px;border-radius: 0;margin-left:0;margin-bottom:25px;;padding-top:10px">
+        <p style="text-align: left"><span style="color:green">{{verboseStatus}}</span></p>
+        <h3 style="color: #333;">{{event_title}}</h3>
+        <h4>{{event_description}}</h4>
+        <h5>{{date}}<br>{{time}}</h5>
+        <br>
+        <h5>{{venue}}<br>{{venue_details}}</h5>
+        <br>
+        <h4>Added by : <b>{{fname}} {{lname}}</b></h4>
+        <div class="container w-full">
+            <div class="container w-full p-0">
+                <div class="editDeleteOtion">
+                    <div class="button small glassed red" style="width:150px;display: inline-block" onclick="$(this).parent().parent().parent().addClass('confirmDelete')">
+                        <p>DELETE</p>
+                    </div>
+                    <div class="button small bordered-button glassed" onclick="admin.events.edit(`{{id}}`)" style="width:150px;display: inline-block;margin-left:20px;">
+                        <p>EDIT</p>
+                    </div>
+                </div>
+                <div class="confirmDeleteOption" style="float: left">
+                    <div class="button small red glassed" style="width:250px;display: inline-block;margin-left:20px;" onclick="admin.events.delete('{{id}}')">
+                        <p>CONFIRM DELETE</p>
+                    </div>
+                    <div class="button bordered-button small glassed" style="width:50px;display: inline-block" onclick="$(this).parent().parent().parent().removeClass('confirmDelete')">
+                        <p>X</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div>
     <div class="container my-single-advert" style="/* max-width:500px; */padding:25px;border-radius: 0;margin-left:0;margin-bottom:25px;;padding-top:10px">
         <div class="container w-full p-0">
             <div class="container p-0" style="width:200px;float:left;aspect-ratio:1;float:left">
@@ -156,6 +188,31 @@
         <div class="col-sm-9">
             <h4>{{title}}</h4>
             <h5>{{excerpt}}</h5>
+        </div>
+    </div>
+</div>
+<div>
+    <div class="container admin-home-single-image {{event_type}}" style="/* max-width:500px; */padding:25px;border-radius: 0;margin-left:0;margin-bottom:25px;;padding-top:10px;width: 100%;max-width: 350px;display: block;margin: auto;">
+        <img src="/assets/{{photo}}" alt="">
+        <div class="container w-full">
+            <div class="container w-full p-0">
+                <div class="editDeleteOtion">
+                    <div class="button small glassed red" style="width:150px;display: inline-block" onclick="$(this).parent().parent().parent().addClass('confirmDelete')">
+                        <p>DELETE</p>
+                    </div>
+                    <!-- <div class="button small bordered-button glassed" onclick="admin.events.edit(`{{id}}`)" style="width:150px;display: inline-block;margin-left:20px;">
+                        <p>EDIT</p>
+                    </div> -->
+                </div>
+                <div class="confirmDeleteOption" style="float: left">
+                    <div class="button small red glassed" style="width:250px;display: inline-block;margin-left:20px;" onclick="admin.home.delete('{{id}}')">
+                        <p>CONFIRM DELETE</p>
+                    </div>
+                    <div class="button bordered-button small glassed" style="width:50px;display: inline-block" onclick="$(this).parent().parent().parent().removeClass('confirmDelete')">
+                        <p>X</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

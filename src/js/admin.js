@@ -266,6 +266,7 @@ var admin= {
         },
         populate: function () {
             this.read().then(()=>{
+                $(".home_banner_archive .admin-home-single-image").remove();
                 $("#stat1title").val(this.Storage.statistics[0].name);
                 $("#stat1").val(this.Storage.statistics[0].number);
                 $("#stat2title").val(this.Storage.statistics[1].name);
@@ -274,11 +275,43 @@ var admin= {
                 $("#stat3").val(this.Storage.statistics[2].number);
                 $("#stat4title").val(this.Storage.statistics[3].name);
                 $("#stat4").val(this.Storage.statistics[3].number);
+                template_engine('.admin-home-single-image', this.Storage.banners, ".home_banner_archive");
             })
             admin.about.read().then(()=>{
                 let x = admin.about.Storage;
                 $("#landingViewtext").val(x.filter((y)=> y.title == 'landing-view-text')[0].text);
                 $("#legendtext").val(x.filter((y)=> y.title == 'legend-text')[0].text);
+            })
+            this.addNewBanner();
+        },
+        addNewBanner:function () {
+            $(".website-landing-new").html(`
+                <div class="dropzone dropzone_square smalltools" id="newLandingPhoto"
+                    data-width="512"
+                    data-height="512"
+                    data-url="/service/bannerPhoto"
+                    style="max-width:300px;width: 100%;aspect-ratio:1;display:block;margin:auto;">
+                        <input type="file" accept=".png, .jpg, .jpeg" name="thumb" />
+                </div>`
+            );
+            /* data-image="/assets/membergallery/${this.currentPhotoEdit.photo_name}" */
+            $('#newLandingPhoto').html5imageupload({
+                onAfterProcessImage: function(x) {
+                    Promise.all([admin.home.load(),admin.about.load()]).then(()=>{
+                        admin.home.populate();
+                    })
+                },
+                onAfterCancel: function() {
+                    $('#filename').val('');
+                }
+            });  
+            this.filename = null;
+        },
+        delete: function (id) {
+            xhttp.delete('bannerPhoto',{id: id}).then(()=>{
+                Promise.all([admin.home.load(),admin.about.load()]).then(()=>{
+                    admin.home.populate();
+                })
             })
         },
         save: function () {
@@ -305,10 +338,139 @@ var admin= {
                 ]
             };
             xhttp.post('website/home',payload).then(()=>{
+                showsnackbar('Data has been updated');
                 Promise.all([this.load(),admin.about.load()]).then(()=>{
                     this.populate();
                 })
 
+            })
+        }
+    },
+    events:{
+        load: function () {
+            return new Promise((resolve, reject)=>{
+                xhttp.get('admin/events').then((response)=>{
+                    this.Storage = response;
+                    this.Storage.forEach((x)=>{
+                        x.verboseStatus = x.status == '0' ? `<span style="color:gray">UNDER REVIEW</span>` : x.status == '1' ? `<span style="color:green">APPROVED</span>` : x.status == '2' ? `<span style="color:red">REJECTED</span>`: null;
+                        x.details = JSON.parse(x.details);
+                        x.date = (new Date(Number(x.event_datetime))).toString().slice(8, 11) + ' ' + (new Date(Number(x.event_datetime))).toLocaleString('default', { month: 'long' }) + ' '+(new Date(Number(x.event_datetime))).toString().slice(11, 15);
+                        x.time = (new Date(Number(x.event_datetime))).toString().slice(16, 21);
+                        if(x.event_type == "online"){
+                            x.venue = "Link: " + x.details.link;
+                            x.venue_details = "Password: "+x.details.password;
+                        }else{
+                            x.venue = x.details.venue_name + '<br>' + x.details.venue_address;
+                            x.venue_details = "Map : <a href='"+x.details.venue_link+"'>"+ x.details.venue_link+"</a>";
+                        }
+                    })
+                    resolve();
+                })
+            })
+        },
+        read: function () {
+            return new Promise((resolve, reject)=>{
+                if(this.Storage){
+                    resolve(this.Storage);
+                }else{
+                    this.load().then(()=>{
+                        resolve(this.Storage);
+                    })
+                }
+            })
+        },
+        populate: function(){
+            $(".admin_event_approve_section").hide();
+            this.read().then(()=>{
+                $('[linked-to="admin-events"] .admin-single-event').remove();
+                template_engine('.admin-single-event', this.Storage,'.admin-events-archive');
+            })
+        },
+        toggleOnlineOffline: function () {
+            setTimeout(() => {
+                if($("#admin_event_online").is(":checked")){
+                    $("#admin_event_details_online").slideDown();
+                    $("#admin_event_details_offline").slideUp();
+                }else{
+                    $("#admin_event_details_online").slideUp();
+                    $("#admin_event_details_offline").slideDown();
+                }
+            }, 100);
+        },
+        edit: function(id){
+            let x = this.Storage.filter((x) => x.id == id)[0];
+            if(!x){
+                return false;
+            }
+            $(".admin_event_approve_section").show();
+            $(`[linked-to="admin-events"]`).data('current',x.id);
+            $(`[linked-to="admin-events"] .side-panel-upper h4:eq(0)`).text('Edit Event');
+
+            $("#admin_event_name").val(x.event_title);
+            $("#admin_event_description").val(x.event_description);
+            $("#admin_event_online").prop('checked',x.event_type=="online");
+            $("#admin_event_approve").prop('checked', x.event_status == "2" || x.event_status == "1");
+            if(x.event_type=="online"){
+                $("#admin_event_link").val(x.details.link);
+                $("#admin_event_password").val(x.details.password);
+            }else{
+                $("#admin_event_venue").val(x.details.venue_name);
+                $("#admin_event_address").val(x.details.venue_address);
+                $("#admin_event_map_link").val(x.details.venue_link);
+            }
+            $("#admin_event_date").val(x.date +' - '+x.time);
+            this.toggleOnlineOffline();
+        },
+        cancelEdit: function(){
+            $(`[linked-to="admin-events"] .side-panel-upper h4:eq(0)`).text('Add New');
+            $(`[linked-to="admin-events"]`).data('current',null);
+            $(`[linked-to="admin-events"] .side-panel-upper input`).val('');
+            $(`[linked-to="admin-events"] .side-panel-upper textarea`).val('');
+            $(".admin_event_approve_section").hide();
+        },
+        save: function () {
+            let error = false;
+            let payload = {
+                id: $(`[linked-to="admin-events"]`).data('current') || "NA",
+                title: $("#admin_event_name").val() || (showsnackbar('Please specify Event Title'), error = true),
+                description: $("#admin_event_description").val() || (showsnackbar('Please specify Event Title'), error = true),
+                datetime: $("#admin_event_date").val() ? (new Date($("#add_event_date").val())).getTime() : (showsnackbar('Please specify a date and time'), error = true),
+                type: $("#admin_event_online").is(":checked") ? 'online': 'offline',
+                approval: $("#admin_event_approve").is(":checked") ? 'yes' : 'no'
+            };
+            if($("#admin_event_online").is(":checked")){
+                payload.details = {
+                    link: $("#admin_event_link").val() || (showsnackbar('Please include event link'), error = true),
+                    password: $("#admin_event_password").val() || "NA"
+                }
+            }else{
+                payload.details = {
+                    venue_name: $("#admin_event_venue").val() || (showsnackbar('Please include Venue name'), error=true),
+                    venue_address: $("#admin_event_address").val() || (showsnackbar('Please include Venue adress'), error=true),
+                    venue_link: $("#admin_event_map_link").val() || (showsnackbar('Please include Venue map link'), error=true),
+                }
+            }
+            if(error){
+                return false;
+            }
+            xhttp.post('admin/events',payload).then(()=>{
+                showsnackbar('Event Added Successfully');
+                $(`[linked-to="admin-events"] .side-panel-upper h4:eq(0)`).text('Add New');
+                $(`[linked-to="admin-events"]`).data('current',null);
+                $(`[linked-to="admin-events"] .side-panel-upper input`).val('');
+                $(`[linked-to="admin-events"] .side-panel-upper textarea`).val('');
+                $(".admin_event_approve_section").hide();
+                this.load().then(()=>{
+                    this.populate();
+                })
+            })
+        },
+        delete: function (id) {
+            xhttp.delete('myEvent',{id: id}).then(()=>{
+                showsnackbar('Event deleted successfully');
+                this.load().then(()=>{
+                    this.populate();
+                })
             })
         }
     }
