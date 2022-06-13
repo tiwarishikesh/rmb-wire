@@ -409,7 +409,7 @@ var admin= {
             $("#admin_event_name").val(x.event_title);
             $("#admin_event_description").val(x.event_description);
             $("#admin_event_online").prop('checked',x.event_type=="online");
-            $("#admin_event_approve").prop('checked', x.event_status == "2" || x.event_status == "1");
+            $("#admin_event_approve").prop('checked', x.status == "2" || x.status == "1");
             if(x.event_type=="online"){
                 $("#admin_event_link").val(x.details.link);
                 $("#admin_event_password").val(x.details.password);
@@ -434,7 +434,7 @@ var admin= {
                 id: $(`[linked-to="admin-events"]`).data('current') || "NA",
                 title: $("#admin_event_name").val() || (showsnackbar('Please specify Event Title'), error = true),
                 description: $("#admin_event_description").val() || (showsnackbar('Please specify Event Title'), error = true),
-                datetime: $("#admin_event_date").val() ? (new Date($("#add_event_date").val())).getTime() : (showsnackbar('Please specify a date and time'), error = true),
+                datetime: $("#admin_event_date").val() ? (new Date($("#admin_event_date").val().replace(' -',''))).getTime() : (showsnackbar('Please specify a date and time'), error = true),
                 type: $("#admin_event_online").is(":checked") ? 'online': 'offline',
                 approval: $("#admin_event_approve").is(":checked") ? 'yes' : 'no'
             };

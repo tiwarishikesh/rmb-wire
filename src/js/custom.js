@@ -1022,7 +1022,7 @@ var member = {
                 id: $(`[linked-to="my-events"]`).data('current') || "NA",
                 title: $("#add_event_name").val() || (showsnackbar('Please specify Event Title'), error = true),
                 description: $("#add_event_description").val() || (showsnackbar('Please specify Event Title'), error = true),
-                datetime: $("#add_event_date").val() ? (new Date($("#add_event_date").val())).getTime() : (showsnackbar('Please specify a date and time'), error = true),
+                datetime: $("#add_event_date").val() ? (new Date($("#add_event_date").val().replace(' -',''))).getTime() : (showsnackbar('Please specify a date and time'), error = true),
                 type: $("#add_event_online").is(":checked") ? 'online': 'offline'
             };
             if($("#add_event_online").is(":checked")){
@@ -1186,7 +1186,8 @@ var member = {
                 title: $("#add_ad_name").val() || (showsnackbar('Please specify Event Title'), error = true),
                 description: $("#add_ad_description").val() || (showsnackbar('Please specify Event Title'), error = true),
                 link: $("#add_ad_link").val() || "NA",
-                duration: $("#add_ad_days").val() || (showsnackbar('Please specify duration ad has to run'), error = true),
+                from: $("#add_ad_from").val() || (showsnackbar('Please specify when you want the advertisement to run'), error = true),
+                to: $("#add_ad_to").val() || (showsnackbar('Please specify till when you want the advertisement to run'), error = true),
                 type: $("#add_advert_photo_footer").is(":checked") ? 'footer': 'home',
                 photo: this.filename || (showsnackbar('Please include a creative'), error = true)
             };
@@ -1212,6 +1213,9 @@ var member = {
                     this.populate();
                 })
             })
+        },
+        from_changed: function () {
+            
         }
     }
 }
@@ -1515,6 +1519,16 @@ function checkUrl() {
             }else if(path.parts[1] == "my-adverts"){
                 member.advertisement.new();
                 member.advertisement.populate();
+                tempDatepickers.push($("#add_ad_from").bootstrapMaterialDatePicker({
+                    format: 'DD MMMM YYYY',
+                    time: false,
+                    minDate: new Date()
+                }));
+                tempDatepickers.push($("#add_ad_to").bootstrapMaterialDatePicker({
+                    format: 'DD MMMM YYYY',
+                    time: false,
+                    minDate: new Date()
+                }));
             }else if(path.parts[1] == 'admin-members'){
                 if (!quillEditors.AdminAboutSection) {
                     quillEditors.AdminAboutSection = new Quill('.admin-about-edit-section', {
