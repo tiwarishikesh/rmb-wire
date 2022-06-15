@@ -1095,6 +1095,8 @@ var member = {
                         x.venue = x.details.venue_name + '<br>' + x.details.venue_address;
                         x.venue_details = "Map : <a href='"+x.details.venue_link+"'>"+ x.details.venue_link+"</a>";
                     } */
+                    x.fromHuman = (new Date(Number(x.from))).toString().slice(8, 11) + ' ' + (new Date(Number(x.from))).toLocaleString('default', { month: 'long' }) + ' '+(new Date(Number(x.from))).toString().slice(11, 15)
+                    x.toHuman = (new Date(Number(x.till))).toString().slice(8, 11) + ' ' + (new Date(Number(x.till))).toLocaleString('default', { month: 'long' }) + ' '+(new Date(Number(x.till))).toString().slice(11, 15);
                 })
                 template_engine('.my-single-advert', this.Storage,'.my-advertisements-archive');
             })
@@ -1168,7 +1170,8 @@ var member = {
             $("#add_ad_name").val(x.title);
             $("#add_ad_description").val(x.description);
             $("#add_ad_link").val(x.link);
-            $("#add_ad_days").val(x.days);
+            $("#add_ad_from").val(x.fromHuman);
+            $("#add_ad_to").val(x.toHuman);
             $("#add_advert_photo_footer").prop("checked",x.type=="footer");
             this.filename = x.image;
         },
@@ -1186,8 +1189,8 @@ var member = {
                 title: $("#add_ad_name").val() || (showsnackbar('Please specify Event Title'), error = true),
                 description: $("#add_ad_description").val() || (showsnackbar('Please specify Event Title'), error = true),
                 link: $("#add_ad_link").val() || "NA",
-                from: $("#add_ad_from").val() || (showsnackbar('Please specify when you want the advertisement to run'), error = true),
-                to: $("#add_ad_to").val() || (showsnackbar('Please specify till when you want the advertisement to run'), error = true),
+                from: $("#add_ad_from").val() ? (new Date($("#add_ad_from").val())).getTime() : (showsnackbar('Please specify when you want the advertisement to run'), error = true),
+                to: $("#add_ad_to").val() ? (new Date($("#add_ad_to").val())).getTime() :  (showsnackbar('Please specify till when you want the advertisement to run'), error = true),
                 type: $("#add_advert_photo_footer").is(":checked") ? 'footer': 'home',
                 photo: this.filename || (showsnackbar('Please include a creative'), error = true)
             };

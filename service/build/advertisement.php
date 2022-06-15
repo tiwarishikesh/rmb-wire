@@ -10,10 +10,10 @@ function updateMyAds($conn, $payload){
     $time = getdate()[0];
 
     if($payload->id == 'NA'){
-        mysqli_query($conn, "INSERT INTO `website_advertisements`(`type`, `image`, `title`, `description`, `days`, `link`, `status`, `uploaded_on`, `uploaded_by`)
-        VALUES ('$payload->type',  '$payload->photo',  '$payload->title',  '$payload->description',    '$payload->duration',   '$payload->link', '0', '$time', '$user->id')");
+        mysqli_query($conn, "INSERT INTO `website_advertisements`(`type`, `image`, `title`, `description`, `from`,`till`, `link`, `status`, `uploaded_on`, `uploaded_by`) VALUES ('$payload->type',  '$payload->photo',  '$payload->title',  '$payload->description', '$payload->from',   '$payload->to' ,   '$payload->link', '0', '$time', '$user->id')");
+        return "INSERT INTO `website_advertisements`(`type`, `image`, `title`, `description`, `from`,`till`, `link`, `status`, `uploaded_on`, `uploaded_by`) VALUES ('$payload->type',  '$payload->photo',  '$payload->title',  '$payload->description', '$payload->from',   '$payload->to' ,   '$payload->link', '0', '$time', '$user->id')";
     }else{
-        mysqli_query($conn, "UPDATE `website_advertisements` SET `type`='$payload->type',`image`='$payload->photo',`title`='$payload->title',`description`='$payload->description',`days`='$payload->duration',`link`='$payload->link' ,`status`='0', `uploaded_on`='$time' WHERE `id`='$payload->id'");
+        mysqli_query($conn, "UPDATE `website_advertisements` SET `type`='$payload->type',`image`='$payload->photo',`title`='$payload->title',`description`='$payload->description',`from`='$payload->from', `till`='$payload->to',`link`='$payload->link' ,`status`='0', `uploaded_on`='$time' WHERE `id`='$payload->id'");
     }
 
     return null;
