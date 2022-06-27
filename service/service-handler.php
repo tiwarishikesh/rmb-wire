@@ -53,9 +53,17 @@ $routes = array(
 
     ["GET","myAds","build/advertisement.php","getMyAds","auth",[]],
     ["POST","myAd","build/advertisement.php","updateMyAds","auth",[]],
+    ["PUT","myAd","build/advertisement.php","payMyAds","auth",[]],
     ["DELETE","myAd","build/advertisement.php","deleteMyAds","auth",[]],
     ["POST","myAdPhoto","build/advertisement.php","myAdPhoto","auth",[]],
 
+    ["GET","Ads","build/advertisement.php","getAdminAds","auth",[]],
+    ["POST","Ad","build/advertisement.php","updateAdminAds","auth",[]],
+    ["DELETE","Ad","build/advertisement.php","deleteAdminAds","auth",[]],
+
+    ["GET","Testimonials","build/testimonials.php","getAdminTestimonials","auth",[]],
+    ["POST","Testimonial","build/testimonials.php","updateAdminTestimonials","auth",[]],
+    ["DELETE","Testimonial","build/testimonials.php","deleteAdminTestimonials","auth",[]],
 
     ["GET","admin","build/admin.php","load","auth",[]],
 
@@ -74,7 +82,8 @@ $routes = array(
     ["POST","bannerPhoto","build/website.php","homeLandingImage","auth",[]],
     ["DELETE","bannerPhoto","build/website.php","deletehomeLandingImage","auth",[]],
 
-    ["GET","search","build/search.php","search","",[]]
+    ["GET","search","build/search.php","search","",[]],
+    ["GET","init","build/search.php","init","",[]]
 
 );
 

@@ -6,4 +6,11 @@ function search($conn, $payload){
 
     return array("members"=>$members, "blogs"=>$blogs, "events"=>$events);
 }
+
+function init($conn, $payload){
+    $time = getdate()[0]*1000;
+
+    $events = mysqli_getarray(mysqli_query($conn, "SELECT * from member_events JOIN member ON member.id = member_events.member_id WHERE member_events.status = '1' AND "));
+    /* $ads = mysqli_getarray(mysqli_query($conn, "")) */
+}
 ?>

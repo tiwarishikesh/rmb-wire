@@ -1682,6 +1682,19 @@ background-repeat: no-repeat;}
 .my-single-advert h5{
     font-size:16px;
 }
+
+.payForAdvertisement{
+    display:none !important;
+}
+
+.my-single-advert[status="01"] .payForAdvertisement{
+    display:inline-block !important;
+}
+
+.my-single-advert[status="01"] .editAdvertisement,
+.my-single-advert[status="11"] .editAdvertisement{
+    display:none !important;
+}
 /* 
 
 
@@ -1913,6 +1926,26 @@ padding-top: 12px;border: 1px solid #3153BC;}
 
 .button.small p{
     font-size:16px;}
+
+.button.bordered-button.glassed.green{
+    background: #fff5;
+    backdrop-filter:blur(5px);
+background: rgb(169 248 165 / 12%);
+box-shadow: 0 4px 16px 0 rgb(26 133 40 / 46%);
+backdrop-filter: blur( 6.5px );
+-webkit-backdrop-filter: blur( 6.5px );
+
+border: 1px solid rgba( 255, 255, 255, 0.18 );
+}
+
+.button.bordered-button.green p{
+    position: relative;
+    text-align: center;
+    background: linear-gradient(182deg,#238b45, #175a00);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    z-index: 2;
+}
 
 .checkbox,
 .radio{

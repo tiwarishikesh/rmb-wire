@@ -29,7 +29,7 @@
         "1": "Approved Unpaid",
         "2": "Approved Paid",
         "4": "Approved Expired",
-        "3": "Paid Banned"
+        "3": "Paid Unapproved"
     },
     "env": "dev"
 }

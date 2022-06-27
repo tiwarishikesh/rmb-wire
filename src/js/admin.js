@@ -7,8 +7,9 @@ var admin= {
                 if(x.id == auth.memberData.personal.id){
                     return false;
                 }
-                $("#myMembersTable tbody").append(`<tr style="border-bottom:1px solid black;"><td>${x.id} &nbsp; ${x.photo ? `<img src="/service/build/${x.photo}"} style="width:50px;">`:''}</td>
-                <td>${x.fname} ${x.lname}</td>
+                $("#myMembersTable tbody").append(`<tr style="border-bottom:1px solid black;">
+                <td> ${x.photo ? `<img src="/service/build/${x.photo}"} style="width:50px;">`:''} &nbsp; ${x.fname} ${x.lname}</td>
+                <td>${x.club}</td>
                 <td style="text-transform:capitalize">${x.role}</td>
                 <td>${config.membership_status[x.membership_status]}</td>
                 <td><div class="button bordered-button small glassy" style="margin-top:0" onclick="admin.member.view(${x.id})"><p>EDIT</p></td>
@@ -468,6 +469,281 @@ var admin= {
         delete: function (id) {
             xhttp.delete('myEvent',{id: id}).then(()=>{
                 showsnackbar('Event deleted successfully');
+                this.load().then(()=>{
+                    this.populate();
+                })
+            })
+        }
+    },
+    advertisement : {
+        load: function () {
+            return new Promise((resolve, reject)=>{
+                xhttp.get('Ads').then((response)=>{
+                    this.Storage = response;
+                    resolve();
+                })
+            })
+        },
+        read: function () {
+            return new Promise((resolve, reject)=>{
+                if(this.Storage){
+                    resolve(this.Storage);
+                }else{
+                    this.load().then(()=>{
+                        resolve(this.Storage);
+                    })
+                }
+            })
+        },
+        populate: function(){
+            this.read().then(()=>{
+                $('[linked-to="admin-adverts"] .admin-single-advert').remove();
+                this.Storage.forEach((x)=>{
+                    x.verboseStatus = x.status == '0' ? `<span style="color:gray">UNDER REVIEW</span>` : x.status == '1' ? `<span style="color:green">APPROVED</span>` : x.status == '2' ? `<span style="color:red">REJECTED</span>`: null;
+                    x.paymentStatus = x.payment_status == '1'? `<span style="color:green">PAID</span>` : `<span style="color:gray">UNPAID</span>`;
+                   /*  x.details = JSON.parse(x.details);
+                    x.date = (new Date(Number(x.event_datetime))).toString().slice(8, 11) + ' ' + (new Date(Number(x.event_datetime))).toLocaleString('default', { month: 'long' }) + ' '+(new Date(Number(x.event_datetime))).toString().slice(11, 15);
+                    x.time = (new Date(Number(x.event_datetime))).toString().slice(16, 21);
+                    if(x.event_type == "online"){
+                        x.venue = "Link" + x.details.link;
+                        x.venue_details = "Password: "+x.details.password;
+                    }else{
+                        x.venue = x.details.venue_name + '<br>' + x.details.venue_address;
+                        x.venue_details = "Map : <a href='"+x.details.venue_link+"'>"+ x.details.venue_link+"</a>";
+                    } */
+                    x.fromHuman = (new Date(Number(x.from))).toString().slice(8, 11) + ' ' + (new Date(Number(x.from))).toLocaleString('default', { month: 'long' }) + ' '+(new Date(Number(x.from))).toString().slice(11, 15)
+                    x.toHuman = (new Date(Number(x.till))).toString().slice(8, 11) + ' ' + (new Date(Number(x.till))).toLocaleString('default', { month: 'long' }) + ' '+(new Date(Number(x.till))).toString().slice(11, 15);
+                })
+                template_engine('.admin-single-advert', this.Storage,'.admin-advertisements-archive');
+            })
+        },
+        toggleOnlineOffline: function () {
+            setTimeout(() => {
+                if($("#add_event_online").is(":checked")){
+                    $("#new_event_details_online").slideDown();
+                    $("#new_event_details_offline").slideUp();
+                }else{
+                    $("#new_event_details_online").slideUp();
+                    $("#new_event_details_offline").slideDown();
+                }
+            }, 100);
+        },
+        new: function () {
+
+            this.filename = null;
+            $("#adminAdPhotoSectionContainer").html(`
+                <div class="dropzone dropzone_square smalltools" id="adminAdPhotoSection"
+                    data-width="512"
+                    data-height="512"
+                    data-url="/service/myAdPhoto"
+                    style="max-width:300px;width: 100%;aspect-ratio:1;display:block;margin:auto;">
+                        <input type="file" accept=".png, .jpg, .jpeg" name="thumb" />
+                </div>`
+            );
+            /* data-image="/assets/membergallery/${this.currentPhotoEdit.photo_name}" */
+            $('#adminAdPhotoSection').html5imageupload({
+                onAfterProcessImage: function(x) {
+                    $("#addEditPhotoInput").attr('data-img',ImageUploadedResponse.filename);
+                    admin.advertisement.filename = ImageUploadedResponse.filename;
+                },
+                onAfterCancel: function() {
+                    $('#filename').val('');
+                }
+            });  
+            this.filename = null;
+        },
+        newImageUploaded: function () {
+            admin.advertisement.filename = ImageUploadedResponse?.filename;
+            /* ImageUploadedResponse?.image_id */
+        },
+        edit: function(id){
+            let x = this.Storage.filter((x) => x.id == id)[0];
+            if(!x){
+                return false;
+            }
+            $(`[linked-to="admin-adverts"]`).data('current',x.id);
+            $(`[linked-to="admin-adverts"] .side-panel-upper h4:eq(0)`).text('Edit Advertisement');
+
+            $("#adminAdPhotoSectionContainer").html(`
+                <div class="dropzone dropzone_square smalltools" id="adminAdPhotoSection"
+                    data-width="512"
+                    data-height="512"
+                    data-url="/service/myAdPhoto"
+                    data-image="/assets/advertisement/${x.image}"
+                    style="max-width:300px;width: 100%;aspect-ratio:1;display:block;margin:auto;">
+                        <input type="file" accept=".png, .jpg, .jpeg" name="thumb" />
+                </div>`
+            );
+
+            $('#adminAdPhotoSection').html5imageupload({
+                onAfterProcessImage: function(x) {
+                    $("#addEditPhotoInput").attr('data-img',ImageUploadedResponse.filename);
+                    admin.advertisement.filename = ImageUploadedResponse.filename;
+                    member.advertisement.newImageUploaded();
+                },
+                onAfterCancel: function() {
+                    $('#filename').val('');
+                }
+            });  
+
+            $("#admin_ad_name").val(x.title);
+            $("#admin_ad_description").val(x.description);
+            $("#admin_ad_link").val(x.link);
+            $("#admin_ad_from").val(x.fromHuman);
+            $("#admin_ad_to").val(x.toHuman);
+            $("#admin_price").val(x.price);
+            $("#admin_advert_photo_footer").prop("checked",x.type=="footer");
+            this.filename = x.image;
+            if(x.status == "1"){
+                $("#editAdvertisementApproved").prop("checked",true)
+            }else{
+                $("#editAdvertisementApproved").prop("checked",false)
+            }
+
+            if(x.payment_status == "1"){
+                $("#editAdvertisementPaid").prop("checked",true)
+            }else{
+                $("#editAdvertisementPaid").prop("checked",false)
+            }
+        },
+        cancelEdit: function(){
+            $(`[linked-to="admin-adverts"] .side-panel-upper h4:eq(0)`).text('Add New');
+            $(`[linked-to="admin-adverts"]`).data('current',null);
+            $(`[linked-to="admin-adverts"] .side-panel-upper input`).val('');
+            $(`[linked-to="admin-adverts"] .side-panel-upper textarea`).val('');
+            this.new();
+        },
+        save: function () {
+            let error = false;
+            let payload = {
+                id: $(`[linked-to="admin-adverts"]`).data('current') || "NA",
+                title: $("#admin_ad_name").val() || (showsnackbar('Please specify Event Title'), error = true),
+                description: $("#admin_ad_description").val() || (showsnackbar('Please specify Event Title'), error = true),
+                link: $("#admin_ad_link").val() || "NA",
+                from: $("#admin_ad_from").val() ? (new Date($("#admin_ad_from").val())).getTime() : (showsnackbar('Please specify when you want the advertisement to run'), error = true),
+                to: $("#admin_ad_to").val() ? (new Date($("#admin_ad_to").val())).getTime() :  (showsnackbar('Please specify till when you want the advertisement to run'), error = true),
+                type: $("#admin_advert_photo_footer").is(":checked") ? 'footer': 'home',
+                price: $("#admin_price").val() || (showsnackbar('Please include a price'), error = true),
+                photo: this.filename || (showsnackbar('Please include a creative'), error = true),
+                status: $("#editAdvertisementApproved").is(":checked")? "1" : "0",
+                payment_status: $("#editAdvertisementPaid").is(":checked")? "1":"0"
+            };
+            if(error){
+                return false;
+            }
+            xhttp.post('Ad',payload).then(()=>{
+                showsnackbar('Advertisement submitted Successfully');
+                $(`[linked-to="admin-adverts"] .side-panel-upper h4:eq(0)`).text('Add New');
+                $(`[linked-to="admin-adverts"]`).data('current',null);
+                $(`[linked-to="admin-adverts"] .side-panel-upper input`).val('');
+                $(`[linked-to="admin-adverts"] .side-panel-upper textarea`).val('');
+                this.filename = null;
+                this.load().then(()=>{
+                    this.populate();
+                })
+            })
+        },
+        delete: function (id) {
+            xhttp.delete('Ad',{id: id}).then(()=>{
+                showsnackbar('Advertisement deleted successfully');
+                this.load().then(()=>{
+                    this.populate();
+                })
+            })
+        },
+        from_changed: function () {
+            
+        }
+    },
+    testimonial:{
+        load: function () {
+            return new Promise((resolve, reject)=>{
+                xhttp.get('Testimonials').then((response)=>{
+                    this.Storage = response;
+                    resolve();
+                })
+            })
+        },
+        read: function () {
+            return new Promise((resolve, reject)=>{
+                if(this.Storage){
+                    resolve(this.Storage);
+                }else{
+                    this.load().then(()=>{
+                        resolve(this.Storage);
+                    })
+                }
+            })
+        },
+        populate: function(){
+            if(!admin.data?.members){
+                setTimeout(() => {
+                    this.populate();
+                }, 500);
+                return false;
+            }
+            $("#admin_testimonial_member").html(`<option value=""></option>`);
+            template_engine(`<option value="{{id}}">{{fname}} {{lname}}</option>`,admin.data.members,"#admin_testimonial_member").then(()=>{
+                $("#admin_testimonial_member").select2({
+                    placeholder: "Select a member"
+                });
+            });
+            this.read().then(()=>{
+                $('[linked-to="admin-testimonials"] .admin-single-testimonial').remove();
+                this.Storage.forEach((x)=>{
+                    x.verboseStatus = x.status == '0' ? `<span style="color:gray">UNDER REVIEW</span>` : x.status == '1' ? `<span style="color:green">APPROVED</span>` : x.status == '2' ? `<span style="color:red">REJECTED</span>`: null;
+                })
+                template_engine('.admin-single-testimonial', this.Storage,'.admin-testimonials-archive');
+            })
+        },
+        edit: function (id) {
+            let x = this.Storage.filter((x) => x.id == id)[0];
+            if(!x){
+                return false;
+            }
+            if(x.status == "1"){
+                $("#editTestimonialApproved").prop('checked',true);
+            }else{
+                $("#editTestimonialApproved").prop('checked',false);
+            }
+            $("#admin-testimonial-edit").data('current',x.id);
+            $("#admin-testimonial-edit").val(x.testimonial_text);
+            $('#admin_testimonial_member').val(x.member_id).trigger('change');
+            $(`[linked-to="admin-testimonials"] .side-panel-upper h4:eq(0)`).text('Edit Testimonial');
+        },
+        save: function () {
+            if(!$("#admin-testimonial-edit").val() || !$("#admin_testimonial_member").val()){
+                showsnackbar('Please fill out testimonial text and the member name');
+            }
+            let payload = {
+                id: $("#admin-testimonial-edit").data('current') || 'NA',
+                testimonial: $("#admin-testimonial-edit").val(),
+                user: $('#admin_testimonial_member').val(),
+                approval: $("#editTestimonialApproved").is(":checked") ? 'true' : 'false'
+            }
+            xhttp.post('Testimonial',payload).then(()=>{
+                showsnackbar('Testimonial Recorded Successfully');
+                $(`[linked-to="admin-testimonials"] .side-panel-upper h4:eq(0)`).text('Add New');
+                $("#admin-testimonial-edit").val('');
+                $("#admin-testimonial-edit").data('current',null);
+                $("#admin_testimonial_member").val('').trigger('change');
+                this.load().then(()=>{
+                    this.populate();
+                })
+            })
+        },
+        cancelEdit: function () {
+            $(`[linked-to="admin-testimonials"] .side-panel-upper h4:eq(0)`).text('Add New');
+            $("#admin-testimonial-edit").val('');
+            $("#admin-testimonial-edit").data('current',null);
+            $("#admin_testimonial_member").val('').trigger('change');
+            this.load().then(()=>{
+                this.populate();
+            })
+        },
+        delete: function (id) {
+            xhttp.delete('Testimonial',{id: id}).then(()=>{
+                showsnackbar('Testimonial deleted successfully');
                 this.load().then(()=>{
                     this.populate();
                 })

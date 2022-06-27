@@ -63,6 +63,33 @@
     </div>
 </div>
 <div>
+    <div class="container admin-single-testimonial" style="border: 1px solid #cecece;max-width:500px;padding:25px;border-radius: 20px;margin-left:0;margin-bottom:25px;;padding-top:10px">
+        <p style="text-align: right">{{verboseStatus}}</p>
+        <h4>{{testimonial_text}}</h4>
+        <h3>Testimonial By: {{fname}} {{lname}}</h3>
+        <div class="container w-full">
+            <div class="container w-full p-0">
+                <div class="editDeleteOtion">
+                    <div class="button small glassed red" style="width:150px;display: inline-block" onclick="$(this).parent().parent().parent().addClass('confirmDelete')">
+                        <p>DELETE</p>
+                    </div>
+                    <div class="button small bordered-button glassed" onclick="admin.testimonial.edit(`{{id}}`)" style="width:150px;display: inline-block;margin-left:20px;">
+                        <p>EDIT</p>
+                    </div>
+                </div>
+                <div class="confirmDeleteOption" style="float: left">
+                    <div class="button small red glassed" style="width:250px;display: inline-block;margin-left:20px;" onclick="admin.testimonial.delete('{{id}}')">
+                        <p>CONFIRM DELETE</p>
+                    </div>
+                    <div class="button bordered-button small glassed" style="width:50px;display: inline-block" onclick="$(this).parent().parent().parent().removeClass('confirmDelete')">
+                        <p>X</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div>
     <div class="container my-single-event {{event_type}}" style="/* max-width:500px; */padding:25px;border-radius: 0;margin-left:0;margin-bottom:25px;;padding-top:10px">
         <p style="text-align: left"><span style="color:green">{{verboseStatus}}</span></p>
         <h3 style="color: #333;">{{event_title}}</h3>
@@ -126,7 +153,48 @@
     </div>
 </div>
 <div>
-    <div class="container my-single-advert" style="/* max-width:500px; */padding:25px;border-radius: 0;margin-left:0;margin-bottom:25px;;padding-top:10px">
+    <div class="container my-single-advert" status="{{payment_status}}{{status}}" style="/* max-width:500px; */padding:25px;border-radius: 0;margin-left:0;margin-bottom:25px;;padding-top:10px">
+        <div class="container w-full p-0">
+            <div class="container p-0" style="width:200px;float:left;aspect-ratio:1;float:left">
+                <img src="/assets/advertisement/{{image}}" alt="">
+            </div>
+            <div class="container" style="width:calc(100% - 225px);float:left">
+                <p style="text-align: left">{{verboseStatus}} | {{paymentStatus}}</p>
+                <h3 style="color: #333;">{{title}}</h3>
+                <h4>{{description}}</h4>
+                <h5>Type : <b style="text-transform: uppercase;">{{type}}</b></h5>
+                <h5>Duration : <b style="text-transform: uppercase;">{{fromHuman}}  :   {{toHuman}}</b></h5>
+                <h5>Link : <b style="text-transform: uppercase;">{{link}}</b></h5>
+                {{verbosePrice}}
+            </div>
+        </div>
+        <div class="container w-full">
+            <div class="container w-full p-0">
+                <div class="editDeleteOtion">
+                    <div class="button small glassed red" style="width:150px;display: inline-block" onclick="$(this).parent().parent().parent().addClass('confirmDelete')">
+                        <p>DELETE</p>
+                    </div>
+                    <div class="button small bordered-button glassed editAdvertisement" onclick="member.advertisement.edit(`{{id}}`)" style="width:150px;display: inline-block;margin-left:20px;">
+                        <p>EDIT</p>
+                    </div>
+                    <div class="button small bordered-button glassed payForAdvertisement green" onclick="member.advertisement.pay(`{{id}}`)" style="width:150px;display: inline-block;margin-left:20px;">
+                        <p>PAY</p>
+                    </div>
+                </div>
+                <div class="confirmDeleteOption" style="float: left">
+                    <div class="button small red glassed" style="width:250px;display: inline-block;margin-left:20px;" onclick="member.advertisement.delete('{{id}}')">
+                        <p>CONFIRM DELETE</p>
+                    </div>
+                    <div class="button bordered-button small glassed" style="width:50px;display: inline-block" onclick="$(this).parent().parent().parent().removeClass('confirmDelete')">
+                        <p>X</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div>
+    <div class="container admin-single-advert" style="/* max-width:500px; */padding:25px;border-radius: 0;margin-left:0;margin-bottom:25px;;padding-top:10px">
         <div class="container w-full p-0">
             <div class="container p-0" style="width:200px;float:left;aspect-ratio:1;float:left">
                 <img src="/assets/advertisement/{{image}}" alt="">
@@ -137,6 +205,10 @@
                 <h5>Type : <b style="text-transform: uppercase;">{{type}}</b></h5>
                 <h5>Duration : <b style="text-transform: uppercase;">{{fromHuman}}  :   {{toHuman}}</b></h5>
                 <h5>Link : <b style="text-transform: uppercase;">{{link}}</b></h5>
+                <h5>Price: USD <b style="text-transform: uppercase;">{{price}}</b></h5>
+                <h5>Status: {{verboseStatus}} | {{paymentStatus}}</h5>
+                <br>
+                <h4>Added by : <b>{{fname}} {{lname}}</b></h4>
             </div>
         </div>
         <div class="container w-full">
@@ -145,12 +217,12 @@
                     <div class="button small glassed red" style="width:150px;display: inline-block" onclick="$(this).parent().parent().parent().addClass('confirmDelete')">
                         <p>DELETE</p>
                     </div>
-                    <div class="button small bordered-button glassed" onclick="member.advertisement.edit(`{{id}}`)" style="width:150px;display: inline-block;margin-left:20px;">
+                    <div class="button small bordered-button glassed" onclick="admin.advertisement.edit(`{{id}}`)" style="width:150px;display: inline-block;margin-left:20px;">
                         <p>EDIT</p>
                     </div>
                 </div>
                 <div class="confirmDeleteOption" style="float: left">
-                    <div class="button small red glassed" style="width:250px;display: inline-block;margin-left:20px;" onclick="member.advertisement.delete('{{id}}')">
+                    <div class="button small red glassed" style="width:250px;display: inline-block;margin-left:20px;" onclick="admin.advertisement.delete('{{id}}')">
                         <p>CONFIRM DELETE</p>
                     </div>
                     <div class="button bordered-button small glassed" style="width:50px;display: inline-block" onclick="$(this).parent().parent().parent().removeClass('confirmDelete')">

@@ -1085,6 +1085,8 @@ var member = {
                 $('[linked-to="my-adverts"] .my-single-advert').remove();
                 this.Storage.forEach((x)=>{
                     x.verboseStatus = x.status == '0' ? `<span style="color:gray">UNDER REVIEW</span>` : x.status == '1' ? `<span style="color:green">APPROVED</span>` : x.status == '2' ? `<span style="color:red">REJECTED</span>`: null;
+                    x.paymentStatus = x.payment_status == '1'? `<span style="color:green">PAID</span>` : `<span style="color:gray">UNPAID</span>`;
+                    x.verbosePrice = x.price ? `<h5>Price: USD <b style="text-transform: uppercase;">${x.price}</b></h5>` : '';
                    /*  x.details = JSON.parse(x.details);
                     x.date = (new Date(Number(x.event_datetime))).toString().slice(8, 11) + ' ' + (new Date(Number(x.event_datetime))).toLocaleString('default', { month: 'long' }) + ' '+(new Date(Number(x.event_datetime))).toString().slice(11, 15);
                     x.time = (new Date(Number(x.event_datetime))).toString().slice(16, 21);
@@ -1212,6 +1214,25 @@ var member = {
         delete: function (id) {
             xhttp.delete('myAd',{id: id}).then(()=>{
                 showsnackbar('Advertisement deleted successfully');
+                this.load().then(()=>{
+                    this.populate();
+                })
+            })
+        },
+        pay: function (x) {
+            var retVal = confirm("Do you want to continue ?");
+            if( retVal == true ) {
+                this.paymentSuccess(x);
+                return true;
+            } else {
+                return false;
+            }  
+        },
+        paymentSuccess: function(x){
+            this.currentPaid = this.Storage.filter((a) => a.id == x)[0];
+            this.currentPaid.payment_status = "1";
+            xhttp.put('myAd',this.currentPaid).then(()=>{
+                this.filename = null;
                 this.load().then(()=>{
                     this.populate();
                 })
@@ -1419,10 +1440,12 @@ function checkUrl() {
             tempDatepickers.push($("#dateofjoiningnew").bootstrapMaterialDatePicker({
                 format: 'DD MMMM YYYY',
                 time: false,
+                maxDate: new Date()
             }));
             tempDatepickers.push($("#dobnew").bootstrapMaterialDatePicker({
                 format: 'DD MMMM YYYY',
-                time: false
+                time: false,
+                maxDate: new Date(new Date().setDate(new Date().getDate() - 5400))
             }));
         }else if (path.parts[0] == "account" && path.parts[1]) {
             $('.left-menu-single-item').removeClass('active');
@@ -1580,6 +1603,21 @@ function checkUrl() {
                     time: true,
                     minDate : new Date()
                 }));
+            }else if(path.parts[1] == "admin-adverts"){
+                admin.advertisement.new();
+                admin.advertisement.populate();
+                tempDatepickers.push($("#admin_ad_from").bootstrapMaterialDatePicker({
+                    format: 'DD MMMM YYYY',
+                    time: false,
+                    minDate: new Date()
+                }));
+                tempDatepickers.push($("#admin_ad_to").bootstrapMaterialDatePicker({
+                    format: 'DD MMMM YYYY',
+                    time: false,
+                    minDate: new Date()
+                }));
+            }else if(path.parts[1] == "admin-testimonials"){
+                admin.testimonial.populate();
             }
         }
     })

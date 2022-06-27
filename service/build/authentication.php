@@ -122,7 +122,7 @@ function register($conn, $payload){
                                         VALUES('$payload->fname','$payload->lname','0','member','$payload->club','$payload->clubsecretary','$payload->clubsecretaryemail','$payload->about','$photo','$payload->chapter','$time','$payload->gender','$payload->dateofjoining','$payload->dob','$payload->timezone')");
 
     $id = $conn->insert_id;
-    echo is_numeric($payload->classification);
+    
     if(!is_numeric($payload->classification)){
         mysqli_query($conn, "INSERT INTO `member_profession_classifications`( `name`, `status`) VALUES ('$payload->classification',1)");
         $payload->classification = $conn->insert_id;
