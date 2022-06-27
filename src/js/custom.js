@@ -1618,6 +1618,10 @@ function checkUrl() {
                 }));
             }else if(path.parts[1] == "admin-testimonials"){
                 admin.testimonial.populate();
+            }else if(path.parts[1] == "admin-blogs"){
+                admin.blogs.load().then(()=>{
+                    admin.blogs.populate()
+                });
             }
         }
     })

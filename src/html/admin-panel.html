@@ -375,6 +375,70 @@
         </div>
     </div>
 </div>
+<div class="right-menu-single-item p-0" linked-to="admin-blogs">
+    <div class="container w-full admin-blogs-archive">
+        <h4>All Blogs</h4>
+        <br>
+    </div>
+    <div class="container w-full admin-blogs-single">
+        <div class="container w-full p-0" style="padding-bottom: 10px;border-bottom: 1px solid #bebebe;">
+            <div class="col-sm-3" style="padding-top:15px;">
+                <div style="width:60px;margin-left:5px;float: left;">
+                    <div class="toggle-wrapper toggle-wrapper">
+                        <input id="editBlogApproved" type="checkbox" checked="">
+                        <label class="toggle" for="editBlogApproved">
+                            <span class="toggle--handler"></span>
+                        </label>
+                    </div>
+                </div>
+                <p style="display: inline-block;font-size: 18px;margin-bottom:0;cursor: pointer" onclick="$(this).parent().find('.toggle--handler').click()">Approved</p>
+            </div>
+            <div class="col-sm-3" style="padding-top:15px;">
+                <div style="width:60px;margin-left:5px;float: left;">
+                    <div class="toggle-wrapper toggle-wrapper">
+                        <input id="editBlogMemberOnly" type="checkbox" checked="">
+                        <label class="toggle" for="editBlogMemberOnly">
+                            <span class="toggle--handler"></span>
+                        </label>
+                    </div>
+                </div>
+                <p style="display: inline-block;font-size: 18px;margin-bottom:0;cursor: pointer" onclick="$(this).parent().find('.toggle--handler').click()">Members Only</p>
+            </div>
+            <div class="col-sm-6">
+                <div class="button bordered-button small glassy" onclick="admin.blogs.save()" style="width:150px;display: inline-block;margin-left:25px;">
+                    <p>SAVE CHANGES</p>
+                </div>
+            </div>
+        </div>
+        <div class="container w-full p-0" style="height:calc(100vh - 250px);overflow-y: scroll;">
+            <div class="col-sm-8">
+                <h4 class="blogAdminTitle"></h4>
+                <h5 class="blogAdminReadTime"></h5>
+                <br>
+                <div class="container w-full p-0 blogAdminBody single-complete-blog-body" style="margin-top:25px;padding-top:25px;border-top:1px solid #bebebe">
+
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="old">
+                    <h5>Old Banner</h5>
+                    <img src="" alt="" id="blog_old_banner">
+                </div>
+                <h5>New Banner</h5>
+                <img src="" alt="" id="blog_new_banner">
+                <div class="old">
+                    <h5>Old Thumbnail</h5>
+                    <img src="" alt="" id="blog_old_thumb">
+                </div>
+                <h5>New Thumbnail</h5>
+                <img src="" alt="" id="blog_new_thumb">
+                <br>
+                <h5>Excerpt</h5>
+                <p class="blogAdminExcerpt"></p>
+            </div>
+        </div>
+    </div>
+</div>
 <style>
     .main-admin-view{
         float:left;

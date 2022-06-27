@@ -37,6 +37,25 @@
     </div>
 </div>
 <div>
+    <div class="container admin-blog-single-card">
+        <div class="container p-0">
+            <div class="col-sm-3">
+                <img src="/assets/blogImages/{{banner}}" alt="">
+            </div>
+            <div class="col-sm-9">
+                {{verboseStatus}} | {{verboseAccess}}
+                <h4>{{title}}</h4>
+                <p>{{excerpt}}</p>
+                <div class="button glassy bordered-button" style="width: 150px;float:left;transform:scale(0.8);transform-origin:top right" onclick="route('account/admin-blogs/edit/{{id}}')">
+                    <p>EDIT</p>
+                </div>  
+            </div>
+        </div>
+        <div class="container p-0">      
+        </div>
+    </div>
+</div>
+<div>
     <div class="container my-single-testimonial" style="border: 1px solid #cecece;max-width:500px;padding:25px;border-radius: 20px;margin-left:0;margin-bottom:25px;;padding-top:10px">
         <p style="text-align: right">{{verboseStatus}}</p>
         <h3>{{testimonial_text}}</h3>

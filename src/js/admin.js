@@ -749,6 +749,134 @@ var admin= {
                 })
             })
         }
+    },
+    blogs:{
+        load: function () {
+            return new Promise((resolve, reject)=>{
+                xhttp.get('Blog').then((response)=>{
+                    this.Storage = response.blogs;
+                    resolve();
+                })
+            })
+        },
+        read: function () {
+            return new Promise((resolve, reject)=>{
+                if(this.Storage){
+                    resolve(this.Storage);
+                }else{
+                    this.load().then(()=>{
+                        resolve(this.Storage);
+                    })
+                }
+            })
+        },
+        populate: function(){
+            if(Number(path.parts[3]) == path.parts[3] && path.parts[2] == "edit"){
+                this.edit(path.parts[3]);
+            }else{
+                this.read().then(()=>{
+                    $('[linked-to="admin-blogs"] .admin-blog-single-card').remove();
+                    this.Storage.forEach((x)=>{
+                        x.verboseStatus = x.status == '0' ? `<span style="color:gray">UNDER REVIEW</span>` : x.status == '1' ? `<span style="color:green">APPROVED</span>` : x.status == '2' ? `<span style="color:orange">EDITED</span>`: null;
+                        x.verboseAccess = x.access == "1" ? `<span style="color:green">PUBLIC</span>` : `<span style="color:blue">MEMBER ONLY</span>`;
+                    })
+                    template_engine('.admin-blog-single-card', this.Storage,'.admin-blogs-archive');
+                    $(".admin-blogs-archive").show();
+                    $(".admin-blogs-single").hide();
+                })
+            }
+        },
+        edit: function (id) {
+            xhttp.get('blog/single',{id: id}).then((response)=>{
+                this.currentEdit = response;
+
+                if(this.currentEdit.edited[0]){
+                    this.currentEdit.edited = this.currentEdit.edited[0];
+                }
+                if(!response.current){
+                    route('account/admin-blogs');
+                }
+                $(".admin-blogs-archive").hide();
+                $(".admin-blogs-single").show();
+
+                if(this.currentEdit.current.status !== '0'){
+                    $("#editBlogApproved").prop("checked",true);
+                }else{
+                    $("#editBlogApproved").prop("checked",false);
+                }
+
+                if(this.currentEdit.current.access == '2'){
+                    $("#editBlogMemberOnly").prop("checked",true);
+                }else{
+                    $("#editBlogMemberOnly").prop("checked",false);
+                }
+
+                if(!this.currentEdit.edited){
+                    $(".old").hide();
+                    $("#blog_new_banner").attr('src',`/assets/blogImages/${this.currentEdit.current.banner}`);
+                    $("#blog_new_thumb").attr('src',`/assets/blogImages/${this.currentEdit.current.thumbnail}`);
+                    $(".blogAdminExcerpt").text(this.currentEdit.current.excerpt);
+                    $(".blogAdminTitle").text(this.currentEdit.current.title);
+                    $(".blogAdminReadTime").text(this.currentEdit.current.readtime + ' minutes');
+                    $(".blogAdminBody").html(this.currentEdit.current.blog_text);
+                }else{
+                    $(".old").show();
+                    $("#blog_new_banner").attr('src',`/assets/blogImages/${this.currentEdit.current.banner}`);
+                    $("#blog_new_thumb").attr('src',`/assets/blogImages/${this.currentEdit.current.thumbnail}`);
+                    $("#blog_old_banner").attr('src',`/assets/blogImages/${this.currentEdit.edited.banner}`);
+                    $("#blog_old_thumb").attr('src',`/assets/blogImages/${this.currentEdit.edited.thumbnail}`);
+                    $(".blogAdminExcerpt").html(`<s>${this.currentEdit.current.excerpt}</s>${this.currentEdit.edited.excerpt}`);
+                    $(".blogAdminTitle").html(`<s>${this.currentEdit.current.title}</s>${this.currentEdit.edited.title}`);
+                    $(".blogAdminReadTime").html(`<s>${this.currentEdit.current.readtime}</s>${this.currentEdit.edited.readtime} minutes`);
+                    /* var re = new RegExp(/<img\s[^>]*?src\s*=\s*['\"]([^'\"]*?)['\"][^>]*?>/gi, "gi");
+                    let images1 = admin.blogs.currentEdit.current.blog_text.match(re);
+                    let images2 = admin.blogs.currentEdit.edited.blog_text.match(re);
+
+                    let image_matrix = [];
+
+                    images1.forEach((x)=>{
+                        image_matrix[(new Date()).getTime()] = x;
+                    })
+                    images2.forEach((x)=>{
+                        image_matrix[(new Date()).getTime()] = x;
+                    })
+
+                    console.log(images2); */
+
+                    $(".blogAdminBody").html(diffString(admin.blogs.currentEdit.current.blog_text, admin.blogs.currentEdit.edited.blog_text).replaceAll('&lt;','<').replaceAll('&gt;','>'))
+                }
+            })
+        },
+        save: function () {
+            let payload = {
+                approval: $("#editBlogApproved").is(":checked") ? "true": 'false',
+                memberOnly: $("#editBlogMemberOnly").is(":checked") ? "true": 'false',
+                id: this.currentEdit.current.id
+            }
+            xhttp.put('Blog',payload).then(()=>{
+                route('account/admin-blogs')
+                this.load().then(()=>{
+                    this.populate();
+                })
+            })
+        },
+        cancelEdit: function () {
+            $(`[linked-to="admin-testimonials"] .side-panel-upper h4:eq(0)`).text('Add New');
+            $("#admin-testimonial-edit").val('');
+            $("#admin-testimonial-edit").data('current',null);
+            $("#admin_testimonial_member").val('').trigger('change');
+            this.load().then(()=>{
+                this.populate();
+            })
+        },
+        delete: function (id) {
+            xhttp.delete('Testimonial',{id: id}).then(()=>{
+                showsnackbar('Testimonial deleted successfully');
+                this.load().then(()=>{
+                    this.populate();
+                })
+            })
+        }
     }
 }
 

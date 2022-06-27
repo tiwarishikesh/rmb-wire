@@ -43,6 +43,11 @@ $routes = array(
     ["GET","myBlog","build/blog.php","getMyBlogs","auth",[]],
     ["PUT","myBlog","build/blog.php","updateMyBlog","auth",[]],
 
+    ["POST","Blog","build/blog.php","createAdminNewBlog","auth",[]],
+    ["GET","Blog","build/blog.php","getAdminBlogs","auth",[]],
+    ["GET","blog/single","build/blog.php","getAdminBlog","auth",[]],
+    ["PUT","Blog","build/blog.php","updateAdminBlog","auth",[]],
+
     ["GET","myTestimonials","build/testimonials.php","getMyTestimonials","auth",[]],
     ["POST","myTestimonial","build/testimonials.php","updateMyTestimonials","auth",[]],
     ["DELETE","myTestimonial","build/testimonials.php","deleteMyTestimonials","auth",[]],

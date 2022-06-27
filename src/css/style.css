@@ -1670,13 +1670,18 @@ background-repeat: no-repeat;}
 background-repeat: no-repeat;}
 
 .my-single-advert::after{
-    position:absolute;
-    height: 2px;
+    position:
+    absolute;
+    height: 1px;
     width:100%;
     left:0;
     bottom:0;
     content:'';
     background: linear-gradient(to right, transparent, #999999, transparent);
+}
+
+.my-single-advert:last-child::after{
+    height:0px;
 }
 
 .my-single-advert h5{
@@ -1694,6 +1699,34 @@ background-repeat: no-repeat;}
 .my-single-advert[status="01"] .editAdvertisement,
 .my-single-advert[status="11"] .editAdvertisement{
     display:none !important;
+}
+
+.admin-blog-single-card{
+    width:100%;
+    /* float:
+    left; */
+    max-width: 1150px;
+    margin-left: 0;
+    padding-bottom: 40px;
+    padding-top: 40px;
+    border-bottom: 1px solid #99999999;
+}
+
+.admin-blog-single-card:last-child{
+    border:none;
+}
+
+.admin-blogs-archive img{
+    width:200px;
+    float: left;
+}
+
+del{
+    background: #f09d9d;
+}
+
+ins{
+    background:#a9d3a9;
 }
 /* 
 
