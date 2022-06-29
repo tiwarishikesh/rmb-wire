@@ -16,15 +16,15 @@
             <h4><i class="fa-solid fa-blog"></i> My Blogs</h4>
         </div>
         <div class="left-menu-single-item" linked-to="my-events" onclick="route('account/my-events')">
-            <h4><i class="fa-solid fa-comment"></i> Events</h4>
+            <h4><i class="fa-regular fa-calendar-days"></i> Events</h4>
         </div>
         <div class="left-menu-single-item" linked-to="my-adverts" onclick="route('account/my-adverts')">
-            <h4><i class="fa-solid fa-comment"></i> Advertisements</h4>
+            <h4><i class="fa-brands fa-adversal"></i> Advertisements</h4>
         </div>
         <div class="left-menu-single-item" linked-to="my-testimonials" onclick="route('account/my-testimonials')">
-            <h4><i class="fa-solid fa-comment"></i> Testimonials</h4>
+            <h4><i class="fa-regular fa-comment-dots"></i> Testimonials</h4>
         </div>
-        <div class="left-menu-single-item" style="display: none;" linked-to="network" onclick="route('account/network')">
+        <div class="left-menu-single-item" linked-to="network" onclick="route('account/network')">
             <h4><i class="fa-solid fa-users"></i> Network</h4>
         </div>
         <tag class="admin-only">
@@ -39,13 +39,13 @@
                 <h4><i class="fa-solid fa-blog"></i>Blogs</h4>
             </div>
             <div class="left-menu-single-item" linked-to="admin-events" onclick="route('account/admin-events')">
-                <h4><i class="fa-solid fa-comment"></i> Events</h4>
+                <h4><i class="fa-regular fa-calendar-days"></i> Events</h4>
             </div>
             <div class="left-menu-single-item" linked-to="admin-adverts" onclick="route('account/admin-adverts')">
-                <h4><i class="fa-solid fa-comment"></i> Advertisements</h4>
+                <h4><i class="fa-brands fa-adversal"></i> Advertisements</h4>
             </div>
             <div class="left-menu-single-item" linked-to="admin-testimonials" onclick="route('account/admin-testimonials')">
-                <h4><i class="fa-solid fa-comment"></i> Testimonials</h4>
+                <h4><i class="fa-regular fa-comment-dots"></i> Testimonials</h4>
             </div>
             <!-- <div class="left-menu-single-item" style="pointer-events:none;height: unset;">
                 <p style="font-size: 16px;font-weight: 600;color: #9f9fff;margin-top: 25px;">WEBMASTER</p>
@@ -59,6 +59,12 @@
             </div>
             <div class="left-menu-single-item" linked-to="website-home-edit" onclick="route('account/website-home-edit')">
                 <h4><i class="fa-solid fa-house"></i>Home</h4>
+            </div>
+            <div class="left-menu-single-item" linked-to="faq" onclick="route('account/faq')">
+                <h4><i class="fa-regular fa-circle-question"></i>FAQ</h4>
+            </div>
+            <div class="left-menu-single-item" linked-to="bod" onclick="route('account/bod')">
+                <h4><i class="fa-solid fa-users-between-lines"></i>Board of Directors</h4>
             </div>
             <div class="left-menu-single-item" linked-to="website-about-edit" onclick="route('account/website-about-edit')">
                 <h4><i class="fa-solid fa-file-circle-info"></i>About</h4>
@@ -403,20 +409,20 @@
             </div>
         </div>
     </div>
-    <div class="right-menu-single-item" linked-to="network" style="overflow-y: hidden;opacity:0">
+    <div class="right-menu-single-item" linked-to="network" style="overflow-y: hidden;">
         <div class="container w-full network-header">
             <div class="col-sm-3">
                 <img src="https://www.rotarymeansbusiness.in/images/userphotos/1582107447657.1ddcca.jpg" class="network_photo" alt="">
             </div>
             <div class="col-sm-3">
-                <p>120<span>Friends</span></p>
-                <p>10<span>Posts</span></p>
+                <p><span>Friends</span></p>
+                <p><span>Posts</span></p>
             </div>
             <div class="col-sm-6">
-                <a href="Javascript:void(0)" onclick="route('account/network/friends');return false">Profile</a>
+                <a href="Javascript:void(0)" onclick="route('account/network/');return false">Home</a>
+                <a href="Javascript:void(0)" onclick="route('account/network/my-feed');return false">My Feed</a>
                 <a href="Javascript:void(0)" onclick="route('account/network/friends');return false">Friends</a>
                 <a href="Javascript:void(0)" onclick="route('account/network/gallery');return false">Gallery</a>
-                <a href="Javascript:void(0)" onclick="route('account/network/albums');return false">Albums</a>
             </div>
         </div>
         <div class="container w-full network-body">
@@ -424,14 +430,14 @@
                 <div class="col-sm-4">
                     <div class="container feed-home-about">
                         <h3>About</h3>
-                        <p>I’m a friendly kitchen assistant who suffers from a severe phobia of buttons.<br>Brother of Elijah Jay Watkins, who has phobia of buttons and trust issues.</p>
-                        <p>Mumbai, India</p>
-                        <p>CEO, KANRIS Inftech PVt Ltd</p>
-                        <p>March, 11</p>
+                        <p></p>
+                        <p></p>
+                        <p></p>
+                        <p></p>
                     </div>
                     <div class="container feed-home-friends">
                         <h3>Friends</h3>
-                        <div class="container w-full p-0">
+                        <div id="feed-home-friends" class="container w-full p-0">
                             <img src="https://www.rotarymeansbusiness.in/images/userphotos/1582107447657.1ddcca.jpg" alt="">
                             <img src="https://www.rotarymeansbusiness.in/images/userphotos/1582107447657.1ddcca.jpg" alt="">
                             <img src="https://www.rotarymeansbusiness.in/images/userphotos/1582107447657.1ddcca.jpg" alt="">
@@ -445,7 +451,7 @@
                             <p>VIEW ALL</p>
                         </div>
                     </div>
-                    <div class="container feed-home-friends">
+                    <div class="container feed-home-friends feed-home-photos">
                         <h3>Gallery</h3>
                         <div class="container w-full p-0">
                             <img src="https://www.rotarymeansbusiness.in/images/userphotos/1582107447657.1ddcca.jpg" alt="">
@@ -465,24 +471,19 @@
                 <div class="col-sm-8">
                     <div class="container new-post-block">
                         <h3>Create Post</h3>
-                        <div class="button bordered-button" style="width: 200px;float:left;transform: scale(0.7);transform-origin: top right;position: absolute;top: 13px;right: 15px;" onclick="route('account/blogs/add')">
+                        <div class="button bordered-button" style="width: 200px;float:left;transform: scale(0.7);transform-origin: top right;position: absolute;top: 13px;right: 15px;" onclick="network.withPhoto()">
                             <p>Add Photo</p>
                         </div>
-                        <textarea style="height:unset" name="" id="" rows="10"></textarea>
-                        <div class="button" style="width: 250px;float:left;transform:scale(0.8);transform-origin:top right" onclick="route('account/blogs/add')">
+                        <div class="container w-full p-0 postWithPhoto" style="aspect-ratio: 1.5;display: none">
+
+                        </div>
+                        <textarea style="height:unset" name="" id="newPostBody" rows="10"></textarea>
+                        <div class="button" style="width: 250px;float:left;transform:scale(0.8);transform-origin:top right" onclick="network.savePost()">
                             <p>SUBMIT</p>
                         </div>
                     </div>
-                    <div class="container old-post-block">
-                        <div class="post-member">
-                            <img src="https://www.rotarymeansbusiness.in/images/userphotos/1582107447657.1ddcca.jpg" alt="">
-                            <h4>Rishikesh Tiwari</h4>
-                            <h5>29 minutes ago</h5>
-                        </div>
-                        <div class="post-body">
-                            <p>Look at that sky! I so want to be there.. Can we arrange a trip? Is that a possibility? Please!!!</p>
-                            <img src="http://angular-material.fusetheme.com/assets/images/cards/14-640x480.jpg" alt="">
-                        </div>
+                    <div class="container old-post-archive">
+                        
                     </div>
                 </div>
             </div>

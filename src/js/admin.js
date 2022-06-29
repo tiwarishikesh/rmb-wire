@@ -877,6 +877,186 @@ var admin= {
                 })
             })
         }
+    },
+    faqs:{
+        load: function () {
+            return new Promise((resolve, reject)=>{
+                xhttp.get('faqs').then((response)=>{
+                    this.Storage = response;
+                    resolve();
+                })
+            })
+        },
+        read: function () {
+            return new Promise((resolve, reject)=>{
+                if(this.Storage){
+                    resolve(this.Storage);
+                }else{
+                    this.load().then(()=>{
+                        resolve(this.Storage);
+                    })
+                }
+            })
+        },
+        populate: function(){
+            this.read().then(()=>{
+                $('[linked-to="faq"] .admin-single-faq').remove();
+                this.Storage.forEach((x)=>{
+                    x.verboseStatus = x.status == '0' ? `<span style="color:gray">INACTIVE</span>` : x.status == '1' ? `<span style="color:green">ACTIVE</span>` : x.status == '2' ? `<span style="color:red">REJECTED</span>`: null;
+                })
+                template_engine('.admin-single-faq', this.Storage,'.admin-faqs-archive');
+            })
+        },
+        edit: function (id) {
+            let x = this.Storage.filter((x) => x.id == id)[0];
+            if(!x){
+                return false;
+            }
+            if(x.status == "1"){
+                $("#editFAQApproved").prop('checked',true);
+            }else{
+                $("#editFAQApproved").prop('checked',false);
+            }
+            $("#admin-faq-edit").data('current',x.id);
+            $("#admin-faq-question").val(x.question);
+            $("#admin-faq-answer").val(x.answer);
+            
+            $(`[linked-to="faq"] .side-panel-upper h4:eq(0)`).text('Edit FAQs');
+        },
+        save: function () {
+            if(!$("#admin-faq-question").val() || !$("#admin-faq-answer").val()){
+                showsnackbar('Please fill out faq question and answer');
+            }
+            let payload = {
+                id: $("#admin-faq-edit").data('current') || 'NA',
+                question: $("#admin-faq-question").val(),
+                answer: $('#admin-faq-answer').val(),
+                approval: $("#editFAQApproved").is(":checked") ? 'true' : 'false'
+            }
+            xhttp.post('faqs',payload).then(()=>{
+                showsnackbar('FAQ Added Successfully');
+                $(`[linked-to="faq"] .side-panel-upper h4:eq(0)`).text('Add New');
+                $("#admin-faq-answer").val('');
+                $("#admin-faq-question").val('');
+                $("#admin-faq-edit").data('current',null);
+                this.load().then(()=>{
+                    this.populate();
+                })
+            })
+        },
+        cancelEdit: function () {
+            $(`[linked-to="faq"] .side-panel-upper h4:eq(0)`).text('Add New');
+            $("#admin-faq-answer").val('');
+            $("#admin-faq-question").val('');
+            $("#admin-faq-edit").data('current',null);
+            this.load().then(()=>{
+                this.populate();
+            })
+        },
+        delete: function (id) {
+            xhttp.delete('faqs',{id: id}).then(()=>{
+                showsnackbar('FAQ deleted successfully');
+                this.load().then(()=>{
+                    this.populate();
+                })
+            })
+        }
+    },
+    bod:{
+        load: function () {
+            return new Promise((resolve, reject)=>{
+                xhttp.get('bod').then((response)=>{
+                    this.Storage = response;
+                    resolve();
+                })
+            })
+        },
+        read: function () {
+            return new Promise((resolve, reject)=>{
+                if(this.Storage){
+                    resolve(this.Storage);
+                }else{
+                    this.load().then(()=>{
+                        resolve(this.Storage);
+                    })
+                }
+            })
+        },
+        populate: function(){
+            if(!admin.data?.members){
+                setTimeout(() => {
+                    this.populate();
+                }, 500);
+                return false;
+            }
+            $("#admin-bod-member").html(`<option value=""></option>`);
+            template_engine(`<option value="{{id}}">{{fname}} {{lname}}</option>`,admin.data.members,"#admin-bod-member").then(()=>{
+                $("#admin-bod-member").select2({
+                    placeholder: "Select a member"
+                });
+            });
+            this.read().then(()=>{
+                $('[linked-to="bod"] .admin-single-bod').remove();
+                this.Storage.forEach((x)=>{
+                    x.verboseStatus = x.status == '0' ? `<span style="color:gray">PAST</span>` : x.status == '1' ? `<span style="color:green">ACTIVE</span>` : x.status == '2' ? `<span style="color:red">PAST</span>`: null;
+                })
+                template_engine('.admin-single-bod', this.Storage,'.admin-bod-archive');
+            })
+        },
+        edit: function (id) {
+            let x = this.Storage.filter((x) => x.id == id)[0];
+            if(!x){
+                return false;
+            }
+            if(x.status == "1"){
+                $("#editBODcurrent").prop('checked',true);
+            }else{
+                $("#editBODcurrent").prop('checked',false);
+            }
+            $("#admin-bod-edit").data('current',x.id);
+            $("#admin-bod-position").val(x.position);
+            $('#admin-bod-member').val(x.member_id).trigger('change');
+            $(`[linked-to="bod"] .side-panel-upper h4:eq(0)`).text('Edit Board Member');
+        },
+        save: function () {
+            if(!$("#admin-bod-member").val() || !$('#admin-bod-position').val()){
+                showsnackbar('Please fill out member position and the member name');
+                return false;
+            }
+            let payload = {
+                id: $("#admin-bod-edit").data('current') || 'NA',
+                member_id: $("#admin-bod-member").val(),
+                position: $('#admin-bod-position').val(),
+                status: $("#editBODcurrent").is(":checked") ? 'true' : 'false'
+            }
+            xhttp.post('bod',payload).then(()=>{
+                showsnackbar('Board Member Recorded Successfully');
+                $(`[linked-to="bod"] .side-panel-upper h4:eq(0)`).text('Add New');
+                $("#admin-bod-position").val('');
+                $("#admin-bod-edit").data('current',null);
+                $("#admin-bod-member").val('').trigger('change');
+                this.load().then(()=>{
+                    this.populate();
+                })
+            })
+        },
+        cancelEdit: function () {
+            $(`[linked-to="bod"] .side-panel-upper h4:eq(0)`).text('Add New');
+                $("#admin-bod-position").val('');
+                $("#admin-bod-edit").data('current',null);
+                $("#admin-bod-member").val('').trigger('change');
+            this.load().then(()=>{
+                this.populate();
+            })
+        },
+        delete: function (id) {
+            xhttp.delete('bod',{id: id}).then(()=>{
+                showsnackbar('Director deleted successfully');
+                this.load().then(()=>{
+                    this.populate();
+                })
+            })
+        }
     }
 }
 

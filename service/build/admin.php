@@ -86,4 +86,55 @@ function post_events($conn, $payload){
 
     return null;
 }
+
+function get_faqs($conn, $payload){
+    $user = $payload->jwt_vars;
+
+    return mysqli_getarray(mysqli_query($conn, "SELECT * FROM `website_faqs`"));
+}
+
+function post_faqs($conn, $payload){
+    $user = $payload->jwt_vars;
+
+    $approval = $payload->approval == "true" ? '1' : '0';
+
+    if($payload->id == 'NA'){
+        mysqli_query($conn, "INSERT INTO `website_faqs`(`question`, `answer`, `status`) VALUES ('$payload->question', '$payload->answer', '$approval')");
+        return "INSERT INTO `website_faqs`(`question`, `answer`, `status`) VALUES ('$payload->question', '$payload->answer', '$approval')";
+    }else{
+        mysqli_query($conn, "UPDATE `website_faqs` SET `question`='$payload->question', `answer`='$payload->answer', `status`='$approval' WHERE `id`='$payload->id'");
+        return "UPDATE `website_faqs` SET `question`='$payload->question', `answer`='$payload->answer', `status`='$approval' WHERE `id`='$payload->id'";
+    }
+}
+
+function delete_faqs($conn, $payload){
+    $user = $payload->jwt_vars;
+
+    mysqli_query($conn, "DELETE FROM `website_faqs` WHERE `id`='$payload->id'");
+}
+
+function get_bod($conn, $payload){
+    $user = $payload->jwt_vars;
+
+    return mysqli_getarray(mysqli_query($conn, "SELECT * FROM website_board JOIN member ON website_board.member_id = member.id"));
+}
+
+function post_bod($conn, $payload){
+    $user = $payload->jwt_vars;
+
+    $status = $payload->status == "true" ? "1" : "0";
+
+    if($payload->id == 'NA'){
+        mysqli_query($conn, "INSERT INTO `website_board`(`member_id`, `position`, `status`) VALUES ('$payload->member_id', '$payload->position', '$status')");
+        return "INSERT INTO `website_board`(`member_id`, `position`, `status`) VALUES ('$payload->member_id', '$payload->position', '$status')";
+    }else{
+        mysqli_query($conn, "UPDATE `website_board` SET `member_id`='$payload->member_id', `position`='$payload->position', `status`='$status' WHERE `id`='$payload->id'");
+    }
+}
+
+function delete_bod($conn, $payload){
+    $user = $payload->jwt_vars;
+
+    mysqli_query($conn, "DELETE FROM `website_board` WHERE `id`='$payload->id'");
+}
 ?>

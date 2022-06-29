@@ -1581,6 +1581,10 @@ max-height: 100%;width: unset;max-width: 100%;}
     font-size:16px;
 }
 
+.post-body img.NA{
+    display:none;
+}
+
 .old-post-block .post-member img{
     width:75px;
     border-radius:100px;
@@ -2011,6 +2015,7 @@ width: 100%;}
 .radio label:before,
 .radio label:after {
     font-family: 'Font Awesome\ 5 Pro';
+    font-family:"Font Awesome 6 Free";
     font-size: 21px;
     /*absolutely positioned*/
     position: absolute;

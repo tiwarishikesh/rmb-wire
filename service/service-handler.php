@@ -78,6 +78,13 @@ $routes = array(
     ["GET","admin/events","build/admin.php","get_events","auth",[]],
     ["POST","admin/events","build/admin.php","post_events","auth",[]],
 
+    ["GET","faqs","build/admin.php","get_faqs","auth",[]],
+    ["POST","faqs","build/admin.php","post_faqs","auth",[]],
+    ["DELETE","faqs","build/admin.php","delete_faqs","auth",[]],
+
+    ["GET","bod","build/admin.php","get_bod","auth",[]],
+    ["POST","bod","build/admin.php","post_bod","auth",[]],
+    ["DELETE","bod","build/admin.php","delete_bod","auth",[]],
 
     ["GET","website/legal","build/website.php","getlegal","",[]],
     ["POST","website/legal","build/website.php","updatelegal","auth",[]],
@@ -88,8 +95,14 @@ $routes = array(
     ["DELETE","bannerPhoto","build/website.php","deletehomeLandingImage","auth",[]],
 
     ["GET","search","build/search.php","search","",[]],
-    ["GET","init","build/search.php","init","",[]]
+    ["GET","init","build/search.php","init","",[]],
 
+    ["GET","network","build/search.php","network","auth",[]],
+
+    ["GET","post","build/search.php","getMyPosts","auth",[]],
+    ["GET","posts","build/search.php","getPosts","auth",[]],
+    ["POST","post","build/search.php","addNewPost","auth",[]],
+    ["GET","anotherMember","build/search.php","getAnotherMember","auth",[]],
 );
 
 foreach ($routes as $route) {
@@ -222,6 +235,10 @@ function mysqli_getarray($x){
         }
     }
     return $z;
+}
+
+function mysqli_getAll($x){
+    return mysqli_getAll(mysqli_query(getConnection(), $x));
 }
 
 function endsWith( $haystack, $needle ) {

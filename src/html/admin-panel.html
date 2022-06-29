@@ -439,6 +439,94 @@
         </div>
     </div>
 </div>
+<div class="right-menu-single-item p-0" linked-to="faq" style="padding:0;">
+    <div class="main-admin-view">
+        <h4>All FAQs</h4>
+        <br>
+        <div class="admin-faqs-archive">
+
+        </div>
+    </div>
+    <div id="admin-faq-edit" class="side-panel" style="opacity:1;">
+        <div class="side-panel-upper">
+            <div class="container w-full" style="padding-bottom: 7px;margin-bottom:15px; border-bottom: 1px solid #cecece;">
+                <h4>Add New</h4>
+            </div>
+            <div class="container w-full">
+                <div style="width:60px;margin-left:5px;float: left;">
+                    <div class="toggle-wrapper toggle-wrapper">
+                        <input id="editFAQApproved" type="checkbox" checked="">
+                        <label class="toggle" for="editFAQApproved">
+                            <span class="toggle--handler"></span>
+                        </label>
+                    </div>
+                </div>
+                <p style="display: inline-block;font-size: 18px;margin-bottom:0;cursor: pointer" onclick="$(this).parent().find('.toggle--handler').click()">Active</p>
+            </div>
+            <div class="container w-full">
+                <input type="text" placeholder="Question*" name="" id="admin-faq-question">
+            </div>
+            <div class="container w-full">
+                <textarea name="" id="admin-faq-answer" cols="10" style="height: unset;" rows="10"></textarea>
+            </div>
+        </div>
+        <div class="side-panel-lower">
+            <div class="container w-full p-0">
+                <div class="button bordered-button small glassy" onclick="admin.faqs.save()" style="width:150px;display: inline-block;margin-left:25px;">
+                    <p>SAVE CHANGES</p>
+                </div>
+                <div class="button bordered-button small glassy red" onclick="admin.faqs.cancelEdit()" style="width:150px;display: inline-block;margin-left:25px;">
+                    <p>CANCEL</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="right-menu-single-item p-0" linked-to="bod" style="padding:0;">
+    <div class="main-admin-view">
+        <br>
+        <div class="admin-bod-archive">
+
+        </div>
+    </div>
+    <div id="admin-bod-edit" class="side-panel" style="opacity:1;">
+        <div class="side-panel-upper">
+            <div class="container w-full" style="padding-bottom: 7px;margin-bottom:15px; border-bottom: 1px solid #cecece;">
+                <h4>Add New</h4>
+            </div>
+            <div class="container w-full">
+                <div style="width:60px;margin-left:5px;float: left;">
+                    <div class="toggle-wrapper toggle-wrapper">
+                        <input id="editBODcurrent" type="checkbox" checked="">
+                        <label class="toggle" for="editBODcurrent">
+                            <span class="toggle--handler"></span>
+                        </label>
+                    </div>
+                </div>
+                <p style="display: inline-block;font-size: 18px;margin-bottom:0;cursor: pointer" onclick="$(this).parent().find('.toggle--handler').click()">Active</p>
+            </div>
+            <div class="container w-full">
+                <select name="" id="admin-bod-member">
+                    <option value=""></option>
+                </select>
+            </div>
+            <br/>
+            <div class="container w-full">
+                <input type="text" placeholder="Position*" name="" id="admin-bod-position">
+            </div>
+        </div>
+        <div class="side-panel-lower">
+            <div class="container w-full p-0">
+                <div class="button bordered-button small glassy" onclick="admin.bod.save()" style="width:150px;display: inline-block;margin-left:25px;">
+                    <p>SAVE CHANGES</p>
+                </div>
+                <div class="button bordered-button small glassy red" onclick="admin.bod.cancelEdit()" style="width:150px;display: inline-block;margin-left:25px;">
+                    <p>CANCEL</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <style>
     .main-admin-view{
         float:left;

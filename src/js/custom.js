@@ -1622,6 +1622,18 @@ function checkUrl() {
                 admin.blogs.load().then(()=>{
                     admin.blogs.populate()
                 });
+            }else if(path.parts[1] == "faq"){
+                admin.faqs.load().then(()=>{
+                    admin.faqs.populate();
+                });
+            }else if(path.parts[1] == "bod"){
+                admin.bod.load().then(()=>{
+                    admin.bod.populate();
+                });
+            }else if(path.parts[1] == "network"){
+                network.load().then(()=>{
+                    network.populate();
+                })
             }
         }
     })
@@ -1792,7 +1804,7 @@ function ajax_promise(type,data,endpoint) {
     })
 }
 
-let template_engine = function(identifier, replacements, callback) {
+let template_engine = function(identifier, replacements, callback, options) {
     return new Promise((resolve,reject)=>{
         let divTag = '';
         if(!Array.isArray(replacements)){
@@ -1817,7 +1829,7 @@ let template_engine = function(identifier, replacements, callback) {
             }
             divTag += template;
         })
-        callback ? /function\(|[\)\*\{\}]/.test(callback.toString()) ? callback(divTag) : $(callback).length ? $(callback).append(divTag) : console.log("html element doesn't exist") : console.log("Parameter missing");
+        callback ? /function\(|[\)\*\{\}]/.test(callback.toString()) ? callback(divTag) : $(callback).length ? (options?.position == "pre" ? $(callback).prepend(divTag) : $(callback).append(divTag)) : console.log("html element doesn't exist") : console.log("Parameter missing");
         resolve(divTag);
     })
 }
